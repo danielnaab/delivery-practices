@@ -1,0 +1,33 @@
+apiVersion: kb/v1
+name: delivery-practices
+description: "Knowledge base for software delivery practices enabling fast and safe AI-assisted development"
+
+entrypoints:
+  human: docs/README.md
+  agent: CLAUDE.md
+
+meta:
+  entrypoint: "../meta-knowledge-base/docs/meta.md"
+
+imports:
+  - kind: local
+    path: ../meta-knowledge-base
+    entrypoint: knowledge-base.yaml
+
+paths:
+  docs: docs
+  notes: notes
+
+sources:
+  canonical:
+    - path: docs/**
+      note: "Curated practices are canonical when they exist"
+
+rules:
+  lifecycle:
+    statuses: ["draft", "working", "stable", "deprecated"]
+  provenance:
+    requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
+  writes:
+    allow: ["docs/**", "notes/**"]
+    deny: ["secrets/**", "credentials/**"]

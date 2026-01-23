@@ -1,0 +1,10 @@
+apiVersion: graft/v0
+dependencies:
+  meta-knowledge-base:
+    source: https://github.com/danielnaab/meta-knowledge-base.git
+    ref: main
+    commit: a1324bea546e004f5c40f91abd20f3b0300d7828
+    consumed_at: '2026-01-23T21:15:01.463689+00:00'
+    direct: true
+    requires: []
+    required_by: []
