@@ -11,6 +11,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 ## Active Explorations
 
 - [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI (partially graduated to [iterative-critique](../playbooks/iterative-critique.md) and [session-logging](../playbooks/session-logging.md))
+- [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels
 
 ## Graduated
 
@@ -19,6 +20,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 ## Sessions
 
 ### 2026-01-24
+- [PR Reviewability](./2026-01-24-pr-reviewability.md) - Progressive disclosure for spec-driven PRs
 - [AI-Assisted Workflow](./2026-01-24-ai-assisted-workflow.md) - Workflow patterns for AI-assisted development
 - [Tooling Expansion](./2026-01-24-tooling-expansion.md) - KB linter, link validator, playbook validation, CI, v0.2.0
 - [Tooling Cleanup](./2026-01-24-tooling-cleanup.md) - Spec-implementation alignment, exit codes, hygiene
