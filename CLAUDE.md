@@ -40,7 +40,7 @@ Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-w
 
 ## Content Organization
 
-Content is organized by **knowledge type**:
+**Knowledge content** (organized by type):
 
 | Directory | Type | Purpose |
 |-----------|------|---------|
@@ -48,9 +48,14 @@ Content is organized by **knowledge type**:
 | `policies/` | Normative | Principles, rules, constraints ("follow this") |
 | `playbooks/` | Procedural | Step-by-step guides ("do this") |
 | `notes/` | Ephemeral | Explorations, working notes ("thinking about this") |
-| `specs/` | Specifications | Living specs for repo tooling (dogfooding) |
-| `src/` | Source | Tool implementations |
-| `tests/` | Tests | Tool tests |
+
+**Tooling** (dogfooding the practices):
+
+| Directory | Purpose |
+|-----------|---------|
+| `specs/` | Living specifications for tools |
+| `src/` | Python implementations |
+| `tests/` | Pytest test suite |
 
 Practice areas span these types. For example, "living specifications" has:
 - `docs/` — conceptual reference (format, relationships, verification, comprehension)

@@ -16,7 +16,7 @@ Personal exploration of delivery practices for:
 
 ## Structure
 
-Content organized by knowledge type:
+**Knowledge content** (organized by type):
 
 | Directory | Type | Purpose |
 |-----------|------|---------|
@@ -24,9 +24,14 @@ Content organized by knowledge type:
 | `policies/` | Normative | Principles, rules, constraints |
 | `playbooks/` | Procedural | Step-by-step guides |
 | `notes/` | Ephemeral | Explorations, working notes |
-| `specs/` | Specifications | Living specs for repo tooling (dogfooding) |
-| `src/` | Source | Tool implementations |
-| `tests/` | Tests | Tool tests |
+
+**Tooling** (dogfooding the practices):
+
+| Directory | Purpose |
+|-----------|---------|
+| `specs/` | Living specifications for tools |
+| `src/` | Python implementations |
+| `tests/` | Pytest test suite |
 
 ## Current Practice Areas
 

@@ -19,9 +19,6 @@ paths:
   policies: policies
   playbooks: playbooks
   notes: notes
-  specs: specs
-  src: src
-  tests: tests
 
 sources:
   canonical:
