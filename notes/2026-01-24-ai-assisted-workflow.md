@@ -85,13 +85,12 @@ Friction during use became improvement signals: missing steps got added, unclear
 4. **Dogfooding is testing** — Running tools on their own repo is an integration test the test suite can't replicate.
 5. **Log everything** — Context evaporates between sessions; explicit notes preserve decision rationale.
 
-## Potential Graduation Paths
+## Graduation Status
 
-If these patterns stabilize:
-- **Build-Critique-Fix Loop** → playbook (procedural)
-- **Spec-First AI Implementation** → enhancement to writing-specs playbook
-- **Speed demands guardrails** → principle in living-specifications policy
-- **Session logging** → playbook for AI-assisted sessions
+- **Build-Critique-Fix Loop** → Graduated to [playbooks/iterative-critique.md](../playbooks/iterative-critique.md)
+- **Session logging** → Graduated to [playbooks/session-logging.md](../playbooks/session-logging.md)
+- **Speed demands guardrails** → Already covered by Principles #2 and #16
+- **Spec-First AI Implementation** → Partially covered by writing-specs playbook; remaining patterns still exploratory
 
 ## Sources
 

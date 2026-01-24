@@ -36,6 +36,8 @@ CODE (implementation, durable, reviewed)
 - [Writing specs](../playbooks/writing-specs.md) — how to write or update a specification
 - [Ensemble with specs](../playbooks/ensemble-with-specs.md) — using specs in mob programming
 - [Reviewing against specs](../playbooks/reviewing-against-specs.md) — reviewing PRs with specs as source of truth
+- [Iterative critique](../playbooks/iterative-critique.md) — build-critique-fix loops for quality
+- [Session logging](../playbooks/session-logging.md) — preserving context across work sessions
 
 ## Patterns Borrowed
 

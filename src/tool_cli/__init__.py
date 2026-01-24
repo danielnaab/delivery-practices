@@ -2,6 +2,7 @@
 
 Provides the common pattern: parse args, run tool, serialize, print JSON, exit.
 """
+# spec: specs/tool-cli.md
 
 import json
 import sys

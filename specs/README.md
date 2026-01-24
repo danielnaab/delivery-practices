@@ -11,6 +11,7 @@ Living specifications for this repository's tooling. Each spec is a behavioral c
 | [backlink-scanner.md](backlink-scanner.md) | working | Scan for `spec:` annotations, report traceability |
 | [kb-linter.md](kb-linter.md) | working | Validate content files against knowledge-base.yaml rules |
 | [link-validator.md](link-validator.md) | working | Detect broken internal markdown links |
+| [tool-cli.md](tool-cli.md) | working | Shared CLI runner conventions (args, JSON output, exit codes) |
 
 ## Lifecycle
 

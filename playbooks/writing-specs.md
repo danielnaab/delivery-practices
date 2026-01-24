@@ -44,7 +44,7 @@ touch docs/specs/[feature-name].md
 Set frontmatter:
 ```yaml
 ---
-status: proposed
+status: draft
 last-verified: [today]
 owners: [your-name]
 ---
@@ -136,7 +136,7 @@ This step catches drift introduced during implementation — the most common sou
 2. Update behavior statements to reflect the change
 3. Update `last-verified` date in frontmatter
 4. Include spec update in the same PR as code change
-5. If status was `implemented`, keep it (the update is part of the implementation)
+5. If status was `working` or `stable`, keep it (the update is part of the implementation)
 
 ## Key Reframe
 
