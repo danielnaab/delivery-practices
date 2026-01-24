@@ -10,12 +10,13 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Active Explorations
 
-- Initial structure and conventions
+- Living specifications as source of truth
 
 ## Sessions
 
 ### 2026-01-23
 - [Initialization](./2026-01-23-initialization.md) - KB setup
+- [Living Specifications](./2026-01-23-living-specifications.md) - Exploring specs as living documentation
 
 ## Guidelines
 

@@ -2,11 +2,11 @@
 
 Knowledge base for **software delivery practices that enable fast and safe AI-assisted development**.
 
-**Status**: Draft - Minimal initialization, content will grow organically
+**Status**: Working - First practice area established
 
-## What's Here
+## Practice Areas
 
-Currently: nothing yet! This KB will grow as practices are discovered and documented from real project work.
+- **[Specifications](specifications/)** - Living specifications as source of truth: format, workflow, collaboration, verification
 
 ## Philosophy
 
