@@ -74,7 +74,7 @@ This gives [Principle #2](../policies/living-specifications.md) ("source-of-trut
 
 - Given completed linting
 - When results are reported
-- Then output is a JSON object with violations grouped by file
+- Then output is a JSON object with a flat `violations` array and a `summary` object
 
 Example output:
 ```json
@@ -108,9 +108,9 @@ Example output:
 ### Edge cases
 
 - Files with empty frontmatter (`---\n---`): reports "missing status"
-- Files with frontmatter but non-YAML content: reports parse error
-- Binary files: skipped
-- Symlinks: not followed
+- Files with malformed frontmatter: reports "missing status" (regex extraction, not full YAML parsing)
+- Binary files: skipped (UnicodeDecodeError caught)
+- File symlinks: resolved normally; directory symlinks: not followed (os.walk default)
 - knowledge-base.yaml missing: exit with error message (not a violation, a misconfiguration)
 
 ## Constraints

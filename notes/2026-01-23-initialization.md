@@ -39,5 +39,5 @@ Required for all practice recommendations (trust critical)
 ## Sources
 
 - [Meta KB](https://github.com/danielnaab/meta-knowledge-base)
-- [Graft Knowledge](../graft-knowledge/)
+- [Graft Knowledge](../.graft/)
 - Personal Flexion experience

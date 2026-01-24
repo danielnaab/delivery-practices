@@ -11,7 +11,7 @@
 - Scanner exit codes: exit 1 on dangling references or orphan specs (was always exit 0)
 - CLAUDE.md write boundaries now reference knowledge-base.yaml as single source of truth
 - docs/verification.md: removed speculative content, tightened to reference doc
-- playbooks/writing-specs.md: promoted to working, added Step 0 (Orient), Step 7 (Record Decisions), iterative-writing note
+- playbooks/writing-specs.md: promoted to working, added Step 0 (Orient), Step 7 (Record Decisions), Step 9 (Verify Against Implementation), iterative-writing note
 - pyproject.toml: renamed project to delivery-practices-tools, multi-package build config
 
 ### Added
@@ -19,6 +19,10 @@
 - src/kb_linter/ — Python implementation enforcing knowledge-base.yaml rules
 - tests/test_linter.py — unit tests for kb-linter
 - tests/test_kb_linter_cli.py — integration tests for kb-linter CLI
+- specs/link-validator.md — specification for link validator tool
+- src/link_validator/ — Python implementation detecting broken internal links
+- tests/test_validator.py — unit tests for link-validator
+- tests/test_link_validator_cli.py — integration tests for link-validator CLI
 - `spec-section` annotation support in backlink scanner
 - `--report-only` CLI flag (always exit 0, for informational use)
 - tests/test_cli.py — integration tests for CLI output and exit codes
@@ -38,6 +42,8 @@
 - scripts/ directory (trivial wrappers; README documents the commands directly)
 
 ### Fixed
+- specs/kb-linter.md: corrected 3 behavior statements that drifted from implementation (output grouping, parse error, symlinks)
+- notes/2026-01-23-initialization.md: fixed broken link to graft-knowledge directory
 - specs/backlink-scanner.md: corrected language from "Node.js (TypeScript)" to "Python"
 - CHANGELOG 0.1.0: folded non-standard "Conventions Established" heading into "Added"
 

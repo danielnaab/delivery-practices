@@ -120,6 +120,16 @@ Link to related specs, docs, or principles:
 - [Principles](../policies/living-specifications.md) — relevant principle numbers
 ```
 
+### 9. Verify Against Implementation
+
+After implementing (or if spec and implementation are developed together), re-read each behavior statement and edge case against the actual code:
+
+- Does the output structure match what the code produces?
+- Do edge case descriptions match actual error paths?
+- Are constraint claims (performance, dependencies) still accurate?
+
+This step catches drift introduced during implementation — the most common source of spec inaccuracy is "wrote the spec, then built something slightly different."
+
 ## Updating an Existing Spec
 
 1. Find the spec (via backlink in code, or in your project's `docs/specs/`)

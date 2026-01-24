@@ -118,6 +118,17 @@ class TestFrontmatterValidation:
         rules = [v.rule for v in result.violations if v.file == "docs/empty-fm.md"]
         assert "missing-status" in rules
 
+    def test_malformed_frontmatter_reports_missing_status(self, tmp_path: Path) -> None:
+        _setup_kb(tmp_path)
+        (tmp_path / "docs/malformed.md").write_text(
+            "---\n{not: [valid yaml\n---\n\n# Content\n"
+        )
+
+        result = lint(str(tmp_path))
+
+        rules = [v.rule for v in result.violations if v.file == "docs/malformed.md"]
+        assert "missing-status" in rules
+
 
 class TestProvenanceValidation:
     def test_reports_missing_sources_in_docs(self, tmp_path: Path) -> None:
@@ -185,11 +196,13 @@ class TestScannedPaths:
         _setup_kb(tmp_path)
         (tmp_path / "notes").mkdir()
         (tmp_path / "notes/exploration.md").write_text("# No frontmatter, no problem")
+        # Add a docs file so we can confirm scanning works at all
+        (tmp_path / "docs/real.md").write_text("---\nstatus: working\n---\n\n## Sources\n- x\n")
 
         result = lint(str(tmp_path))
 
-        files_checked = [v.file for v in result.violations]
-        assert not any(f.startswith("notes/") for f in files_checked)
+        assert result.files_checked == 1  # Only the docs file
+        assert not any(v.file.startswith("notes/") for v in result.violations)
 
     def test_does_not_scan_specs(self, tmp_path: Path) -> None:
         _setup_kb(tmp_path)
