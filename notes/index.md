@@ -11,7 +11,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 ## Active Explorations
 
 - [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI (partially graduated to [iterative-critique](../playbooks/iterative-critique.md) and [session-logging](../playbooks/session-logging.md))
-- [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels
+- [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels (partially graduated to [pr-descriptions](../playbooks/pr-descriptions.md))
 
 ## Graduated
 
