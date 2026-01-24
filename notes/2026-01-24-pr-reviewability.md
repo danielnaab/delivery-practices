@@ -128,86 +128,156 @@ Session notes already capture what a PR description needs. The mapping:
 
 **Convention**: When creating a PR from a work session, the session note is your source material. Extract, don't rewrite.
 
-## Structured PR Description Template
+## PR Description Design
 
-A template that maps to our abstraction levels:
+### Design principles
+
+1. **Navigation aid, not document** — The description points to specs and notes. It doesn't restate them.
+2. **One screen or less** — If a reviewer has to scroll the description, it's too long. Depth goes in collapsibles or links.
+3. **The title does the heavy lifting** — A good title means many reviewers skip the body entirely. Write the title as if it's the only thing people will read.
+4. **Plain language over structure** — Sentences over bullet lists. Paragraphs over tables. The description is for humans reading quickly, not machines parsing.
+5. **Focus over completeness** — Tell the reviewer what to pay attention to, not everything that changed.
+6. **Generatable** — An AI agent with access to the spec and session note should produce this consistently.
+
+### Format: simple PR (1-5 files, single concern)
 
 ```markdown
-## Summary
-[Level 0: 1-3 sentences of intent]
+[Plain language: what was done and why. One sentence is fine.]
 
-## Spec
-[Link to spec(s) this PR implements or modifies]
-
-## Changes
-[Level 1: Component map — files grouped by role]
-
-## Behavior Map
-[Level 2: Spec sections → code locations]
-[Only for spec-driven changes; skip for config/docs-only PRs]
-
-## Review Strategy
-[Suggested approach — which files to read in what order]
-[What to focus on vs. what's mechanical/generated]
-
-## Decisions
-[Level 3: Key choices and rationale, or link to spec Decisions section]
-
-## Session
-[Level 4: Link to session note for full context]
+Spec: [name](link) | Verify: `command`
 ```
+
+That's it. For a trusted reviewer of a small spec-driven change, the spec link IS the review guide. Example:
+
+```markdown
+Fix link-validator false positives on inline code spans.
+
+Spec: [link-validator](specs/link-validator.md) | Verify: `uv run pytest && uv run link-validator`
+```
+
+### Format: medium PR (5-15 files, one spec)
+
+```markdown
+[What was done and why. 2-3 sentences covering intent and approach.]
+
+Spec: [name](link) | Session: [note](link)
+Verify: `command`
+
+**Changes**: spec, 3 source files, 2 test files, config
+**Focus**: [what the reviewer should actually look at]
+```
+
+Example:
+
+```markdown
+Added kb-linter: validates content files against knowledge-base.yaml rules
+(status vocabulary, provenance requirements). Spec-first, 30 tests, found
+7 real violations in the repo on first run.
+
+Spec: [kb-linter](specs/kb-linter.md) | Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
+Verify: `uv run pytest && uv run kb-linter`
+
+**Changes**: new spec, src/kb_linter/ (3 files), tests/ (2 files), pyproject.toml
+**Focus**: Frontmatter extraction uses regex not YAML parser — intentional (see spec §Constraints)
+```
+
+### Format: large PR (15+ files, multiple specs or cross-cutting)
+
+```markdown
+[What was done and why. 2-3 sentences.]
+
+Specs: [a](link), [b](link), [c](link) | Session: [note](link)
+Verify: `command`
+
+**Changes**: [compact grouping by role]
+**Focus**: [where to spend review time vs. what's mechanical]
+
+<details><summary>Behavior map (which spec sections → which code)</summary>
+
+[Spec section → function/file mapping, only the non-obvious ones]
+
+</details>
+
+<details><summary>Key decisions</summary>
+
+[Choices that a reviewer might question, with brief rationale or link to spec §Decisions]
+
+</details>
+```
+
+### What makes this work
+
+| Element | Purpose | Why it's here |
+|---------|---------|---------------|
+| Plain summary | Triage — "is this relevant to me?" | Every reviewer reads this |
+| Spec links | Deep intent — "what should the code do?" | Replaces inline behavior descriptions |
+| Session link | Full context — "what was the exploration?" | Available but not required |
+| Verify line | Reproducibility — "how do I check this?" | Actionable, copy-pasteable |
+| Changes line | Scope — "how much is there?" | Compact, not a file list |
+| Focus line | Guidance — "where should I spend time?" | The author's review recommendation |
+| Behavior map | Traceability — "which code implements which spec?" | Collapsible, for thorough reviews |
+| Decisions | Rationale — "why this approach?" | Collapsible, for "but why?" questions |
+
+### What's NOT in the description
+
+- **Full file list** — that's what the "Files changed" tab shows
+- **Diff explanations** — the code + spec should be self-explanatory
+- **Test descriptions** — tests are verification, not documentation
+- **Background/motivation** — the session note covers this; link, don't copy
+- **Commit-by-commit breakdown** — that's what git log shows
+
+### The "Focus" line
+
+This is the most important non-obvious element. It tells the reviewer: "given limited time, here's what actually matters." Examples:
+
+- "Read the spec. Implementation is straightforward against it."
+- "The regex in line 47 handles a tricky edge case — verify it matches the spec's description."
+- "Most changes are mechanical renames. The behavioral change is in auth.py:login()."
+- "This is a pure refactor — behavior should be identical. Tests prove it."
+
+The Focus line is the author saying "I know your time is valuable, here's where to spend it."
 
 ## Worked Example: v0.2.0 as a Single PR
 
-If the entire v0.2.0 release had been a single PR (8 commits, 30+ files, 3 new tools), here's what the structured description would look like:
+If the entire v0.2.0 release had been a single PR (8 commits, 30+ files, 3 new tools), here's what the large-format description would look like:
 
-### Summary (Level 0)
-> Three structural integrity tools (backlink-scanner, kb-linter, link-validator), all spec-first with CI enforcement. Unified status vocabulary, validated all playbooks through use, consolidated CLI boilerplate.
+Using the large-format template:
 
-### Changes (Level 1)
-```
-New specs:       specs/{backlink-scanner,kb-linter,link-validator,tool-cli}.md
-New tools:       src/{backlink_scanner,kb_linter,link_validator,tool_cli}/
-New tests:       tests/test_{scanner,linter,validator,cli,kb_linter_cli,link_validator_cli}.py
-New CI:          .github/workflows/ci.yml
-New playbooks:   playbooks/{iterative-critique,session-logging}.md
-Modified specs:  (none — all new)
-Modified docs:   docs/{README,format,verification,comprehension}.md
-Modified policy: policies/living-specifications.md (+Principle #16)
-Config:          pyproject.toml, CHANGELOG.md, README.md
-```
+````markdown
+Three structural integrity tools (backlink-scanner, kb-linter, link-validator),
+all spec-first with CI enforcement. Unified status vocabulary across all content.
+Consolidated identical CLI patterns into shared tool_cli module.
 
-### Behavior Map (Level 2)
-```
-backlink-scanner (specs/backlink-scanner.md):
-  §Behavior/Scanning     → scanner.py:_scan_file(), :scan()
-  §Behavior/Exit codes   → __main__.py via tool_cli.run_tool()
-  §Behavior/spec-section → scanner.py SPEC_SECTION_PATTERN
+Specs: [backlink-scanner](specs/backlink-scanner.md), [kb-linter](specs/kb-linter.md), [link-validator](specs/link-validator.md), [tool-cli](specs/tool-cli.md)
+Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
+Verify: `uv run pytest && uv run ruff check . && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
 
-kb-linter (specs/kb-linter.md):
-  §Behavior/Frontmatter  → linter.py:_check_frontmatter()
-  §Behavior/Provenance   → linter.py:_check_provenance()
-  §Behavior/Exit codes   → __main__.py via tool_cli.run_tool()
+**Changes**: 4 new specs, 4 new src/ packages, 6 test files, CI workflow, 2 new playbooks, docs/policy updates
+**Focus**: Read specs first — implementation is mechanical against them. Watch for: inline code span handling in link-validator (edge case caught by dogfooding), regex YAML parsing in kb-linter (intentional, see spec §Constraints).
 
-link-validator (specs/link-validator.md):
-  §Behavior/Link extraction → validator.py:_extract_links()
-  §Behavior/Path resolution → validator.py:_resolve_path()
-  §Behavior/Exit codes      → __main__.py via tool_cli.run_tool()
+<details><summary>Behavior map</summary>
 
-tool-cli (specs/tool-cli.md):
-  §Behavior/Argument handling → __init__.py:run_tool() argv parsing
-  §Behavior/Exit codes        → __init__.py:run_tool() exit logic
-```
+backlink-scanner §Scanning → scanner.py:scan(), :_scan_file()
+backlink-scanner §spec-section → scanner.py SPEC_SECTION_PATTERN
+kb-linter §Frontmatter → linter.py:_check_frontmatter()
+kb-linter §Provenance → linter.py:_check_provenance()
+link-validator §Link extraction → validator.py:_extract_links()
+link-validator §Path resolution → validator.py:_resolve_path()
+tool-cli §Exit codes → __init__.py:run_tool()
 
-### Review Strategy
-> Read specs first (4 files, ~400 lines total). Then spot-check implementations against behavior statements. Tests are verification — skim for coverage, don't read line-by-line. Config/docs changes are mechanical.
+</details>
 
-### Session Context
-> [notes/2026-01-24-tooling-expansion.md](2026-01-24-tooling-expansion.md) — full narrative including 3 critique cycles, decisions, and observations.
+<details><summary>Key decisions</summary>
 
----
+- Regex over YAML parser for frontmatter: avoids runtime dep, only needs status/sources
+- Inline code span stripping: backtick-wrapped links are examples, not navigation
+- CLI consolidation at 3 tools: evolution trigger met, shared module justified
+- Unified vocabulary (draft/working/stable/deprecated): eliminates parallel lifecycle confusion
 
-**Observation**: Even for 30+ files, the structured description fits in a screen. The reviewer can dive into any level they need. The spec links serve as authoritative documentation of intent.
+</details>
+````
+
+**Observation**: 30+ files, but the visible description is 7 lines. Everything else is collapsible or linked. A high-trust reviewer reads the summary + focus line and goes straight to the diff. A thorough reviewer expands the behavior map and verifies each spec section is implemented.
 
 ## AI Agent as PR Author
 
@@ -311,11 +381,11 @@ The structured description scales down gracefully. High-trust reviews use Level 
 
 ## Open Questions
 
-- **How much structure is too much?** For a 3-file PR, the template is overkill. Where's the threshold?
-- **Should behavior maps be generated or hand-written?** Generated is more accurate but requires tooling investment.
-- **How do we handle PRs that modify specs?** The spec is both the change and the review guide — circular reference problem.
-- **Can review comments reference spec sections?** "This doesn't match §Behavior/Login" is more precise than "this seems wrong."
-- **Does this pattern work for non-spec changes?** Config, docs, refactors don't have specs. Do they need their own template?
+- **Should behavior maps be generated or hand-written?** Generated is more accurate but requires tooling. Hand-written is simpler but risks going stale. Could the backlink scanner output be reformatted into a behavior map?
+- **How do we handle PRs that modify specs?** The spec is both the change and the review guide — circular reference. Possible answer: the *diff* of the spec IS the intent description; the reviewer reads the spec diff first, then verifies code matches the new spec.
+- **Can review comments reference spec sections?** "This doesn't match §Behavior/Login" is more precise than "this seems wrong." Would this convention be adopted naturally?
+- **Does this pattern work for non-spec changes?** Config, docs, refactors don't have specs. The simple format (summary + verify) probably suffices. The Focus line still applies — "this is a pure refactor, behavior unchanged."
+- **How do we handle PRs from people who didn't write the spec?** The Focus line depends on author knowledge. Can the spec itself provide enough Focus guidance for any author?
 
 ## Emerging Principles
 
