@@ -132,12 +132,24 @@ Session notes already capture what a PR description needs. The mapping:
 
 ### Design principles
 
-1. **Navigation aid, not document** — The description points to specs and notes. It doesn't restate them.
+1. **Navigation aid with glue text** — The description links to specs and notes for depth, but restates key facts inline when it saves the reviewer a click. Brief restatement is glue that makes the description self-sufficient for high-trust review.
 2. **One screen or less** — If a reviewer has to scroll the description, it's too long. Depth goes in collapsibles or links.
 3. **The title does the heavy lifting** — A good title means many reviewers skip the body entirely. Write the title as if it's the only thing people will read.
-4. **Plain language over structure** — Sentences over bullet lists. Paragraphs over tables. The description is for humans reading quickly, not machines parsing.
+4. **Plain language over structure** — Sentences over bullet lists. Translate spec formality into casual reviewer language. The description is for humans reading quickly, not machines parsing.
 5. **Focus over completeness** — Tell the reviewer what to pay attention to, not everything that changed.
 6. **Generatable** — An AI agent with access to the spec and session note should produce this consistently.
+
+### When to restate vs. link
+
+| Restate inline | Link instead |
+|---------------|--------------|
+| One-line facts ("exit 1 on dangling refs") | Multi-paragraph explanations |
+| Casual translation of formal spec language | The spec's full behavior section |
+| Summary across multiple specs (1 line each) | Individual spec details |
+| The delta when the spec is changing ("was X, now Y") | Background/history |
+| Context for the Focus line | The session note narrative |
+
+**The test**: Does this restatement save the reviewer a click AND fit in one sentence? If yes, restate. If it needs a paragraph, link.
 
 ### Format: simple PR (1-5 files, single concern)
 
@@ -257,13 +269,20 @@ Verify: `uv run pytest && uv run ruff check . && uv run backlink-scanner && uv r
 
 <details><summary>Behavior map</summary>
 
-backlink-scanner §Scanning → scanner.py:scan(), :_scan_file()
-backlink-scanner §spec-section → scanner.py SPEC_SECTION_PATTERN
-kb-linter §Frontmatter → linter.py:_check_frontmatter()
-kb-linter §Provenance → linter.py:_check_provenance()
-link-validator §Link extraction → validator.py:_extract_links()
-link-validator §Path resolution → validator.py:_resolve_path()
-tool-cli §Exit codes → __init__.py:run_tool()
+backlink-scanner:
+- §Scanning — finds `# spec:` annotations in source files → scanner.py:scan()
+- §spec-section — tracks section-level granularity → scanner.py SPEC_SECTION_PATTERN
+
+kb-linter:
+- §Frontmatter — validates status field against allowed values → linter.py:_check_frontmatter()
+- §Provenance — checks for Sources section in docs/policies → linter.py:_check_provenance()
+
+link-validator:
+- §Link extraction — pulls markdown links, skips code blocks/inline code → validator.py:_extract_links()
+- §Path resolution — resolves relative paths, strips fragments → validator.py:_resolve_path()
+
+tool-cli:
+- §Exit codes — 0 clean, 1 failures, 2 config error → __init__.py:run_tool()
 
 </details>
 
@@ -277,7 +296,11 @@ tool-cli §Exit codes → __init__.py:run_tool()
 </details>
 ````
 
-**Observation**: 30+ files, but the visible description is 7 lines. Everything else is collapsible or linked. A high-trust reviewer reads the summary + focus line and goes straight to the diff. A thorough reviewer expands the behavior map and verifies each spec section is implemented.
+**Observations**:
+- 30+ files, but the visible description is 7 lines. Everything else is collapsible or linked.
+- A high-trust reviewer reads the summary + focus line and goes straight to the diff.
+- A thorough reviewer expands the behavior map — the one-line restatements tell them what each behavior does without opening the spec. They click through only when verifying details.
+- The key decisions section restates rationale concisely. The reviewer only follows spec links when they disagree or want more context.
 
 ## AI Agent as PR Author
 
@@ -391,10 +414,11 @@ The structured description scales down gracefully. High-trust reviews use Level 
 
 1. **Specs are review guides** — Read the spec before reading the code. The spec tells you what to verify.
 2. **Progressive disclosure in PRs** — Summary for triage, component map for scoping, behavior map for verification.
-3. **Extract, don't rewrite** — Session notes already contain the PR description. Surface it, don't duplicate it.
+3. **Restate to save clicks, link for depth** — One-line facts belong inline. Multi-paragraph context belongs behind a link. The test: does it fit in one sentence AND save a context switch?
 4. **Structure enables generation** — Structured artifacts (specs, annotations, session notes) enable AI-generated PR descriptions that are consistent and complete.
-5. **Trust scales the template down** — High-trust review needs only Level 0 + spec link. All levels exist for when depth is needed.
+5. **Trust scales the template down** — High-trust review needs only summary + spec link. All levels exist for when depth is needed.
 6. **The reviewer chooses their depth** — The author provides all levels; the reviewer decides how deep to go. Don't force everyone through the same path.
+7. **The description should be self-sufficient for triage** — A reviewer should be able to decide "approve / review deeper / not my area" without clicking any links. Restatement makes this possible.
 
 ## Potential Graduation Paths
 
