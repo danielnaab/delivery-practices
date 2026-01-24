@@ -1,10 +1,12 @@
 ---
-status: working
+status: draft
 ---
 
 # Verification and Drift Detection
 
 How to keep specifications honest—detecting and resolving divergence between specs and implementation.
+
+> **Status note**: These are proposed approaches. None have been implemented or validated yet. The patterns below represent our best thinking on how drift detection *could* work.
 
 ## Detection Approaches
 

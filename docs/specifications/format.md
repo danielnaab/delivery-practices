@@ -1,5 +1,5 @@
 ---
-status: working
+status: draft
 ---
 
 # Specification Format

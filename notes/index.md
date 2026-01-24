@@ -10,13 +10,17 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Active Explorations
 
-- Living specifications as source of truth
+(None currently active)
+
+## Graduated
+
+- [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/specifications/](../docs/specifications/), [policies/](../policies/living-specifications.md), [playbooks/](../playbooks/)
 
 ## Sessions
 
 ### 2026-01-23
 - [Initialization](./2026-01-23-initialization.md) - KB setup
-- [Living Specifications](./2026-01-23-living-specifications.md) - Exploring specs as living documentation
+- [Living Specifications](./2026-01-23-living-specifications.md) - Exploring specs as living documentation (graduated)
 
 ## Guidelines
 

@@ -1,10 +1,12 @@
 ---
-status: working
+status: draft
 ---
 
 # Playbook: Writing Specifications
 
 How to write a new specification or update an existing one.
+
+> **Context**: This playbook is for use in project repositories that adopt the [living specifications](../docs/specifications/) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
 
 ## When to Write a Spec
 
@@ -22,9 +24,11 @@ How to write a new specification or update an existing one.
 
 ### 1. Create the File
 
+Create a new spec in your project's `docs/specs/` directory:
+
 ```bash
-# New spec
-cp docs/specifications/format.md docs/specs/[feature-name].md
+mkdir -p docs/specs
+touch docs/specs/[feature-name].md
 ```
 
 Set frontmatter:
@@ -91,7 +95,7 @@ Include provenance for all behavior decisions:
 
 ## Updating an Existing Spec
 
-1. Find the spec (via backlink in code, or in `docs/specs/`)
+1. Find the spec (via backlink in code, or in your project's `docs/specs/`)
 2. Update behavior statements to reflect the change
 3. Update `last-verified` date in frontmatter
 4. Include spec update in the same PR as code change

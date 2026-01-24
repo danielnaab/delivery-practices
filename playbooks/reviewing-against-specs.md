@@ -1,10 +1,12 @@
 ---
-status: working
+status: draft
 ---
 
 # Playbook: Reviewing PRs Against Specifications
 
 How to review a pull request when specifications are the source of truth.
+
+> **Context**: This playbook applies to project repositories using the [living specifications](../docs/specifications/) practice. Example paths like `docs/specs/` refer to conventions in project repos.
 
 ## Before Reviewing
 

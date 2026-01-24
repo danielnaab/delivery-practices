@@ -1,15 +1,30 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- Reorganized by knowledge type: docs/ (declarative), policies/ (normative), playbooks/ (procedural), notes/ (ephemeral)
+- Split monolithic specifications document into focused files
+- Corrected status fields: unvalidated content marked as draft
+- Added context notes to playbooks (these describe project repo conventions)
+
+### Added
+- policies/living-specifications.md — 15 principles for spec-driven development
+- playbooks/writing-specs.md — how to write a specification
+- playbooks/ensemble-with-specs.md — using specs in ensemble sessions
+- playbooks/reviewing-against-specs.md — reviewing PRs against specs
+- docs/specifications/{format,verification,relationships,comprehension}.md
+- READMEs for policies/ and playbooks/ directories
+
 ## [0.1.0] - 2026-01-23
 
 ### Added
 - Initial knowledge base structure
 - Graft configuration with meta-kb dependency
-- Practice area structure: development, quality, deployment, collaboration, governance
-- Decision records framework
+- Living specifications practice area (explored and synthesized)
 - Notes system for exploration
 
 ### Conventions Established
 - Evidence-driven evolution
-- Hybrid handbook + atomic notes strategy
+- Knowledge-type directory structure (following meta-kb conventions)
 - Required provenance for practice recommendations

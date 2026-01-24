@@ -1,5 +1,5 @@
 ---
-status: working
+status: draft
 ---
 
 # Playbook: Ensemble Sessions with Specifications
