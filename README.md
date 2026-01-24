@@ -37,8 +37,9 @@ Content organized by knowledge type:
 - **[Backlink Scanner](specs/backlink-scanner.md)** — Scans for `// spec:` annotations and reports spec-to-implementation traceability
 
 ```bash
-npm run scan        # Run the scanner on the repo
-npm test            # Run tests
+uv run backlink-scanner   # Run the scanner on the repo
+uv run pytest             # Run tests
+uv run ruff check .       # Lint
 ```
 
 ## Knowledge Base System

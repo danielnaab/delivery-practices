@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Test script for Delivery Practices
+# Runs tests with coverage
+
+set -e  # Exit on error
+
+echo "==> Running tests for Delivery Practices"
+
+# Run tests with coverage
+uv run pytest
+
+# Check exit code
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "All tests passed! ✓"
+    echo "Coverage report: htmlcov/index.html"
+else
+    echo ""
+    echo "Some tests failed! ✗"
+    exit 1
+fi

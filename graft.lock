@@ -4,7 +4,15 @@ dependencies:
     source: https://github.com/danielnaab/meta-knowledge-base.git
     ref: main
     commit: a1324bea546e004f5c40f91abd20f3b0300d7828
-    consumed_at: '2026-01-23T21:15:01.463689+00:00'
+    consumed_at: '2026-01-24T14:26:43.878133+00:00'
+    direct: true
+    requires: []
+    required_by: []
+  python-starter:
+    source: ssh://forgejo@platform-vm:2222/daniel/python-starter.git
+    ref: main
+    commit: 3eac821c0e4d0bd418dc37b58f7e87d23f9d9e7f
+    consumed_at: '2026-01-24T14:26:43.878133+00:00'
     direct: true
     requires: []
     required_by: []

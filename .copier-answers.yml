@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 3eac821
+_src_path: .graft/python-starter
+author_email: daniel@example.com
+author_name: Daniel
+include_dev_scripts: true
+include_example_code: false
+include_github_actions: false
+license: MIT
+package_name: backlink_scanner
+project_description: Backlink scanner for spec-to-implementation traceability
+project_name: Delivery Practices
+python_version: '3.11'

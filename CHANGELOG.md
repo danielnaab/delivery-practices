@@ -10,15 +10,16 @@
 
 ### Added
 - specs/backlink-scanner.md — specification for the backlink scanner tool (dogfooding)
-- src/backlink-scanner.ts — backlink scanner implementation
-- tests/backlink-scanner.test.ts — backlink scanner tests (11 tests)
+- src/backlink_scanner/ — Python implementation (no runtime dependencies)
+- tests/test_scanner.py — 16 tests with pytest
 - policies/living-specifications.md — 15 principles for spec-driven development
 - playbooks/writing-specs.md — how to write a specification
 - playbooks/ensemble-with-specs.md — using specs in ensemble sessions
 - playbooks/reviewing-against-specs.md — reviewing PRs against specs
 - docs/{format,verification,relationships,comprehension}.md — declarative reference
 - READMEs for policies/ and playbooks/ directories
-- package.json, tsconfig.json — project configuration for tooling
+- pyproject.toml — project configuration (uv, ruff, pytest)
+- python-starter graft dependency for project scaffolding
 
 ## [0.1.0] - 2026-01-23
 
