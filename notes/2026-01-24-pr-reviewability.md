@@ -18,115 +18,21 @@ But these aren't reckless "dump 2000 lines" PRs. They're *structured* changes wh
 
 The structure is already there. We need to surface it for reviewers.
 
-## Progressive Disclosure for PR Review
+## Conceptual Foundation
 
-Apply the [comprehension.md](../docs/comprehension.md) progressive disclosure principle to PR descriptions:
+The [progressive disclosure](../docs/comprehension.md) principle applies directly to PR review. A reviewer needs different depths at different moments:
 
-### Level 0: Intent (1-3 sentences)
+- **Triage**: "Is this relevant to me?" → the title and summary
+- **Scoping**: "How big is this?" → the changes line
+- **Understanding**: "What does this implement?" → spec links and behavior map
+- **Verification**: "Is the approach sound?" → focus line, decisions
+- **Context**: "Why this approach?" → session note link
 
-What was accomplished and why. A reviewer reads this and knows whether the PR is relevant to them.
+Our structured artifacts already contain this information. Specs hold intent and behavior. Session notes hold rationale and context. Backlink annotations hold the spec-to-code mapping. The PR description is a **computed view** over these artifacts — it points to them rather than restating them.
 
-```
-Added link-validator tool: detects broken internal markdown links across
-all content directories. Spec-first implementation, 42 tests, found and
-fixed 1 broken link in the repo.
-```
+**The spec as review guide**: For spec-driven changes, the review flow inverts. Instead of "read code → infer intent," it's "read intent → verify code matches." The spec tells the reviewer what the code should do; the diff shows whether it does.
 
-### Level 1: Component Map
-
-What files changed, grouped by role. A reviewer reads this and knows which files to focus on for their expertise.
-
-```
-Spec:           specs/link-validator.md
-Implementation: src/link_validator/{validator,__main__}.py
-Tests:          tests/{test_validator,test_link_validator_cli}.py
-Config:         pyproject.toml (script entry, build, coverage)
-Docs:           CHANGELOG.md, specs/README.md
-Fixed:          notes/2026-01-23-initialization.md (broken link)
-```
-
-### Level 2: Behavior Map
-
-Which spec behaviors map to which code. A reviewer reads this to understand what the code *should* do before reading what it *does*.
-
-```
-Link extraction (spec §Behavior/Link extraction)
-  → validator.py:_extract_links()
-  → tests: TestExtraction (8 cases)
-
-Code block skipping (spec §Behavior/Code block handling)
-  → validator.py:_extract_links() fence tracking
-  → tests: TestCodeBlockSkipping (6 cases)
-
-Path resolution (spec §Behavior/Path resolution)
-  → validator.py:_resolve_path()
-  → tests: TestResolvePath (10 cases)
-
-Exit codes (spec §Behavior/Exit codes)
-  → __main__.py via tool_cli.run_tool()
-  → tests: test_link_validator_cli.py (6 cases)
-```
-
-### Level 3: Decisions & Rationale
-
-Why these choices were made. A reviewer reads this when they have "but why?" questions.
-
-```
-- Skip inline code spans: `[link](target)` inside backticks are examples, not navigation
-- FileNotFoundError for missing dirs: consistent with other tools' error contract
-- No argparse: minimal interface doesn't justify the dependency (see tool-cli spec)
-```
-
-### Level 4: Session Context
-
-The full exploration narrative. A reviewer reads this when they want to understand the development process.
-
-```
-Session note: notes/2026-01-24-tooling-expansion.md
-- Three critique cycles refined the implementation
-- Dogfooding caught inline code false positives
-- Follows writing-specs playbook (validated by use)
-```
-
-## How Linking Strategy Enables This
-
-Our existing structure already contains the metadata for every level:
-
-| Level | Source |
-|-------|--------|
-| Intent | Spec's Intent section |
-| Component map | Backlink scanner output (specs → implementors) |
-| Behavior map | Spec behavior sections + `spec-section:` annotations |
-| Decisions | Spec's Decisions section + session note |
-| Context | Session note's Activities/Observations |
-
-**Key insight**: A reviewer doesn't need to read the diff to understand the PR. They can read the spec, then spot-check the diff for correctness. The spec IS the review guide.
-
-## The Spec as Review Guide
-
-For spec-driven changes, the review strategy is:
-
-1. **Read the spec first** — understand what the code should do
-2. **Check behavior coverage** — does each spec section have corresponding code?
-3. **Spot-check implementation** — for correctness, not comprehension
-4. **Verify test coverage** — do tests exercise each behavior statement?
-5. **Check consistency** — config, docs, and tooling alignment
-
-This inverts the traditional review flow. Instead of "read code → infer intent," it's "read intent → verify code matches."
-
-## Work Log Structure for Reviewability
-
-Session notes already capture what a PR description needs. The mapping:
-
-| Session note section | PR description level |
-|---------------------|---------------------|
-| Context | Why this PR exists |
-| Activities | What was done (Level 0-1) |
-| Decisions | Rationale (Level 3) |
-| Observations | Review guidance (what to pay attention to) |
-| Metrics | Quick confidence check (test count, coverage) |
-
-**Convention**: When creating a PR from a work session, the session note is your source material. Extract, don't rewrite.
+**Session notes as source material**: When creating a PR from a work session, extract from the session note — don't rewrite. The session note's Activities become the summary, Decisions become rationale, Observations become the focus line.
 
 ## PR Description Design
 
@@ -143,19 +49,19 @@ Session notes already capture what a PR description needs. The mapping:
 
 The title is the single most important line. It should tell a reviewer whether to open the PR at all.
 
-**Format**: `[verb] [what]: [key behavioral detail]`
+**Principle**: Include enough behavioral detail that the title makes sense without the body. If the body disappeared, would the title alone tell a reviewer what this PR changes?
 
-Good titles:
-- "Add kb-linter: validates frontmatter and provenance against knowledge-base.yaml"
-- "Fix link-validator false positives on inline code spans"
-- "Unify status vocabulary to draft/working/stable/deprecated across all content"
+Good titles (each follows the pattern natural to its type):
+- "Add kb-linter: validates frontmatter and provenance against knowledge-base.yaml" (new feature — what it does)
+- "Fix link-validator false positives on inline code spans" (bug fix — which bug, specifically)
+- "Unify status vocabulary to draft/working/stable/deprecated across all content" (cross-cutting — what changes and to what)
+- "Extract shared tool_cli module from 3 identical __main__.py patterns" (refactor — what was extracted and why)
 
 Weak titles (missing behavioral detail):
 - "Add kb-linter tool" — what does it do?
 - "Fix bug in link-validator" — which bug?
 - "Update statuses" — how? why?
-
-The title should make sense without the body. If the body disappeared, would the title alone tell a reviewer what this PR changes?
+- "Refactor CLI code" — what was the refactoring?
 
 ### When to use which format
 
@@ -217,7 +123,7 @@ Spec: [link-validator](specs/link-validator.md) | Verify: `uv run pytest && uv r
 Spec: [name](link) | Session: [note](link)
 Verify: `command`
 
-**Changes**: [compact grouping by role]
+**Changes**: [semantic structure — e.g., spec → implementation → tests → config]
 **Focus**: [what the reviewer should actually look at]
 ```
 
@@ -231,7 +137,7 @@ Added kb-linter: validates content files against knowledge-base.yaml rules
 Spec: see `specs/kb-linter.md` in this PR | Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
 Verify: `uv run pytest && uv run kb-linter`
 
-**Changes**: new spec, src/kb_linter/ (3 files), tests/ (2 files), pyproject.toml
+**Changes**: spec → implementation → tests → config (pyproject.toml entry point + build)
 **Focus**: Frontmatter extraction uses regex not YAML parser — intentional (see spec §Constraints). Review the regex against real frontmatter examples in the repo.
 ```
 
@@ -245,7 +151,7 @@ Verify: `uv run pytest && uv run kb-linter`
 Specs: [a](link), [b](link), [c](link) | Session: [note](link)
 Verify: `command`
 
-**Changes**: [compact grouping by role]
+**Changes**: [semantic structure — e.g., spec → implementation → tests → config]
 **Focus**: [where to spend review time vs. what's mechanical]
 
 <details><summary>Behavior map (which spec sections → which code)</summary>
@@ -272,15 +178,14 @@ For refactors, config changes, dependency updates, and docs-only PRs where no sp
 
 Verify: `command`
 
-**Safety**: [why this is safe — e.g., "pure refactor, all tests pass unchanged" or "config only, no behavior change"]
-**Focus**: [what the reviewer should check]
+**Focus**: [why this is safe + what the reviewer should check, as a natural sentence]
 ```
 
-The `**Safety**` line replaces the spec link. Without a spec as review guide, the reviewer needs to know why this change doesn't break anything. Examples:
+Without a spec as review guide, the Focus line does double duty — it establishes safety AND directs attention. Examples:
 
-- "Pure refactor — behavior identical, tests unchanged, ruff confirms no new warnings."
-- "Dependency update — changelog reviewed, no breaking changes in minor bump."
-- "Docs only — no code changes."
+- "Pure refactor — behavior identical, all tests pass unchanged. Check that run_tool() handles the same edge cases the original did."
+- "Dependency update — changelog reviewed, no API changes in minor bump. Verify lockfile is clean."
+- "Docs only — no code changes, just verify links resolve."
 
 ### What makes this work
 
@@ -290,10 +195,9 @@ The `**Safety**` line replaces the spec link. Without a spec as review guide, th
 | Plain summary | Scope — "is this relevant to me?" | Every reviewer who opens the PR reads this |
 | Breaking line | Alert — "does this affect my code?" | Only present when behavior changes |
 | Spec links | Deep intent — "what should the code do?" | The review guide for spec-driven changes |
-| Safety line | Confidence — "why is this safe?" | The review guide for non-spec changes |
 | Session link | Full context — "what was the exploration?" | Available but not required |
 | Verify line | Reproducibility — "how do I check this?" | Actionable, copy-pasteable |
-| Changes line | Scope — "how much is there?" | Compact, not a file list |
+| Changes line | Structure — "what's the shape?" | Semantic flow, not file counts |
 | Focus line | Guidance — "where should I spend time?" | The author's review recommendation |
 | Behavior map | Traceability — "which code implements which spec?" | Collapsible, for thorough reviews |
 | Decisions | Rationale — "why this approach?" | Collapsible, for "but why?" questions |
@@ -319,6 +223,15 @@ The Focus line is the author saying "I know your time is valuable, here's where 
 
 **Limitation**: The Focus line depends on author self-awareness. If the author doesn't realize something is non-obvious, they won't flag it. **Mitigation**: When you can't write a good Focus line, fall back to "Review the behavior map — each spec section should have corresponding correct code." The behavior map provides systematic coverage when the author's intuition about what's tricky is unavailable.
 
+### Updating during review
+
+If the implementation changes after review feedback:
+
+- **Update the summary** if the approach changed (not just the details)
+- **Update the Focus line** if the reviewer's feedback revealed a new area of concern
+- **Update the behavior map** only if spec sections were added/removed
+- **Don't update** for cosmetic fixes, test additions, or minor corrections — the description reflects the PR's intent, not its git log
+
 ## Worked Example: v0.2.0 as a Single PR
 
 If the entire v0.2.0 release had been a single PR (8 commits, 30+ files, 3 new tools), here's what the large-format description would look like:
@@ -336,7 +249,7 @@ Specs: see `specs/{backlink-scanner,kb-linter,link-validator,tool-cli}.md` in th
 Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
 Verify: `uv run pytest && uv run ruff check . && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
 
-**Changes**: 4 new specs, 4 new src/ packages, 6 test files, CI workflow, 2 new playbooks, docs/policy updates
+**Changes**: specs → implementations → tests → CI workflow → playbooks → docs/policy alignment
 **Focus**: Read specs first — implementation is mechanical against them. Watch for: inline code span handling in link-validator (edge case caught by dogfooding), regex YAML parsing in kb-linter (intentional, see spec §Constraints).
 
 <details><summary>Behavior map</summary>
@@ -385,8 +298,7 @@ Extracted to shared tool_cli module. No behavior change — all tools work ident
 
 Verify: `uv run pytest && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
 
-**Safety**: Pure refactor. All 101 tests pass unchanged. Tool outputs identical before/after.
-**Focus**: Check that tool_cli.run_tool() handles the edge cases each __main__.py previously handled (FileNotFoundError, --report-only flag ordering).
+**Focus**: Pure refactor — all 101 tests pass unchanged, tool outputs identical. Check that run_tool() handles the edge cases each __main__.py previously handled (FileNotFoundError, --report-only flag ordering).
 ```
 
 ## AI Agent as PR Author
