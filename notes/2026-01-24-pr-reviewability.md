@@ -157,6 +157,70 @@ A template that maps to our abstraction levels:
 [Level 4: Link to session note for full context]
 ```
 
+## Worked Example: v0.2.0 as a Single PR
+
+If the entire v0.2.0 release had been a single PR (8 commits, 30+ files, 3 new tools), here's what the structured description would look like:
+
+### Summary (Level 0)
+> Three structural integrity tools (backlink-scanner, kb-linter, link-validator), all spec-first with CI enforcement. Unified status vocabulary, validated all playbooks through use, consolidated CLI boilerplate.
+
+### Changes (Level 1)
+```
+New specs:       specs/{backlink-scanner,kb-linter,link-validator,tool-cli}.md
+New tools:       src/{backlink_scanner,kb_linter,link_validator,tool_cli}/
+New tests:       tests/test_{scanner,linter,validator,cli,kb_linter_cli,link_validator_cli}.py
+New CI:          .github/workflows/ci.yml
+New playbooks:   playbooks/{iterative-critique,session-logging}.md
+Modified specs:  (none — all new)
+Modified docs:   docs/{README,format,verification,comprehension}.md
+Modified policy: policies/living-specifications.md (+Principle #16)
+Config:          pyproject.toml, CHANGELOG.md, README.md
+```
+
+### Behavior Map (Level 2)
+```
+backlink-scanner (specs/backlink-scanner.md):
+  §Behavior/Scanning     → scanner.py:_scan_file(), :scan()
+  §Behavior/Exit codes   → __main__.py via tool_cli.run_tool()
+  §Behavior/spec-section → scanner.py SPEC_SECTION_PATTERN
+
+kb-linter (specs/kb-linter.md):
+  §Behavior/Frontmatter  → linter.py:_check_frontmatter()
+  §Behavior/Provenance   → linter.py:_check_provenance()
+  §Behavior/Exit codes   → __main__.py via tool_cli.run_tool()
+
+link-validator (specs/link-validator.md):
+  §Behavior/Link extraction → validator.py:_extract_links()
+  §Behavior/Path resolution → validator.py:_resolve_path()
+  §Behavior/Exit codes      → __main__.py via tool_cli.run_tool()
+
+tool-cli (specs/tool-cli.md):
+  §Behavior/Argument handling → __init__.py:run_tool() argv parsing
+  §Behavior/Exit codes        → __init__.py:run_tool() exit logic
+```
+
+### Review Strategy
+> Read specs first (4 files, ~400 lines total). Then spot-check implementations against behavior statements. Tests are verification — skim for coverage, don't read line-by-line. Config/docs changes are mechanical.
+
+### Session Context
+> [notes/2026-01-24-tooling-expansion.md](2026-01-24-tooling-expansion.md) — full narrative including 3 critique cycles, decisions, and observations.
+
+---
+
+**Observation**: Even for 30+ files, the structured description fits in a screen. The reviewer can dive into any level they need. The spec links serve as authoritative documentation of intent.
+
+## AI Agent as PR Author
+
+In our workflow, the AI assistant has full context of:
+- Which specs were implemented (it wrote them)
+- Which behaviors map to which code (it implemented them)
+- What decisions were made and why (it was part of the conversation)
+- What the session notes contain (it wrote them)
+
+This means the AI can *generate* structured PR descriptions from its own context. The convention becomes: **ask the AI to write the PR description using the template, referencing the spec and session note.**
+
+The template is a prompt template as much as a documentation template. An agent that follows it produces consistent, reviewer-friendly descriptions regardless of PR size.
+
 ## What Could Be Tooled vs. What's Convention
 
 ### Convention (now)
@@ -179,29 +243,71 @@ A template that maps to our abstraction levels:
 
 ## Multi-PR Work Streams
 
-For larger efforts spanning multiple PRs:
+For larger efforts spanning multiple PRs (like v0.2.0's 8 commits):
 
 ### Work stream index
-A session note (or dedicated tracking note) that shows:
-- Overall goal
-- PR sequence with each PR's summary
-- Current state and what's next
-- Accumulated decisions
 
-### PR ordering for reviewability
-When splitting work into PRs, prefer:
-1. **Spec PR first** — reviewer understands intent before seeing code
-2. **Implementation PR** — reviewer has spec context, can verify
-3. **Integration PR** — config, docs, CI changes
+A tracking artifact that shows the overall shape. Can live in:
+- A session note (ephemeral, for in-progress work)
+- A PR description for the final merge (durable, for review)
+- An issue/epic (if using an issue tracker)
 
-This mirrors the development order (spec → implement → integrate) and gives reviewers the same progressive disclosure.
+Structure:
+```markdown
+## Work Stream: [Name]
 
-### Alternative: single large PR with navigation
-For trusted teams that prefer fewer PRs:
-- Use the structured template above
-- Add a "Reading Order" section
-- Consider collapsible sections for Level 2+ details
-- The session note link provides deep context without cluttering the PR
+**Goal**: [One sentence]
+
+### PRs (in review order)
+1. [Spec: backlink-scanner](#) — behavioral contract for traceability tool
+2. [Implement: backlink-scanner](#) — scanner with spec-section support
+3. [Spec + Implement: kb-linter](#) — content rule enforcement
+4. [Spec + Implement: link-validator](#) — broken link detection
+5. [Integration: CI + CLI + vocabulary](#) — enforcement, consolidation, alignment
+
+### Accumulated Decisions
+- [Decision and link to spec/session where it was made]
+
+### Current State
+[What's done, what's in review, what's next]
+```
+
+### PR ordering strategies
+
+| Strategy | When to use | Trade-off |
+|----------|-------------|-----------|
+| **Spec first, then implement** | New tools/features with clear boundaries | More PRs, but each is independently reviewable |
+| **Spec + implement together** | Small tools or tight feedback loops | Fewer PRs, reviewer sees intent and code together |
+| **Single large PR** | Trusted team, coherent work session | Fastest for author, needs structured description |
+| **Split by concern** | Cross-cutting changes (vocabulary, config) | Logical grouping, but may have ordering dependencies |
+
+### Single large PR (trusted teams)
+
+When the team trusts the author and prefers fewer review contexts:
+
+1. Use the structured template with all 5 levels
+2. Add a **Reading Order** section:
+   ```markdown
+   ## Reading Order
+   1. Read specs/ first (intent and behavior contracts)
+   2. Skim src/ for structural alignment with specs
+   3. Check tests/ for coverage of spec edge cases
+   4. Config/docs are mechanical — verify links work
+   ```
+3. Link the session note for full decision rationale
+4. Consider GitHub's "viewed" checkbox feature — mark mechanical files as pre-reviewed
+
+### The trust gradient
+
+Different review depths for different trust levels:
+
+| Trust level | Review approach | PR description needs |
+|-------------|----------------|---------------------|
+| **High trust** (pair worked, AI-assisted with oversight) | Spec + summary sufficient. Spot-check edge cases. | Level 0 + spec link |
+| **Medium trust** (solo work, familiar codebase) | Behavior map review. Verify each spec section covered. | Levels 0-2 |
+| **Lower trust** (new contributor, unfamiliar area) | Full diff review with spec as guide. | All levels + reading order |
+
+The structured description scales down gracefully. High-trust reviews use Level 0; lower-trust reviews use all levels. The information is there either way.
 
 ## Open Questions
 
@@ -216,8 +322,9 @@ For trusted teams that prefer fewer PRs:
 1. **Specs are review guides** — Read the spec before reading the code. The spec tells you what to verify.
 2. **Progressive disclosure in PRs** — Summary for triage, component map for scoping, behavior map for verification.
 3. **Extract, don't rewrite** — Session notes already contain the PR description. Surface it, don't duplicate it.
-4. **Structure enables tools** — The more structured our artifacts (specs, annotations, session notes), the more we can automate.
-5. **Trust enables brevity** — With trusted reviewers, a spec link + summary is often enough. The layers exist for when depth is needed.
+4. **Structure enables generation** — Structured artifacts (specs, annotations, session notes) enable AI-generated PR descriptions that are consistent and complete.
+5. **Trust scales the template down** — High-trust review needs only Level 0 + spec link. All levels exist for when depth is needed.
+6. **The reviewer chooses their depth** — The author provides all levels; the reviewer decides how deep to go. Don't force everyone through the same path.
 
 ## Potential Graduation Paths
 
