@@ -40,7 +40,7 @@ Our structured artifacts already contain this information. Specs hold intent and
 
 1. **Navigation aid with glue text** — Link to specs and notes for depth. Restate key facts inline when it saves the reviewer a click. Brief restatement makes the description self-sufficient for high-trust review.
 2. **One screen or less** — If a reviewer has to scroll the description, it's too long. Depth goes in collapsibles or links.
-3. **The title does the heavy lifting** — Many reviewers skip the body entirely. The title is Level 0; the body is for those who need more.
+3. **The title does the heavy lifting** — Many reviewers skip the body entirely. The title is the first thing read; the body is for those who need more.
 4. **Plain language over structure** — Sentences over bullet lists. Translate spec formality into casual reviewer language.
 5. **Focus over completeness** — Tell the reviewer what to pay attention to, not everything that changed.
 6. **Generatable** — An AI agent with access to the spec and session note should produce this consistently.
@@ -323,14 +323,14 @@ The template is a prompt template as much as a documentation template. An agent 
 
 ### Tooling (potential)
 - **PR description generator**: reads spec + backlink scanner output + session note → generates structured description
-- **Behavior map generator**: reads spec behavior sections + `spec-section:` annotations → generates Level 2 map
+- **Behavior map generator**: reads spec behavior sections + `spec-section:` annotations → generates the behavior map
 - **Review guide generator**: reads changed files + their spec annotations → suggests review order
 - **Diff grouping**: group diff hunks by spec section rather than alphabetical file order
 
 ### Tooling trade-offs
 - Generator tools risk becoming stale if conventions change
 - Convention-only approach relies on discipline (but our team is small and trusted)
-- A lightweight generator (just Level 1 + Level 2) would have high value-to-complexity ratio
+- A lightweight generator (just the changes line and behavior map) would have high value-to-complexity ratio
 - Full diff regrouping is complex and probably not worth it for our scale
 
 ## Multi-PR Work Streams
@@ -420,7 +420,7 @@ Success criteria:
 ## Emerging Principles
 
 1. **Specs are review guides** — Read the spec before reading the code. The spec tells you what to verify.
-2. **Progressive disclosure in PRs** — Summary for triage, component map for scoping, behavior map for verification.
+2. **Progressive disclosure in PRs** — Summary for triage, changes line for scoping, behavior map for verification.
 3. **Restate to save clicks, link for depth** — One-line facts belong inline. Multi-paragraph context belongs behind a link. The test: does it fit in one sentence AND save a context switch?
 4. **Structure enables generation** — Structured artifacts (specs, annotations, session notes) enable AI-generated PR descriptions that are consistent and complete.
 5. **Trust scales the template down** — High-trust review needs only summary + spec link. All levels exist for when depth is needed.
