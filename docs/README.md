@@ -1,39 +1,57 @@
-# Delivery Practices
-
-Knowledge base for **software delivery practices that enable fast and safe AI-assisted development**.
-
-**Status**: Working - First practice area established
-
-## Practice Areas
-
-- **[Specifications](specifications/)** - Living specifications as source of truth
-
-## Knowledge Types
-
-This repository organizes content by knowledge type:
-
-| Directory | Type | Purpose |
-|-----------|------|---------|
-| [docs/](.) | Declarative | Concepts, models, reference ("understand this") |
-| [policies/](../policies/) | Normative | Principles, rules, constraints ("follow this") |
-| [playbooks/](../playbooks/) | Procedural | Step-by-step guides ("do this") |
-| [notes/](../notes/) | Ephemeral | Explorations, working notes ("thinking about this") |
-
-## Philosophy
-
-- **Evidence-driven** - Document practices based on real experience, not theory
-- **Minimal structure** - Create organization only when content emerges
-- **Source-grounded** - All practice recommendations cite sources
-- **Evolving** - Iterate based on what works
-
-## How Content Will Emerge
-
-As practices are discovered:
-1. **Capture in notes/** - Quick documentation with date prefix
-2. **Let patterns emerge** - Notice when multiple practices relate
-3. **Create structure** - When you have related practices, organize them
-4. **Graduate stable content** - Move from notes/ to docs/
-
+---
+status: working
 ---
 
-**Meta**: Follows [meta knowledge base conventions](../../.graft/meta-knowledge-base/docs/meta.md)
+# Living Specifications
+
+Reference material for the living specifications practice.
+
+## What This Is
+
+Living specifications are the source of truth for system behavior. They describe what a system does and why, sitting between intent and implementation.
+
+```
+SPEC (readable, durable, collaborative)
+  ↓ maps to
+TESTS (executable, durable, CI-enforced)
+  ↓ verified by
+CODE (implementation, durable, reviewed)
+```
+
+## Reference
+
+- [Format](format.md) — the specification template
+- [Relationships](relationships.md) — how specs relate to tests, acceptance criteria, and code
+- [Verification](verification.md) — drift detection approaches
+- [Comprehension](comprehension.md) — making the system legible to all collaborators
+
+## Rules
+
+- [Principles](../policies/living-specifications.md) — rules governing specification practices
+
+## How-To
+
+- [Writing specs](../playbooks/writing-specs.md) — how to write or update a specification
+- [Ensemble with specs](../playbooks/ensemble-with-specs.md) — using specs in mob programming
+- [Reviewing against specs](../playbooks/reviewing-against-specs.md) — reviewing PRs with specs as source of truth
+
+## Patterns Borrowed
+
+| Pattern | What We Took | What We Left |
+|---------|-------------|--------------|
+| ADRs | Context → Decision → Consequences; status lifecycle | Immutability (specs evolve) |
+| RFCs | Propose → discuss → decide; Alternatives Considered | Heavyweight process |
+| BDD/Gherkin | Given/When/Then as thinking structure | Step definitions; Cucumber |
+| Google Design Docs | Non-goals; living document expectation | Google Docs (not version-controlled) |
+| Executable Specs | Structured-enough-to-check assertions | Framework lock-in |
+| Living Documentation | Specs for what code can't express; computed views | Assumption code is always readable |
+
+Guiding principle: steal structures, not tooling.
+
+## Sources
+
+- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md)
+- ADR pattern: Michael Nygard, "Documenting Architecture Decisions" (2011)
+- BDD: Dan North, "Introducing BDD" (2006)
+- Living Documentation: Cyrille Martraire (2019)
+- C4 Model: Simon Brown

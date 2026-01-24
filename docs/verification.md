@@ -70,5 +70,5 @@ checks:
 
 ## Related
 
-- [Principles](../../policies/living-specifications.md) — #13 (references flow upstream)
+- [Principles](../policies/living-specifications.md) — #13 (references flow upstream)
 - [Artifact relationships](relationships.md) — backlink patterns

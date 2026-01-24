@@ -14,7 +14,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Graduated
 
-- [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/specifications/](../docs/specifications/), [policies/](../policies/living-specifications.md), [playbooks/](../playbooks/)
+- [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/](../docs/), [policies/](../policies/living-specifications.md), [playbooks/](../playbooks/)
 
 ## Sessions
 

@@ -6,7 +6,7 @@ status: draft
 
 How to write a new specification or update an existing one.
 
-> **Context**: This playbook is for use in project repositories that adopt the [living specifications](../docs/specifications/) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
+> **Context**: This playbook is for use in project repositories that adopt the [living specifications](../docs/) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
 
 ## When to Write a Spec
 
@@ -114,6 +114,6 @@ Include provenance for all behavior decisions:
 
 ## Related
 
-- [Specification format](../docs/specifications/format.md) — the template reference
+- [Specification format](../docs/format.md) — the template reference
 - [Principles](../policies/living-specifications.md) — normative rules
 - [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective

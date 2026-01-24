@@ -19,6 +19,9 @@ paths:
   policies: policies
   playbooks: playbooks
   notes: notes
+  specs: specs
+  src: src
+  tests: tests
 
 sources:
   canonical:
@@ -33,5 +36,5 @@ rules:
   provenance:
     requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
   writes:
-    allow: ["docs/**", "policies/**", "playbooks/**", "notes/**"]
+    allow: ["docs/**", "policies/**", "playbooks/**", "notes/**", "specs/**", "src/**", "tests/**"]
     deny: ["secrets/**", "credentials/**", ".graft/**"]

@@ -48,9 +48,12 @@ Content is organized by **knowledge type**:
 | `policies/` | Normative | Principles, rules, constraints ("follow this") |
 | `playbooks/` | Procedural | Step-by-step guides ("do this") |
 | `notes/` | Ephemeral | Explorations, working notes ("thinking about this") |
+| `specs/` | Specifications | Living specs for repo tooling (dogfooding) |
+| `src/` | Source | Tool implementations |
+| `tests/` | Tests | Tool tests |
 
-Practice areas span these types. For example, "specifications" has:
-- `docs/specifications/` — conceptual reference
+Practice areas span these types. For example, "living specifications" has:
+- `docs/` — conceptual reference (format, relationships, verification, comprehension)
 - `policies/living-specifications.md` — principles
 - `playbooks/writing-specs.md` — how-to guides
 
@@ -61,6 +64,9 @@ You may write to:
 - `policies/**` - Principles and rules
 - `playbooks/**` - Procedural guides
 - `notes/**` - Explorations and brainstorming
+- `specs/**` - Specifications for tooling (dogfooding)
+- `src/**` - Tool implementations
+- `tests/**` - Tool tests
 
 Never write to:
 - `secrets/**`
@@ -95,7 +101,8 @@ When updating this KB:
 
 ## Current State
 
-- **Specifications** practice area established (docs/specifications/, policies/, playbooks/)
+- **Living specifications** practice area established (docs/, policies/, playbooks/)
+- **Backlink scanner** tool in src/ with spec in specs/ (dogfooding)
 - Structure follows meta-kb knowledge-type conventions
 - Ready to capture additional practice areas from active work
 

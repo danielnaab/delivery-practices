@@ -26,13 +26,14 @@ The spec system itself must be legible. Different collaborators need different e
 README.md                      → "What is this project?"
 ├── CLAUDE.md                  → "What are the rules?" (agents)
 ├── docs/                      → "What are the concepts?"
-│   └── specifications/        → "How do specs work?"
+│   ├── format.md              → "What goes in a spec?"
+│   ├── relationships.md       → "How do artifacts connect?"
+│   ├── verification.md        → "How is drift detected?"
+│   └── comprehension.md       → "How do people navigate?"
 ├── policies/                  → "What rules do we follow?"
 ├── playbooks/                 → "How do I do X?"
-│   ├── writing-specs.md
-│   ├── ensemble-with-specs.md
-│   └── reviewing-against-specs.md
-├── .specs/status.yaml         → "What's the health of our specs?"
+├── specs/                     → "What does the tooling do?"
+├── src/                       → "Tool implementations"
 └── notes/                     → "What's in progress?"
 ```
 
@@ -64,4 +65,4 @@ The directory structure signals what kind of knowledge each file contains:
 
 ## Related
 
-- [Principles](../../policies/living-specifications.md) — #6 (AI-compatible is human-compatible), #14 (fight tribal knowledge)
+- [Principles](../policies/living-specifications.md) — #6 (AI-compatible is human-compatible), #14 (fight tribal knowledge)

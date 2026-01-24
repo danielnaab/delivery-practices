@@ -55,4 +55,4 @@ Given/When/Then is valuable as a **thinking structure** in plain markdown. But t
 
 - [Specification format](format.md) — the template with behavior sections
 - [Verification](verification.md) — how drift between layers is detected
-- [Principles](../../policies/living-specifications.md) — #7 (separate what/why/how), #9 (tests complement specs)
+- [Principles](../policies/living-specifications.md) — #7 (separate what/why/how), #9 (tests complement specs)

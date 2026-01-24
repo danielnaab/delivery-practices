@@ -24,10 +24,22 @@ Content organized by knowledge type:
 | `policies/` | Normative | Principles, rules, constraints |
 | `playbooks/` | Procedural | Step-by-step guides |
 | `notes/` | Ephemeral | Explorations, working notes |
+| `specs/` | Specifications | Living specs for repo tooling (dogfooding) |
+| `src/` | Source | Tool implementations |
+| `tests/` | Tests | Tool tests |
 
 ## Current Practice Areas
 
-- **[Specifications](docs/specifications/)** — Living specifications as source of truth
+- **[Living Specifications](docs/)** — Specs as source of truth for system behavior
+
+## Tooling
+
+- **[Backlink Scanner](specs/backlink-scanner.md)** — Scans for `// spec:` annotations and reports spec-to-implementation traceability
+
+```bash
+npm run scan        # Run the scanner on the repo
+npm test            # Run tests
+```
 
 ## Knowledge Base System
 

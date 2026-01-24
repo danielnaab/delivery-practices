@@ -6,7 +6,7 @@ status: draft
 
 How to review a pull request when specifications are the source of truth.
 
-> **Context**: This playbook applies to project repositories using the [living specifications](../docs/specifications/) practice. Example paths like `docs/specs/` refer to conventions in project repos.
+> **Context**: This playbook applies to project repositories using the [living specifications](../docs/) practice. Example paths like `docs/specs/` refer to conventions in project repos.
 
 ## Before Reviewing
 
@@ -87,5 +87,5 @@ def login(credentials):
 ## Related
 
 - [Writing specs](writing-specs.md) — the author's perspective
-- [Verification](../docs/specifications/verification.md) — automated drift detection
-- [Artifact relationships](../docs/specifications/relationships.md) — the three-layer model
+- [Verification](../docs/verification.md) — automated drift detection
+- [Artifact relationships](../docs/relationships.md) — the three-layer model

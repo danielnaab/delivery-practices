@@ -1,0 +1,13 @@
+{
+  "name": "delivery-practices",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scan": "tsx src/backlink-scanner.ts",
+    "test": "node --import tsx --test tests/backlink-scanner.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

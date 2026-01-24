@@ -90,5 +90,5 @@ These ceremonies solve async coordination problems. Ensemble doesn't have those 
 ## Related
 
 - [Writing specs](writing-specs.md) — general spec authoring
-- [Specification format](../docs/specifications/format.md) — the template
+- [Specification format](../docs/format.md) — the template
 - [Principles](../policies/living-specifications.md) — #8 (async-first, synchronous-to-resolve)
