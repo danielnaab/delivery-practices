@@ -3,10 +3,16 @@
 ## [Unreleased]
 
 ### Added
+- specs/tool-cli.md — behavioral spec for the shared CLI runner module
+- playbooks/iterative-critique.md — build-critique-fix loop (graduated from AI-workflow note)
+- playbooks/session-logging.md — session context preservation (graduated from AI-workflow note)
+- playbooks/pr-descriptions.md — PR description format for spec-driven changes (graduated from PR reviewability exploration)
+- notes/2026-01-24-pr-reviewability.md — PR reviewability exploration (progressive disclosure for review)
 - Principle #16 "Dogfood the practices" in policies/living-specifications.md
 - notes/2026-01-24-ai-assisted-workflow.md — exploration of AI-assisted development patterns
 
 ### Fixed
+- playbooks/writing-specs.md: fixed stale status vocabulary (proposed→draft, implemented→working/stable)
 - README.md: updated with all tools and current commands
 - CHANGELOG.md: completed v0.2.0 entries (CI, tool_cli, playbook validation)
 - pyproject.toml: added --cov=tool_cli to pytest coverage config
