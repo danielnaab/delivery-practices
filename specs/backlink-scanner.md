@@ -102,6 +102,7 @@ Example output:
 - Standalone lines only: annotations embedded in other content (string literals, inline code) are ignored
 - Multiple annotations in one file: all recorded
 - Self-referencing specs: allowed (a spec can reference another spec)
+- README.md files in specs/: excluded from orphan detection (navigational, not behavioral)
 
 ## Constraints
 

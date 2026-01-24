@@ -4,7 +4,9 @@ status: working
 
 # Living Specifications
 
-Reference material for the living specifications practice.
+Reference material for the living specifications practice — concepts, templates, and relationship models for teams adopting spec-driven development.
+
+> **This directory vs. `specs/`**: The `docs/` directory describes *how to practice* living specifications (for downstream projects). The [`specs/`](../specs/) directory contains *actual behavioral specifications* for this repository's tooling — contracts that code in `src/` implements.
 
 ## What This Is
 
@@ -47,6 +49,17 @@ CODE (implementation, durable, reviewed)
 | Living Documentation | Specs for what code can't express; computed views | Assumption code is always readable |
 
 Guiding principle: steal structures, not tooling.
+
+## Status Semantics
+
+All content carries a lifecycle status in frontmatter:
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | Exploratory — may change substantially or be discarded |
+| `working` | In use, expected to evolve — usable now, not frozen |
+| `stable` | Settled — changes only via explicit decision |
+| `deprecated` | Superseded — kept for historical reference |
 
 ## Sources
 

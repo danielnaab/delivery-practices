@@ -165,6 +165,17 @@ class TestOrphanSpecs:
 
         assert "specs/orphan.md" in result.orphans
 
+    def test_excludes_readme_from_orphan_detection(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/README.md").write_text("# Specs Index")
+        (tmp_path / "specs/real-spec.md").write_text("# Real Spec")
+        (tmp_path / "src.py").write_text("# spec: specs/real-spec.md")
+
+        result = scan(str(tmp_path))
+
+        assert "specs/README.md" not in result.orphans
+        assert result.orphans == []
+
     def test_does_not_report_referenced_specs(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
         (tmp_path / "specs/used.md").write_text("# Used")

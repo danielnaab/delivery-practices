@@ -45,7 +45,7 @@ README.md                      → "What is this project?"
 | AI agent | CLAUDE.md | Relevant spec |
 | Developer mid-flow | Backlink in code | Spec behavior section |
 | Ensemble participant | Playbook | Spec being implemented |
-| Stakeholder | Specs index | Status + Open Questions |
+| Stakeholder | [Specs index](../specs/) | Status + Open Questions |
 | Async reviewer | PR description | Referenced spec |
 
 ## Knowledge Types as Directories

@@ -9,8 +9,8 @@ You are working in the **delivery-practices knowledge base** - a repository for 
 3. Understand key policies:
    - **Authority**: docs/ canonical, notes/ exploratory
    - **Provenance**: Ground practice recommendations in sources
-   - **Lifecycle**: Mark status (draft/working/stable/deprecated)
-   - **Write boundaries**: docs/**, policies/**, playbooks/**, notes/**
+   - **Lifecycle**: Mark status (draft/working/stable/deprecated) — see [status semantics](docs/README.md#status-semantics)
+   - **Write boundaries**: see [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes`
 
 ## Your Role
 
@@ -53,14 +53,16 @@ Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-w
 
 | Directory | Purpose |
 |-----------|---------|
-| `specs/` | Living specifications for tools |
-| `src/` | Python implementations |
-| `tests/` | Pytest test suite |
+| [`specs/`](specs/) | Behavioral specifications for *this repo's* tools |
+| `src/` | Python implementations of those specs |
+| `tests/` | Pytest test suite verifying spec compliance |
 
-Practice areas span these types. For example, "living specifications" has:
-- `docs/` — conceptual reference (format, relationships, verification, comprehension)
-- `policies/living-specifications.md` — principles
-- `playbooks/writing-specs.md` — how-to guides
+**Key distinction**: `docs/` describes *how to practice* living specifications (for downstream projects). `specs/` contains *behavioral contracts* for this repo's tooling — what the code in `src/` must do.
+
+Practice areas span knowledge types. For example, "living specifications" has:
+- [`docs/`](docs/) — conceptual reference (format, relationships, verification, comprehension)
+- [`policies/living-specifications.md`](policies/living-specifications.md) — principles
+- [`playbooks/writing-specs.md`](playbooks/writing-specs.md) — how-to guides
 
 ## Write Boundaries
 
@@ -96,8 +98,8 @@ When updating this KB:
 
 ## Current State
 
-- **Living specifications** practice area established (docs/, policies/, playbooks/)
-- **Backlink scanner** tool in src/ with spec in specs/ (dogfooding)
+- **Living specifications** practice area established ([docs/](docs/), [policies/](policies/), [playbooks/](playbooks/))
+- **[Backlink scanner](specs/backlink-scanner.md)** tool in [src/](src/) with spec in [specs/](specs/) (dogfooding)
 - Structure follows meta-kb knowledge-type conventions
 - Ready to capture additional practice areas from active work
 

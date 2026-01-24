@@ -33,10 +33,19 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 - **Exploratory** - Less rigor than docs/
 - **Graduated notes remain** - Kept as historical reference; they preserve the exploratory context and reasoning that led to stable content
 
-## Graduation Path
+## Note Lifecycle
 
-When insights stabilize:
-1. Extract to docs/
-2. Add provenance linking to note
-3. Mark note "Graduated to [location]"
-4. Archive or leave for reference
+Notes can reach these end states:
+
+| State | Meaning | Action |
+|-------|---------|--------|
+| **Graduated** | Insights stabilized into docs/, policies/, or playbooks/ | Mark "Graduated to [location]", keep for reference |
+| **Superseded** | A later note or doc covers the same ground better | Mark "Superseded by [link]" |
+| **Abandoned** | Exploration didn't lead anywhere useful | Remove from Active, optionally delete |
+
+### Graduation steps
+
+1. Extract stable content to appropriate directory
+2. Add provenance in the target: `Sources: [note link]`
+3. Mark note "Graduated to [location]" in this index
+4. Note remains as historical reference (see Guidelines)

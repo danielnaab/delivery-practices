@@ -38,7 +38,15 @@ When triggers are met, adopt these patterns specifically:
 - uv for dependency management
 - Script entrypoints via `[project.scripts]`
 
+## Review Triggers
+
+Reassess this decision when any of these occur:
+- Scanner implementation exceeds 500 LOC
+- A second CLI subcommand is needed
+- Configuration grows beyond directory path + flags
+- External service integration is required (git API, CI systems)
+
 ## Sources
 
 - `.graft/python-starter/` — template providing the architecture patterns
-- Backlink scanner spec: `specs/backlink-scanner.md`
+- Backlink scanner spec: [`specs/backlink-scanner.md`](../../specs/backlink-scanner.md)

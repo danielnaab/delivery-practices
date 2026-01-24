@@ -1,5 +1,5 @@
 ---
-status: draft
+status: working
 ---
 
 # Verification and Drift Detection
@@ -37,6 +37,10 @@ Without backlinks, detection requires guessing which code relates to which spec.
 - **Detection over prevention** — suggestions, not blockers
 - **Human decision authority** — AI flags, humans decide; no auto-correction
 - **Targeted analysis** — only analyze files referencing specs, only when changed
+
+## Implementation in This Repo
+
+The [backlink scanner](../specs/backlink-scanner.md) implements structural verification for this repository: detecting dangling references and orphan specs via backlink annotations.
 
 ## Related
 
