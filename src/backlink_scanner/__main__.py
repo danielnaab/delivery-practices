@@ -3,10 +3,8 @@
 
 """CLI entry point for the backlink scanner."""
 
-import json
-import sys
-
 from backlink_scanner.scanner import ScanResult, scan
+from tool_cli import run_tool
 
 
 def _serialize(result: ScanResult) -> dict:
@@ -25,18 +23,11 @@ def _serialize(result: ScanResult) -> dict:
 
 
 def main() -> None:
-    report_only = "--report-only" in sys.argv
-    args = [a for a in sys.argv[1:] if a != "--report-only"]
-    root_dir = args[0] if args else "."
-
-    result = scan(root_dir)
-    print(json.dumps(_serialize(result), indent=2))
-
-    if report_only:
-        sys.exit(0)
-
-    if result.dangling or result.orphans:
-        sys.exit(1)
+    run_tool(
+        runner=scan,
+        serializer=_serialize,
+        has_failures=lambda r: bool(r.dangling or r.orphans),
+    )
 
 
 if __name__ == "__main__":

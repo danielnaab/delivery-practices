@@ -8,17 +8,17 @@ Living specifications for this repository's tooling. Each spec is a behavioral c
 
 | Spec | Status | Purpose |
 |------|--------|---------|
-| [backlink-scanner.md](backlink-scanner.md) | proposed | Scan for `spec:` annotations, report traceability |
-| [kb-linter.md](kb-linter.md) | proposed | Validate content files against knowledge-base.yaml rules |
-| [link-validator.md](link-validator.md) | proposed | Detect broken internal markdown links |
+| [backlink-scanner.md](backlink-scanner.md) | working | Scan for `spec:` annotations, report traceability |
+| [kb-linter.md](kb-linter.md) | working | Validate content files against knowledge-base.yaml rules |
+| [link-validator.md](link-validator.md) | working | Detect broken internal markdown links |
 
 ## Lifecycle
 
-Specs use these statuses (defined in [`docs/format.md`](../docs/format.md)):
+Specs use the same status vocabulary as all KB content (see [`docs/README.md`](../docs/README.md#status-semantics)):
 
-- **proposed** — Design intent captured, implementation may not be complete
-- **accepted** — Team agrees on the contract
-- **implemented** — Code satisfies all behavior statements
+- **draft** — Design intent captured, implementation may not be complete
+- **working** — Implemented and tested, expected to evolve
+- **stable** — Behavior is settled, changes only via explicit decision
 - **deprecated** — Superseded or no longer relevant
 
 ## Backlink Verification

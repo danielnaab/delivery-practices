@@ -64,39 +64,39 @@ class TestLinkExtraction:
 
 class TestPathResolution:
     def test_resolves_sibling_link(self) -> None:
-        result = _resolve_path("format.md", "docs", Path("/root"))
+        result = _resolve_path("format.md", "docs")
         assert result == "docs/format.md"
 
     def test_resolves_parent_traversal(self) -> None:
-        result = _resolve_path("../policies/rules.md", "docs", Path("/root"))
+        result = _resolve_path("../policies/rules.md", "docs")
         assert result == "policies/rules.md"
 
     def test_strips_fragment(self) -> None:
-        result = _resolve_path("file.md#section", "docs", Path("/root"))
+        result = _resolve_path("file.md#section", "docs")
         assert result == "docs/file.md"
 
     def test_strips_query_string(self) -> None:
-        result = _resolve_path("file.md?raw=true", "docs", Path("/root"))
+        result = _resolve_path("file.md?raw=true", "docs")
         assert result == "docs/file.md"
 
     def test_returns_none_for_external_http(self) -> None:
-        result = _resolve_path("https://example.com", "docs", Path("/root"))
+        result = _resolve_path("https://example.com", "docs")
         assert result is None
 
     def test_returns_none_for_external_mailto(self) -> None:
-        result = _resolve_path("mailto:user@example.com", "docs", Path("/root"))
+        result = _resolve_path("mailto:user@example.com", "docs")
         assert result is None
 
     def test_returns_none_for_empty_after_strip(self) -> None:
-        result = _resolve_path("#fragment-only", "docs", Path("/root"))
+        result = _resolve_path("#fragment-only", "docs")
         assert result is None
 
     def test_resolves_absolute_path_from_root(self) -> None:
-        result = _resolve_path("/.graft/python-starter/", "docs/sub", Path("/root"))
+        result = _resolve_path("/.graft/python-starter/", "docs/sub")
         assert result == ".graft/python-starter"
 
     def test_detects_path_escape(self) -> None:
-        result = _resolve_path("../../../etc/passwd", "docs", Path("/root"))
+        result = _resolve_path("../../../etc/passwd", "docs")
         assert result is not None
         assert result.startswith("..")
 
@@ -164,9 +164,7 @@ class TestValidation:
     def test_strips_fragment_before_checking(self, tmp_path: Path) -> None:
         _setup_kb(tmp_path)
         (tmp_path / "policies/rules.md").write_text("# Rules\n")
-        (tmp_path / "docs/source.md").write_text(
-            "See [rules](../policies/rules.md#section).\n"
-        )
+        (tmp_path / "docs/source.md").write_text("See [rules](../policies/rules.md#section).\n")
 
         result = validate(str(tmp_path))
 
@@ -174,9 +172,7 @@ class TestValidation:
 
     def test_reports_path_escape_as_broken(self, tmp_path: Path) -> None:
         _setup_kb(tmp_path)
-        (tmp_path / "docs/source.md").write_text(
-            "See [escape](../../../etc/passwd).\n"
-        )
+        (tmp_path / "docs/source.md").write_text("See [escape](../../../etc/passwd).\n")
 
         result = validate(str(tmp_path))
 

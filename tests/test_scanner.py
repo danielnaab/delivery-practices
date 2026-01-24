@@ -67,14 +67,10 @@ class TestSpecSections:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"].sections == {
-            "Behavior/Login": ["src.py"]
-        }
+        assert result.specs["specs/auth.md"].sections == {"Behavior/Login": ["src.py"]}
 
     def test_ignores_section_without_preceding_spec(self, tmp_path: Path) -> None:
-        (tmp_path / "src.py").write_text(
-            "# spec-section: Behavior/Login\ndef login(): pass"
-        )
+        (tmp_path / "src.py").write_text("# spec-section: Behavior/Login\ndef login(): pass")
 
         result = scan(str(tmp_path))
 
@@ -99,18 +95,12 @@ class TestSpecSections:
     def test_sections_from_multiple_files(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
         (tmp_path / "specs/auth.md").write_text("# Auth")
-        (tmp_path / "a.py").write_text(
-            "# spec: specs/auth.md\n# spec-section: Behavior/Login\n"
-        )
-        (tmp_path / "b.py").write_text(
-            "# spec: specs/auth.md\n# spec-section: Behavior/Login\n"
-        )
+        (tmp_path / "a.py").write_text("# spec: specs/auth.md\n# spec-section: Behavior/Login\n")
+        (tmp_path / "b.py").write_text("# spec: specs/auth.md\n# spec-section: Behavior/Login\n")
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"].sections == {
-            "Behavior/Login": ["a.py", "b.py"]
-        }
+        assert result.specs["specs/auth.md"].sections == {"Behavior/Login": ["a.py", "b.py"]}
 
     def test_section_applies_to_most_recent_spec(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -125,12 +115,8 @@ class TestSpecSections:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"].sections == {
-            "Behavior/Login": ["src.py"]
-        }
-        assert result.specs["specs/rate.md"].sections == {
-            "Behavior/Limiting": ["src.py"]
-        }
+        assert result.specs["specs/auth.md"].sections == {"Behavior/Login": ["src.py"]}
+        assert result.specs["specs/rate.md"].sections == {"Behavior/Limiting": ["src.py"]}
 
     def test_slash_slash_section_annotations(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -141,9 +127,7 @@ class TestSpecSections:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"].sections == {
-            "Behavior/Login": ["src.ts"]
-        }
+        assert result.specs["specs/auth.md"].sections == {"Behavior/Login": ["src.ts"]}
 
 
 class TestDanglingReferences:

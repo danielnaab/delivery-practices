@@ -12,7 +12,7 @@ Normative principles governing how specifications are written, maintained, and u
 
 3. **Plain language over formal notation** — For team consensus, accessibility matters more than precision. Structured natural language with examples.
 
-4. **Explicit decision states** — Every spec has clear status: proposed → accepted → implemented. Async collaboration requires knowing "can I build against this?"
+4. **Explicit decision states** — Every spec has clear status: draft → working → stable. Async collaboration requires knowing "can I build against this?"
 
 5. **Low ceremony, high signal** — Updating specs must be lighter than the cost of stale docs. If updating is harder than coding, people won't do it.
 

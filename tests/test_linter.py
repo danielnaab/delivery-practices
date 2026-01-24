@@ -120,9 +120,7 @@ class TestFrontmatterValidation:
 
     def test_malformed_frontmatter_reports_missing_status(self, tmp_path: Path) -> None:
         _setup_kb(tmp_path)
-        (tmp_path / "docs/malformed.md").write_text(
-            "---\n{not: [valid yaml\n---\n\n# Content\n"
-        )
+        (tmp_path / "docs/malformed.md").write_text("---\n{not: [valid yaml\n---\n\n# Content\n")
 
         result = lint(str(tmp_path))
 
@@ -173,7 +171,8 @@ class TestProvenanceValidation:
         result = lint(str(tmp_path))
 
         provenance_violations = [
-            v for v in result.violations
+            v
+            for v in result.violations
             if v.file == "playbooks/guide.md" and v.rule == "missing-provenance"
         ]
         assert provenance_violations == []
@@ -218,9 +217,7 @@ class TestScannedPaths:
         _setup_kb(tmp_path)
         (tmp_path / "docs/a.md").write_text("---\nstatus: working\n---\n\n## Sources\n- x\n")
         (tmp_path / "docs/b.md").write_text("---\nstatus: working\n---\n\n## Sources\n- x\n")
-        (tmp_path / "policies/c.md").write_text(
-            "---\nstatus: working\n---\n\n## Sources\n- x\n"
-        )
+        (tmp_path / "policies/c.md").write_text("---\nstatus: working\n---\n\n## Sources\n- x\n")
 
         result = lint(str(tmp_path))
 

@@ -14,4 +14,4 @@ These documents answer: **"How do I do X?"**
 - [Ensemble with Specs](ensemble-with-specs.md) — Using specs in mob programming sessions
 - [Reviewing Against Specs](reviewing-against-specs.md) — PR review with specs as source of truth
 
-> **Note**: These playbooks describe practices for project repositories that adopt the [living specifications](../docs/) approach. They have not yet been validated in practice (status: draft).
+> **Note**: These playbooks describe practices for project repositories that adopt the [living specifications](../docs/) approach.

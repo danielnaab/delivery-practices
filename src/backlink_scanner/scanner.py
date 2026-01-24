@@ -155,9 +155,12 @@ def scan(root_dir: str) -> ScanResult:
 
     # Find spec files in the specs/ directory (excluding README/index navigation files)
     spec_files = [
-        f for f in files
-        if f.startswith("specs/") and f.endswith(".md")
-        and not f.endswith("/README.md") and f != "specs/README.md"
+        f
+        for f in files
+        if f.startswith("specs/")
+        and f.endswith(".md")
+        and not f.endswith("/README.md")
+        and f != "specs/README.md"
     ]
 
     # Identify dangling references (referenced specs that don't exist)
@@ -171,9 +174,7 @@ def scan(root_dir: str) -> ScanResult:
     for sp, implementors in spec_implementors.items():
         sections: dict[str, list[str]] = {}
         if sp in spec_sections:
-            sections = {
-                name: sorted(files) for name, files in spec_sections[sp].items()
-            }
+            sections = {name: sorted(files) for name, files in spec_sections[sp].items()}
         specs[sp] = SpecEntry(implementors=sorted(implementors), sections=sections)
 
     return ScanResult(specs=specs, dangling=dangling, orphans=orphans)

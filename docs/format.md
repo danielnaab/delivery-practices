@@ -10,7 +10,7 @@ The minimum viable structure for a living specification.
 
 ```markdown
 ---
-status: proposed | accepted | implemented | deprecated
+status: draft | working | stable | deprecated
 last-verified: YYYY-MM-DD
 owners: [team-members]
 ---

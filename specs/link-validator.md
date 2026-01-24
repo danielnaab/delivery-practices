@@ -1,5 +1,5 @@
 ---
-status: proposed
+status: working
 last-verified: 2026-01-24
 owners: [daniel]
 ---
@@ -73,16 +73,16 @@ Example output:
 {
   "violations": [
     {
-      "file": "notes/2026-01-23-initialization.md",
-      "target": "../graft-knowledge/",
-      "resolved": "graft-knowledge",
+      "file": "docs/guide.md",
+      "target": "../old-reference.md",
+      "resolved": "old-reference.md",
       "rule": "broken-link",
       "message": "Link target does not exist"
     }
   ],
   "summary": {
-    "files_checked": 18,
-    "links_checked": 59,
+    "files_checked": 15,
+    "links_checked": 42,
     "broken": 1
   }
 }

@@ -2,50 +2,36 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-01-24
+
 ### Changed
+- Unified status vocabulary across all content: draft/working/stable/deprecated (replaces proposed/accepted/implemented in specs)
 - Reorganized by knowledge type: docs/ (declarative), policies/ (normative), playbooks/ (procedural), notes/ (ephemeral)
 - Flattened docs/specifications/ into docs/ (format, verification, relationships, comprehension)
-- Corrected status fields: unvalidated content marked as draft
-- Added context notes to playbooks (these describe project repo conventions)
 - Scanner output format: nested structure with `implementors` and `sections` per spec
 - Scanner exit codes: exit 1 on dangling references or orphan specs (was always exit 0)
 - CLAUDE.md write boundaries now reference knowledge-base.yaml as single source of truth
 - docs/verification.md: removed speculative content, tightened to reference doc
-- playbooks/writing-specs.md: promoted to working, added Step 0 (Orient), Step 7 (Record Decisions), Step 9 (Verify Against Implementation), iterative-writing note
+- playbooks/writing-specs.md: promoted to working, added Steps 0, 7, 9; iterative-writing note
 - pyproject.toml: renamed project to delivery-practices-tools, multi-package build config
 
 ### Added
-- specs/kb-linter.md — specification for KB content linter tool
-- src/kb_linter/ — Python implementation enforcing knowledge-base.yaml rules
-- tests/test_linter.py — unit tests for kb-linter
-- tests/test_kb_linter_cli.py — integration tests for kb-linter CLI
-- specs/link-validator.md — specification for link validator tool
-- src/link_validator/ — Python implementation detecting broken internal links
-- tests/test_validator.py — unit tests for link-validator
-- tests/test_link_validator_cli.py — integration tests for link-validator CLI
-- `spec-section` annotation support in backlink scanner
-- `--report-only` CLI flag (always exit 0, for informational use)
-- tests/test_cli.py — integration tests for CLI output and exit codes
-- specs/backlink-scanner.md — specification for the backlink scanner tool (dogfooding)
-- src/backlink_scanner/ — Python implementation (no runtime dependencies)
-- tests/test_scanner.py — unit tests with pytest
+- specs/kb-linter.md + src/kb_linter/ — content linter enforcing knowledge-base.yaml rules
+- specs/link-validator.md + src/link_validator/ — broken internal link detection
+- specs/backlink-scanner.md + src/backlink_scanner/ — spec-to-implementation traceability
+- `spec-section` annotation support and `--report-only` CLI flag across all tools
+- Full test suites: unit + integration tests for all three tools (101 tests)
 - policies/living-specifications.md — 15 principles for spec-driven development
-- playbooks/writing-specs.md — how to write a specification
-- playbooks/ensemble-with-specs.md — using specs in ensemble sessions
-- playbooks/reviewing-against-specs.md — reviewing PRs against specs
+- playbooks/ — writing-specs, ensemble-with-specs, reviewing-against-specs
 - docs/{format,verification,relationships,comprehension}.md — declarative reference
-- READMEs for policies/ and playbooks/ directories
-- pyproject.toml — project configuration (uv, ruff, pytest)
-- python-starter graft dependency for project scaffolding
 
 ### Removed
 - scripts/ directory (trivial wrappers; README documents the commands directly)
 
 ### Fixed
-- specs/kb-linter.md: corrected 3 behavior statements that drifted from implementation (output grouping, parse error, symlinks)
+- specs/kb-linter.md: corrected 3 behavior statements (output grouping, parse error, symlinks)
 - notes/2026-01-23-initialization.md: fixed broken link to graft-knowledge directory
 - specs/backlink-scanner.md: corrected language from "Node.js (TypeScript)" to "Python"
-- CHANGELOG 0.1.0: folded non-standard "Conventions Established" heading into "Added"
 
 ## [0.1.0] - 2026-01-23
 

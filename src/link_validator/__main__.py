@@ -3,10 +3,8 @@
 
 """CLI entry point for the link validator."""
 
-import json
-import sys
-
 from link_validator.validator import ValidateResult, validate
+from tool_cli import run_tool
 
 
 def _serialize(result: ValidateResult) -> dict:
@@ -31,18 +29,11 @@ def _serialize(result: ValidateResult) -> dict:
 
 
 def main() -> None:
-    report_only = "--report-only" in sys.argv
-    args = [a for a in sys.argv[1:] if a != "--report-only"]
-    root_dir = args[0] if args else "."
-
-    result = validate(root_dir)
-    print(json.dumps(_serialize(result), indent=2))
-
-    if report_only:
-        sys.exit(0)
-
-    if result.violations:
-        sys.exit(1)
+    run_tool(
+        runner=validate,
+        serializer=_serialize,
+        has_failures=lambda r: bool(r.violations),
+    )
 
 
 if __name__ == "__main__":

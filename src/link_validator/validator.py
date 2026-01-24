@@ -94,8 +94,8 @@ def _strip_target(target: str) -> str:
     return target
 
 
-def _resolve_path(target: str, file_dir: str, root: Path) -> str | None:
-    """Resolve a link target to a path relative to root.
+def _resolve_path(target: str, file_dir: str) -> str | None:
+    """Resolve a link target to a path relative to the file's directory.
 
     Returns None if the target is external or empty after stripping.
     """
@@ -163,7 +163,7 @@ def validate(root_dir: str) -> ValidateResult:
         targets = _extract_links(content)
 
         for target in targets:
-            resolved = _resolve_path(target, file_dir, root)
+            resolved = _resolve_path(target, file_dir)
             if resolved is None:
                 continue  # External or empty
 
@@ -172,11 +172,13 @@ def validate(root_dir: str) -> ValidateResult:
 
             # Check if target exists as file or directory
             if not resolved_full.exists():
-                all_violations.append(LinkViolation(
-                    file=file,
-                    target=target,
-                    resolved=resolved,
-                ))
+                all_violations.append(
+                    LinkViolation(
+                        file=file,
+                        target=target,
+                        resolved=resolved,
+                    )
+                )
 
     return ValidateResult(
         violations=all_violations,

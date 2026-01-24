@@ -121,43 +121,47 @@ def _check_file(root: Path, file: str, config: LintConfig) -> list[Violation]:
     # Check frontmatter presence
     fm_match = FRONTMATTER_PATTERN.match(content)
     if not fm_match:
-        violations.append(Violation(
-            file=file,
-            rule="missing-frontmatter",
-            message="No YAML frontmatter found",
-        ))
+        violations.append(
+            Violation(
+                file=file,
+                rule="missing-frontmatter",
+                message="No YAML frontmatter found",
+            )
+        )
     else:
         frontmatter = fm_match.group(1)
         status_match = STATUS_PATTERN.search(frontmatter)
         if not status_match:
-            violations.append(Violation(
-                file=file,
-                rule="missing-status",
-                message="No status field in frontmatter",
-            ))
+            violations.append(
+                Violation(
+                    file=file,
+                    rule="missing-status",
+                    message="No status field in frontmatter",
+                )
+            )
         elif config.valid_statuses:
             status_value = status_match.group(1)
             if status_value not in config.valid_statuses:
-                violations.append(Violation(
-                    file=file,
-                    rule="invalid-status",
-                    message=(
-                        f"Invalid status '{status_value}', "
-                        f"allowed: {config.valid_statuses}"
-                    ),
-                ))
+                violations.append(
+                    Violation(
+                        file=file,
+                        rule="invalid-status",
+                        message=(
+                            f"Invalid status '{status_value}', allowed: {config.valid_statuses}"
+                        ),
+                    )
+                )
 
     # Check provenance for canonical paths
-    needs_provenance = any(
-        _path_matches_glob(file, pattern)
-        for pattern in config.provenance_paths
-    )
+    needs_provenance = any(_path_matches_glob(file, pattern) for pattern in config.provenance_paths)
     if needs_provenance and not SOURCES_HEADING_PATTERN.search(content):
-        violations.append(Violation(
-            file=file,
-            rule="missing-provenance",
-            message="No Sources section found (required for canonical content)",
-        ))
+        violations.append(
+            Violation(
+                file=file,
+                rule="missing-provenance",
+                message="No Sources section found (required for canonical content)",
+            )
+        )
 
     return violations
 

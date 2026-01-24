@@ -1,5 +1,6 @@
 ---
-status: draft
+status: working
+last-validated: 2026-01-24
 ---
 
 # Playbook: Ensemble Sessions with Specifications
@@ -51,7 +52,7 @@ The spec should already reflect what was decided and built. No separate "go back
 
 1. **Verify spec is current** — quick scan for anything missed
 2. **Commit spec changes** — in the same branch as code
-3. **Update status** if appropriate (proposed → accepted → implemented)
+3. **Update status** if appropriate (draft → working → stable)
 
 ## Bridging to Async
 
@@ -90,5 +91,12 @@ These ceremonies solve async coordination problems. Ensemble doesn't have those 
 ## Related
 
 - [Writing specs](writing-specs.md) — general spec authoring
+- [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective
 - [Specification format](../docs/format.md) — the template
 - [Principles](../policies/living-specifications.md) — #8 (async-first, synchronous-to-resolve)
+
+## Sources
+
+- Partially validated: AI Agent Handoff pattern used in delivery-practices tooling sessions (2026-01-24) — collaborative spec design → AI implementation → review against spec
+- Personal experience: ensemble programming with spec-first approach
+- Navigator-as-Scribe and mob-specific patterns are from observation, not yet field-tested in this context

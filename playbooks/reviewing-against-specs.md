@@ -1,5 +1,6 @@
 ---
-status: draft
+status: working
+last-validated: 2026-01-24
 ---
 
 # Playbook: Reviewing PRs Against Specifications
@@ -32,7 +33,7 @@ How to review a pull request when specifications are the source of truth.
 ### Is the spec current after this change?
 
 - [ ] `last-verified` date updated if spec was validated
-- [ ] Status reflects reality (proposed → accepted → implemented)
+- [ ] Status reflects reality (draft → working → stable)
 - [ ] No stale behavior statements remain
 
 ## The Workflow
@@ -86,6 +87,11 @@ def login(credentials):
 
 ## Related
 
-- [Writing specs](writing-specs.md) — the author's perspective
+- [Writing specs](writing-specs.md) — the author's perspective (includes Step 9: verify against spec)
 - [Verification](../docs/verification.md) — automated drift detection
 - [Artifact relationships](../docs/relationships.md) — the three-layer model
+
+## Sources
+
+- Field-tested: Used to review [link-validator](../specs/link-validator.md) implementation against spec (2026-01-24)
+- [Writing specs playbook](writing-specs.md) — complementary author-side verification (Step 9)
