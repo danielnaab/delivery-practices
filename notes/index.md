@@ -10,7 +10,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Active Explorations
 
-(None currently active)
+- [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI
 
 ## Graduated
 
@@ -19,6 +19,8 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 ## Sessions
 
 ### 2026-01-24
+- [AI-Assisted Workflow](./2026-01-24-ai-assisted-workflow.md) - Workflow patterns for AI-assisted development
+- [Tooling Expansion](./2026-01-24-tooling-expansion.md) - KB linter, link validator, playbook validation, CI, v0.2.0
 - [Tooling Cleanup](./2026-01-24-tooling-cleanup.md) - Spec-implementation alignment, exit codes, hygiene
 
 ### 2026-01-23

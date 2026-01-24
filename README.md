@@ -39,13 +39,24 @@ Personal exploration of delivery practices for:
 
 ## Tooling
 
-- **[Backlink Scanner](specs/backlink-scanner.md)** — Scans for `// spec:` annotations and reports spec-to-implementation traceability
+Three structural integrity tools, all spec-first with no runtime dependencies:
+
+| Tool | Spec | Purpose |
+|------|------|---------|
+| `backlink-scanner` | [spec](specs/backlink-scanner.md) | Spec-to-implementation traceability via `# spec:` annotations |
+| `kb-linter` | [spec](specs/kb-linter.md) | Validates frontmatter status and provenance against `knowledge-base.yaml` |
+| `link-validator` | [spec](specs/link-validator.md) | Detects broken internal markdown links |
 
 ```bash
-uv run backlink-scanner   # Run the scanner on the repo
-uv run pytest             # Run tests
-uv run ruff check .       # Lint
+uv run backlink-scanner        # Traceability check (exit 1 on issues)
+uv run kb-linter               # Content rule enforcement
+uv run link-validator           # Broken link detection
+uv run pytest                  # Run tests (101 tests)
+uv run ruff check .            # Lint
+uv run ruff format --check .   # Format check
 ```
+
+All tools support `--report-only` for informational output (always exit 0).
 
 ## Knowledge Base System
 

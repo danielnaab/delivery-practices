@@ -36,6 +36,8 @@ Normative principles governing how specifications are written, maintained, and u
 
 15. **Specs fill the gap code can't** — Intent, constraints, alternatives, rationale. Don't re-describe what readable code already shows.
 
+16. **Dogfood the practices** — Run your own tools on your own repo. Specs verified against their own implementations catch drift that tests miss. The KB's structural integrity tools enforce the KB's own rules.
+
 ## Sources
 
 - Synthesized from exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md)

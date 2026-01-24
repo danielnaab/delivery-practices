@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+- Principle #16 "Dogfood the practices" in policies/living-specifications.md
+- notes/2026-01-24-ai-assisted-workflow.md — exploration of AI-assisted development patterns
+
+### Fixed
+- README.md: updated with all tools and current commands
+- CHANGELOG.md: completed v0.2.0 entries (CI, tool_cli, playbook validation)
+- pyproject.toml: added --cov=tool_cli to pytest coverage config
+- CI: pinned uv version to >=0.5
+
 ## [0.2.0] - 2026-01-24
 
 ### Changed
@@ -13,12 +23,15 @@
 - CLAUDE.md write boundaries now reference knowledge-base.yaml as single source of truth
 - docs/verification.md: removed speculative content, tightened to reference doc
 - playbooks/writing-specs.md: promoted to working, added Steps 0, 7, 9; iterative-writing note
+- playbooks/ensemble-with-specs.md + reviewing-against-specs.md: validated and promoted to working
 - pyproject.toml: renamed project to delivery-practices-tools, multi-package build config
 
 ### Added
 - specs/kb-linter.md + src/kb_linter/ — content linter enforcing knowledge-base.yaml rules
 - specs/link-validator.md + src/link_validator/ — broken internal link detection
 - specs/backlink-scanner.md + src/backlink_scanner/ — spec-to-implementation traceability
+- src/tool_cli/ — shared CLI runner extracted from three identical __main__.py patterns
+- .github/workflows/ci.yml — tests + ruff lint/format + all three tools
 - `spec-section` annotation support and `--report-only` CLI flag across all tools
 - Full test suites: unit + integration tests for all three tools (101 tests)
 - policies/living-specifications.md — 15 principles for spec-driven development

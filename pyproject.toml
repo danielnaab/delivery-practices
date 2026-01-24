@@ -67,6 +67,7 @@ addopts = [
     "--cov=backlink_scanner",
     "--cov=kb_linter",
     "--cov=link_validator",
+    "--cov=tool_cli",
     "--cov-report=term-missing",
 ]
 
