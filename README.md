@@ -14,25 +14,27 @@ Personal exploration of delivery practices for:
 - SDLC practices that work in professional contexts (including Flexion)
 - Evidence-based evolution of effective methods
 
-## Scope
+## Structure
 
-Any SDLC aspect relevant to speed, safety, and effectiveness. Content areas will emerge based on real project needs.
+Content organized by knowledge type:
+
+| Directory | Type | Purpose |
+|-----------|------|---------|
+| `docs/` | Declarative | Concepts, models, reference |
+| `policies/` | Normative | Principles, rules, constraints |
+| `playbooks/` | Procedural | Step-by-step guides |
+| `notes/` | Ephemeral | Explorations, working notes |
+
+## Current Practice Areas
+
+- **[Specifications](docs/specifications/)** — Living specifications as source of truth
 
 ## Knowledge Base System
 
-Follows [meta-knowledge-base](../meta-knowledge-base/docs/meta.md) conventions:
+Follows [meta-knowledge-base](.graft/meta-knowledge-base/docs/meta.md) conventions:
 - Evidence-driven evolution
 - Lifecycle states: draft → working → stable → deprecated
 - Provenance for all practice recommendations
-- Temporal layers: ephemeral (notes/) vs. durable (docs/)
+- Intent-revealing structure
 
-## Structure
-
-- `docs/` - Curated, stable practices (will grow organically)
-- `notes/` - Exploration and active iteration
-
-## Getting Started
-
-Start with [docs/README.md](docs/README.md) for current practices and [notes/](notes/) for active explorations.
-
-**Status**: Draft (v0.1.0) - Minimal initialization, content will grow based on evidence
+**Status**: Working — First practice area established, structure evolving with evidence

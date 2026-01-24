@@ -7,21 +7,25 @@ entrypoints:
   agent: CLAUDE.md
 
 meta:
-  entrypoint: "../meta-knowledge-base/docs/meta.md"
+  entrypoint: ".graft/meta-knowledge-base/docs/meta.md"
 
 imports:
   - kind: local
-    path: ../meta-knowledge-base
+    path: .graft/meta-knowledge-base
     entrypoint: knowledge-base.yaml
 
 paths:
   docs: docs
+  policies: policies
+  playbooks: playbooks
   notes: notes
 
 sources:
   canonical:
     - path: docs/**
-      note: "Curated practices are canonical when they exist"
+      note: "Conceptual reference is canonical"
+    - path: policies/**
+      note: "Policies are normative"
 
 rules:
   lifecycle:
@@ -29,5 +33,5 @@ rules:
   provenance:
     requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
   writes:
-    allow: ["docs/**", "notes/**"]
-    deny: ["secrets/**", "credentials/**"]
+    allow: ["docs/**", "policies/**", "playbooks/**", "notes/**"]
+    deny: ["secrets/**", "credentials/**", ".graft/**"]

@@ -6,7 +6,18 @@ Knowledge base for **software delivery practices that enable fast and safe AI-as
 
 ## Practice Areas
 
-- **[Specifications](specifications/)** - Living specifications as source of truth: format, workflow, collaboration, verification
+- **[Specifications](specifications/)** - Living specifications as source of truth
+
+## Knowledge Types
+
+This repository organizes content by knowledge type:
+
+| Directory | Type | Purpose |
+|-----------|------|---------|
+| [docs/](.) | Declarative | Concepts, models, reference ("understand this") |
+| [policies/](../policies/) | Normative | Principles, rules, constraints ("follow this") |
+| [playbooks/](../playbooks/) | Procedural | Step-by-step guides ("do this") |
+| [notes/](../notes/) | Ephemeral | Explorations, working notes ("thinking about this") |
 
 ## Philosophy
 
@@ -18,30 +29,11 @@ Knowledge base for **software delivery practices that enable fast and safe AI-as
 ## How Content Will Emerge
 
 As practices are discovered:
-1. **Capture in notes/** - Quick documentation with date prefix (e.g., `notes/2026-01-25-practice-name.md`)
-2. **Let patterns emerge** - Notice when multiple practices relate to same area
-3. **Create structure** - When you have 3+ related practices, create a directory (e.g., `docs/development/`)
-4. **Graduate stable content** - Move proven practices from notes/ to docs/
-
-## Current Work
-
-- See [notes/](../notes/) for active explorations
-- See [CLAUDE.md](../CLAUDE.md) for agent instructions
-
-## Getting Started
-
-**For documenting a new practice**:
-1. Create a note: `notes/YYYY-MM-DD-practice-name.md`
-2. Document what you tried, what worked, what didn't
-3. Include sources (experience, references, context)
-4. Mark status as draft/working
-
-**When ready to stabilize**:
-1. Create appropriate directory in docs/ (if it doesn't exist)
-2. Move or extract content from notes/
-3. Mark as working or stable
-4. Update this README with links
+1. **Capture in notes/** - Quick documentation with date prefix
+2. **Let patterns emerge** - Notice when multiple practices relate
+3. **Create structure** - When you have related practices, organize them
+4. **Graduate stable content** - Move from notes/ to docs/
 
 ---
 
-**Meta**: Follows [meta knowledge base conventions](../../meta-knowledge-base/docs/meta.md)
+**Meta**: Follows [meta knowledge base conventions](../../.graft/meta-knowledge-base/docs/meta.md)
