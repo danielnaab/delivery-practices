@@ -46,3 +46,8 @@ The [backlink scanner](../specs/backlink-scanner.md) implements structural verif
 
 - [Principles](../policies/living-specifications.md) — #13 (references flow upstream)
 - [Artifact relationships](relationships.md) — backlink patterns
+
+## Sources
+
+- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md) — drift detection themes
+- Personal experience: CI-based linting, spec-code drift in production systems

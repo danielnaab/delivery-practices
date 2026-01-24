@@ -66,3 +66,9 @@ The directory structure signals what kind of knowledge each file contains:
 ## Related
 
 - [Principles](../policies/living-specifications.md) — #6 (AI-compatible is human-compatible), #14 (fight tribal knowledge)
+
+## Sources
+
+- [Living Specifications Principles](../policies/living-specifications.md) — #6, #14
+- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md) — UX/comprehension themes
+- Personal experience: Developer onboarding patterns, AI agent cold-start behavior

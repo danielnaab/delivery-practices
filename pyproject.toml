@@ -1,7 +1,7 @@
 [project]
-name = "backlink-scanner"
-version = "0.1.0"
-description = "Backlink scanner for spec-to-implementation traceability"
+name = "delivery-practices-tools"
+version = "0.2.0"
+description = "Tooling for the delivery-practices knowledge base"
 readme = "README.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
@@ -13,10 +13,14 @@ dependencies = []
 
 [project.scripts]
 backlink-scanner = "backlink_scanner.__main__:main"
+kb-linter = "kb_linter.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/backlink_scanner", "src/kb_linter"]
 
 [dependency-groups]
 dev = [
@@ -46,7 +50,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["backlink_scanner"]
+known-first-party = ["backlink_scanner", "kb_linter"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -60,6 +64,7 @@ addopts = [
     "--strict-markers",
     "--strict-config",
     "--cov=backlink_scanner",
+    "--cov=kb_linter",
     "--cov-report=term-missing",
 ]
 

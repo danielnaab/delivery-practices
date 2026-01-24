@@ -1,6 +1,9 @@
+---
+status: working
+---
+
 # Tooling Architecture: Flat Now, Evolve When Warranted
 
-**Status**: Working
 **Date**: 2026-01-24
 
 ## Context

@@ -1,5 +1,6 @@
 ---
-status: draft
+status: working
+last-validated: 2026-01-24
 ---
 
 # Playbook: Writing Specifications
@@ -21,6 +22,15 @@ How to write a new specification or update an existing one.
 **Ceremony scales with impact.** Trivial changes need no spec update; behavior changes do.
 
 ## Steps
+
+> **These steps are a thinking guide, not a strict sequence.** In practice, you'll iterate — writing Intent, jumping to Behavior, refining Non-goals, returning to add Open Questions. Sources inform your design from the start, even though they appear late in this list.
+
+### 0. Orient
+
+Before writing, gather context:
+- Read the [specification format](../docs/format.md) template
+- Check for related specs that your new spec might reference or overlap with
+- Identify the sources (requirements, principles, prior decisions) that will inform the design
 
 ### 1. Create the File
 
@@ -84,13 +94,30 @@ For anything unresolved, use checkboxes:
 
 These explicitly invite collaboration without blocking progress.
 
-### 7. Cite Sources
+### 7. Record Decisions
 
-Include provenance for all behavior decisions:
+As you make design choices, capture rationale inline:
+```markdown
+## Decisions
+- [Date]: [Decision and brief rationale]
+```
+
+This prevents "why is it like this?" archaeology later.
+
+### 8. Cite Sources and Link Related
+
+Include provenance for behavior decisions:
 ```markdown
 ## Sources
 - [OWASP Auth Guidelines](URL) - Session management patterns
 - Personal experience: Project X - Rate limiting approach
+```
+
+Link to related specs, docs, or principles:
+```markdown
+## Related
+- [Other Spec](other-spec.md) — shared constraint
+- [Principles](../policies/living-specifications.md) — relevant principle numbers
 ```
 
 ## Updating an Existing Spec
@@ -117,3 +144,8 @@ Include provenance for all behavior decisions:
 - [Specification format](../docs/format.md) — the template reference
 - [Principles](../policies/living-specifications.md) — normative rules
 - [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective
+
+## Sources
+
+- Field-tested: Used to write [specs/kb-linter.md](../specs/kb-linter.md) (2026-01-24)
+- [Specification format](../docs/format.md) — template this playbook walks through

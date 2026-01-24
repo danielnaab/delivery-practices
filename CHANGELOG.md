@@ -11,8 +11,14 @@
 - Scanner exit codes: exit 1 on dangling references or orphan specs (was always exit 0)
 - CLAUDE.md write boundaries now reference knowledge-base.yaml as single source of truth
 - docs/verification.md: removed speculative content, tightened to reference doc
+- playbooks/writing-specs.md: promoted to working, added Step 0 (Orient), Step 7 (Record Decisions), iterative-writing note
+- pyproject.toml: renamed project to delivery-practices-tools, multi-package build config
 
 ### Added
+- specs/kb-linter.md — specification for KB content linter tool
+- src/kb_linter/ — Python implementation enforcing knowledge-base.yaml rules
+- tests/test_linter.py — unit tests for kb-linter
+- tests/test_kb_linter_cli.py — integration tests for kb-linter CLI
 - `spec-section` annotation support in backlink scanner
 - `--report-only` CLI flag (always exit 0, for informational use)
 - tests/test_cli.py — integration tests for CLI output and exit codes

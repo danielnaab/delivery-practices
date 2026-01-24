@@ -9,6 +9,7 @@ Living specifications for this repository's tooling. Each spec is a behavioral c
 | Spec | Status | Purpose |
 |------|--------|---------|
 | [backlink-scanner.md](backlink-scanner.md) | proposed | Scan for `spec:` annotations, report traceability |
+| [kb-linter.md](kb-linter.md) | proposed | Validate content files against knowledge-base.yaml rules |
 
 ## Lifecycle
 
