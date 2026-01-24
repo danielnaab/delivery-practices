@@ -132,12 +132,43 @@ Session notes already capture what a PR description needs. The mapping:
 
 ### Design principles
 
-1. **Navigation aid with glue text** — The description links to specs and notes for depth, but restates key facts inline when it saves the reviewer a click. Brief restatement is glue that makes the description self-sufficient for high-trust review.
+1. **Navigation aid with glue text** — Link to specs and notes for depth. Restate key facts inline when it saves the reviewer a click. Brief restatement makes the description self-sufficient for high-trust review.
 2. **One screen or less** — If a reviewer has to scroll the description, it's too long. Depth goes in collapsibles or links.
-3. **The title does the heavy lifting** — A good title means many reviewers skip the body entirely. Write the title as if it's the only thing people will read.
-4. **Plain language over structure** — Sentences over bullet lists. Translate spec formality into casual reviewer language. The description is for humans reading quickly, not machines parsing.
+3. **The title does the heavy lifting** — Many reviewers skip the body entirely. The title is Level 0; the body is for those who need more.
+4. **Plain language over structure** — Sentences over bullet lists. Translate spec formality into casual reviewer language.
 5. **Focus over completeness** — Tell the reviewer what to pay attention to, not everything that changed.
 6. **Generatable** — An AI agent with access to the spec and session note should produce this consistently.
+
+### The title
+
+The title is the single most important line. It should tell a reviewer whether to open the PR at all.
+
+**Format**: `[verb] [what]: [key behavioral detail]`
+
+Good titles:
+- "Add kb-linter: validates frontmatter and provenance against knowledge-base.yaml"
+- "Fix link-validator false positives on inline code spans"
+- "Unify status vocabulary to draft/working/stable/deprecated across all content"
+
+Weak titles (missing behavioral detail):
+- "Add kb-linter tool" — what does it do?
+- "Fix bug in link-validator" — which bug?
+- "Update statuses" — how? why?
+
+The title should make sense without the body. If the body disappeared, would the title alone tell a reviewer what this PR changes?
+
+### When to use which format
+
+Choose format by **behavioral complexity**, not file count:
+
+| Use this format | When... |
+|----------------|---------|
+| **Simple** | All choices are obvious from the spec. No non-trivial decisions. |
+| **Medium** | A few decisions a reviewer might question. One area of focused complexity. |
+| **Large** | Multiple specs, cross-cutting changes, or significant design decisions. |
+| **Non-spec** | No spec exists (refactors, config, docs, dependency updates). |
+
+A 3-file PR with a subtle algorithm needs the medium format. A 20-file mechanical rename needs the simple format.
 
 ### When to restate vs. link
 
@@ -151,15 +182,26 @@ Session notes already capture what a PR description needs. The mapping:
 
 **The test**: Does this restatement save the reviewer a click AND fit in one sentence? If yes, restate. If it needs a paragraph, link.
 
-### Format: simple PR (1-5 files, single concern)
+### Linking in PR descriptions
+
+**The problem**: Relative markdown links in GitHub PR descriptions resolve against the default branch, not the PR branch. If this PR adds `specs/kb-linter.md`, a link to it won't work until after merge.
+
+**Solutions** (in order of preference):
+1. **Link to the file in the PR**: Use GitHub's file-in-PR URL format — reviewers can see the file in context of the PR's changes. Format: the file will appear in the "Files changed" tab.
+2. **Name the file without linking**: "See `specs/kb-linter.md` in this PR" — the reviewer finds it in the file list.
+3. **Link to existing files only**: For files that already exist on the default branch (e.g., linking to an existing spec that this PR implements against), relative links work fine.
+
+**Rule of thumb**: Link to existing files. Name new files. The reviewer already has the PR open — they can find new files in the "Files changed" tab.
+
+### Format: simple
 
 ```markdown
-[Plain language: what was done and why. One sentence is fine.]
+[What was done and why. One sentence is fine.]
 
 Spec: [name](link) | Verify: `command`
 ```
 
-That's it. For a trusted reviewer of a small spec-driven change, the spec link IS the review guide. Example:
+Example:
 
 ```markdown
 Fix link-validator false positives on inline code spans.
@@ -167,7 +209,7 @@ Fix link-validator false positives on inline code spans.
 Spec: [link-validator](specs/link-validator.md) | Verify: `uv run pytest && uv run link-validator`
 ```
 
-### Format: medium PR (5-15 files, one spec)
+### Format: medium
 
 ```markdown
 [What was done and why. 2-3 sentences covering intent and approach.]
@@ -175,7 +217,7 @@ Spec: [link-validator](specs/link-validator.md) | Verify: `uv run pytest && uv r
 Spec: [name](link) | Session: [note](link)
 Verify: `command`
 
-**Changes**: spec, 3 source files, 2 test files, config
+**Changes**: [compact grouping by role]
 **Focus**: [what the reviewer should actually look at]
 ```
 
@@ -186,17 +228,19 @@ Added kb-linter: validates content files against knowledge-base.yaml rules
 (status vocabulary, provenance requirements). Spec-first, 30 tests, found
 7 real violations in the repo on first run.
 
-Spec: [kb-linter](specs/kb-linter.md) | Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
+Spec: see `specs/kb-linter.md` in this PR | Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
 Verify: `uv run pytest && uv run kb-linter`
 
 **Changes**: new spec, src/kb_linter/ (3 files), tests/ (2 files), pyproject.toml
-**Focus**: Frontmatter extraction uses regex not YAML parser — intentional (see spec §Constraints)
+**Focus**: Frontmatter extraction uses regex not YAML parser — intentional (see spec §Constraints). Review the regex against real frontmatter examples in the repo.
 ```
 
-### Format: large PR (15+ files, multiple specs or cross-cutting)
+### Format: large
 
 ```markdown
 [What was done and why. 2-3 sentences.]
+
+**Breaking**: [if behavior changes, one sentence on what changes for existing users]
 
 Specs: [a](link), [b](link), [c](link) | Session: [note](link)
 Verify: `command`
@@ -206,23 +250,47 @@ Verify: `command`
 
 <details><summary>Behavior map (which spec sections → which code)</summary>
 
-[Spec section → function/file mapping, only the non-obvious ones]
+[Spec section — one-line restatement → code location]
 
 </details>
 
 <details><summary>Key decisions</summary>
 
-[Choices that a reviewer might question, with brief rationale or link to spec §Decisions]
+[Choices that a reviewer might question, with brief rationale]
 
 </details>
 ```
+
+The `**Breaking**` line appears only when existing behavior changes. Omit it for purely additive PRs.
+
+### Format: non-spec
+
+For refactors, config changes, dependency updates, and docs-only PRs where no spec exists:
+
+```markdown
+[What was done and why.]
+
+Verify: `command`
+
+**Safety**: [why this is safe — e.g., "pure refactor, all tests pass unchanged" or "config only, no behavior change"]
+**Focus**: [what the reviewer should check]
+```
+
+The `**Safety**` line replaces the spec link. Without a spec as review guide, the reviewer needs to know why this change doesn't break anything. Examples:
+
+- "Pure refactor — behavior identical, tests unchanged, ruff confirms no new warnings."
+- "Dependency update — changelog reviewed, no breaking changes in minor bump."
+- "Docs only — no code changes."
 
 ### What makes this work
 
 | Element | Purpose | Why it's here |
 |---------|---------|---------------|
-| Plain summary | Triage — "is this relevant to me?" | Every reviewer reads this |
-| Spec links | Deep intent — "what should the code do?" | Replaces inline behavior descriptions |
+| Title | Triage — "should I open this?" | The only thing some reviewers read |
+| Plain summary | Scope — "is this relevant to me?" | Every reviewer who opens the PR reads this |
+| Breaking line | Alert — "does this affect my code?" | Only present when behavior changes |
+| Spec links | Deep intent — "what should the code do?" | The review guide for spec-driven changes |
+| Safety line | Confidence — "why is this safe?" | The review guide for non-spec changes |
 | Session link | Full context — "what was the exploration?" | Available but not required |
 | Verify line | Reproducibility — "how do I check this?" | Actionable, copy-pasteable |
 | Changes line | Scope — "how much is there?" | Compact, not a file list |
@@ -249,18 +317,22 @@ This is the most important non-obvious element. It tells the reviewer: "given li
 
 The Focus line is the author saying "I know your time is valuable, here's where to spend it."
 
+**Limitation**: The Focus line depends on author self-awareness. If the author doesn't realize something is non-obvious, they won't flag it. **Mitigation**: When you can't write a good Focus line, fall back to "Review the behavior map — each spec section should have corresponding correct code." The behavior map provides systematic coverage when the author's intuition about what's tricky is unavailable.
+
 ## Worked Example: v0.2.0 as a Single PR
 
 If the entire v0.2.0 release had been a single PR (8 commits, 30+ files, 3 new tools), here's what the large-format description would look like:
 
+**Title**: "Add structural integrity tools: backlink-scanner, kb-linter, link-validator with CI enforcement"
+
 Using the large-format template:
 
 ````markdown
-Three structural integrity tools (backlink-scanner, kb-linter, link-validator),
-all spec-first with CI enforcement. Unified status vocabulary across all content.
-Consolidated identical CLI patterns into shared tool_cli module.
+Three structural integrity tools for spec-to-implementation traceability,
+content rule enforcement, and broken link detection. All spec-first with
+CI enforcement. Unified status vocabulary and consolidated CLI boilerplate.
 
-Specs: [backlink-scanner](specs/backlink-scanner.md), [kb-linter](specs/kb-linter.md), [link-validator](specs/link-validator.md), [tool-cli](specs/tool-cli.md)
+Specs: see `specs/{backlink-scanner,kb-linter,link-validator,tool-cli}.md` in this PR
 Session: [tooling-expansion](notes/2026-01-24-tooling-expansion.md)
 Verify: `uv run pytest && uv run ruff check . && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
 
@@ -296,11 +368,26 @@ tool-cli:
 </details>
 ````
 
-**Observations**:
-- 30+ files, but the visible description is 7 lines. Everything else is collapsible or linked.
-- A high-trust reviewer reads the summary + focus line and goes straight to the diff.
-- A thorough reviewer expands the behavior map — the one-line restatements tell them what each behavior does without opening the spec. They click through only when verifying details.
-- The key decisions section restates rationale concisely. The reviewer only follows spec links when they disagree or want more context.
+**Notes on this example**:
+- No `**Breaking**` line because this is purely additive (new tools, no existing behavior changed).
+- Spec links say "see X in this PR" because all specs are new files not yet on the default branch.
+- 30+ files, but the visible description is 7 lines. Everything else is collapsible.
+- A high-trust reviewer reads summary + focus and goes straight to the diff.
+- A thorough reviewer expands the behavior map — the one-line restatements tell them what each behavior does without opening the spec.
+
+### Non-spec example: CLI consolidation
+
+**Title**: "Extract shared tool_cli module from 3 identical __main__.py patterns"
+
+```markdown
+Three tools had identical CLI boilerplate (arg parsing, JSON output, exit codes).
+Extracted to shared tool_cli module. No behavior change — all tools work identically.
+
+Verify: `uv run pytest && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
+
+**Safety**: Pure refactor. All 101 tests pass unchanged. Tool outputs identical before/after.
+**Focus**: Check that tool_cli.run_tool() handles the edge cases each __main__.py previously handled (FileNotFoundError, --report-only flag ordering).
+```
 
 ## AI Agent as PR Author
 
@@ -378,37 +465,45 @@ Structure:
 
 When the team trusts the author and prefers fewer review contexts:
 
-1. Use the structured template with all 5 levels
-2. Add a **Reading Order** section:
-   ```markdown
-   ## Reading Order
-   1. Read specs/ first (intent and behavior contracts)
-   2. Skim src/ for structural alignment with specs
-   3. Check tests/ for coverage of spec edge cases
-   4. Config/docs are mechanical — verify links work
-   ```
+1. Use the large format with behavior map and key decisions
+2. The Focus line should include a reading order: "Read specs first, then spot-check implementation. Tests are verification, config is mechanical."
 3. Link the session note for full decision rationale
-4. Consider GitHub's "viewed" checkbox feature — mark mechanical files as pre-reviewed
+4. Use GitHub's "viewed" checkbox — mark mechanical files (config, docs) as pre-reviewed
 
 ### The trust gradient
 
 Different review depths for different trust levels:
 
-| Trust level | Review approach | PR description needs |
-|-------------|----------------|---------------------|
-| **High trust** (pair worked, AI-assisted with oversight) | Spec + summary sufficient. Spot-check edge cases. | Level 0 + spec link |
-| **Medium trust** (solo work, familiar codebase) | Behavior map review. Verify each spec section covered. | Levels 0-2 |
-| **Lower trust** (new contributor, unfamiliar area) | Full diff review with spec as guide. | All levels + reading order |
+| Trust level | Review approach | What they read in the PR description |
+|-------------|----------------|--------------------------------------|
+| **High trust** (pair worked, AI-assisted with oversight) | Spec + summary sufficient. Spot-check edge cases. | Title + summary + focus |
+| **Medium trust** (solo work, familiar codebase) | Behavior map review. Verify each spec section covered. | Summary + focus + behavior map |
+| **Lower trust** (new contributor, unfamiliar area) | Full diff review with spec as guide. | Everything including decisions |
 
-The structured description scales down gracefully. High-trust reviews use Level 0; lower-trust reviews use all levels. The information is there either way.
+The format scales gracefully. All the information is there; the reviewer decides how deep to go.
 
 ## Open Questions
 
-- **Should behavior maps be generated or hand-written?** Generated is more accurate but requires tooling. Hand-written is simpler but risks going stale. Could the backlink scanner output be reformatted into a behavior map?
+- **Should behavior maps be generated or hand-written?** Generated is more accurate but requires tooling. Hand-written is simpler but risks going stale. Could the backlink scanner output be reformatted into a behavior map automatically?
 - **How do we handle PRs that modify specs?** The spec is both the change and the review guide — circular reference. Possible answer: the *diff* of the spec IS the intent description; the reviewer reads the spec diff first, then verifies code matches the new spec.
 - **Can review comments reference spec sections?** "This doesn't match §Behavior/Login" is more precise than "this seems wrong." Would this convention be adopted naturally?
-- **Does this pattern work for non-spec changes?** Config, docs, refactors don't have specs. The simple format (summary + verify) probably suffices. The Focus line still applies — "this is a pure refactor, behavior unchanged."
-- **How do we handle PRs from people who didn't write the spec?** The Focus line depends on author knowledge. Can the spec itself provide enough Focus guidance for any author?
+- **How do we handle PRs from people who didn't write the spec?** The Focus line depends on author knowledge. Can the spec itself provide enough guidance for any author? (Mitigation: the behavior map provides systematic review regardless of author familiarity.)
+- **What's the threshold for behavior map inclusion?** The format says "large format" includes it, but is it worth maintaining for medium-complexity PRs too?
+
+## Validation Plan
+
+This design is currently theoretical — no actual reviewer has used it to review a PR. To validate:
+
+1. **Use it on the next real PR** — write the description using this format, then ask: was it faster to write than ad hoc? Did it feel natural?
+2. **Get reviewer feedback** — after the PR is reviewed, ask: did the Focus line help? Did you expand the behavior map? What was missing?
+3. **Compare with ad hoc** — for the same work, compare time-to-understand between a structured description and an unstructured one.
+4. **Test generability** — ask an AI agent to generate the description from a spec + session note without seeing the template. Does it converge on something similar?
+
+Success criteria:
+- Author can write the description in under 5 minutes (or the AI generates it)
+- Reviewer can triage (approve/review/defer) from the visible portion without scrolling
+- Thorough reviewer finds the behavior map useful (clicks or expands it)
+- No reviewer asks "but what does this do?" after reading the description
 
 ## Emerging Principles
 
