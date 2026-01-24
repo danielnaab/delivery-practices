@@ -29,15 +29,21 @@ This supports the living specifications practice: references flow upstream (code
 
 ### Annotation format
 
-- Given a file containing `// spec: specs/backlink-scanner.md`
+Annotations must be standalone lines (the annotation is the entire line content, ignoring leading/trailing whitespace).
+
+- Given a line `// spec: specs/backlink-scanner.md`
 - When the scanner parses it
 - Then it records that file as an implementor of `specs/backlink-scanner.md`
 
-- Given a file containing `# spec: specs/backlink-scanner.md`
+- Given a line `# spec: specs/backlink-scanner.md`
 - When the scanner parses it
 - Then it records that file as an implementor of `specs/backlink-scanner.md`
 
-- Given a file containing `// spec-section: Behavior/Scanning for backlinks`
+- Given a line containing an annotation embedded in other content (e.g. inside a string literal)
+- When the scanner parses it
+- Then it does not match
+
+- Given a line `// spec-section: Behavior/Scanning for backlinks`
 - When the scanner parses it
 - Then it records the section reference alongside the spec reference
 
@@ -76,7 +82,8 @@ Example output:
 ### Edge cases
 
 - Binary files: skipped
-- Annotations in comments only: no distinction (any matching line counts)
+- Markdown code fences: annotations inside ``` blocks are skipped
+- Standalone lines only: annotations embedded in other content (string literals, inline code) are ignored
 - Multiple annotations in one file: all recorded
 - Self-referencing specs: allowed (a spec can reference another spec)
 

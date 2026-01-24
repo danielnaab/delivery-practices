@@ -127,6 +127,49 @@ describe("backlink scanner", () => {
       assert.deepEqual(result.orphans, []);
     });
 
+    it("skips annotations inside markdown code fences", async () => {
+      await mkdir(join(testDir, "specs"), { recursive: true });
+      await writeFile(join(testDir, "specs/auth.md"), "# Auth");
+      await writeFile(join(testDir, "example.md"), [
+        "# Example",
+        "```python",
+        "# spec: specs/auth.md",
+        "def login():",
+        "    pass",
+        "```",
+      ].join("\n"));
+
+      const result = await scan(testDir);
+
+      assert.deepEqual(result.specs, {});
+    });
+
+    it("matches annotations outside code fences in markdown", async () => {
+      await mkdir(join(testDir, "specs"), { recursive: true });
+      await writeFile(join(testDir, "specs/auth.md"), "# Auth");
+      await writeFile(join(testDir, "example.md"), [
+        "# spec: specs/auth.md",
+        "",
+        "```python",
+        "# not a spec annotation",
+        "```",
+      ].join("\n"));
+
+      const result = await scan(testDir);
+
+      assert.deepEqual(result.specs["specs/auth.md"].implementors, ["example.md"]);
+    });
+
+    it("ignores annotations embedded in other content", async () => {
+      await mkdir(join(testDir, "specs"), { recursive: true });
+      await writeFile(join(testDir, "specs/auth.md"), "# Auth");
+      await writeFile(join(testDir, "src.ts"), 'writeFile("src.ts", "// spec: specs/auth.md");');
+
+      const result = await scan(testDir);
+
+      assert.deepEqual(result.specs, {});
+    });
+
     it("returns sorted implementors", async () => {
       await mkdir(join(testDir, "specs"), { recursive: true });
       await writeFile(join(testDir, "specs/auth.md"), "# Auth");

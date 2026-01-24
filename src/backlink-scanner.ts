@@ -4,8 +4,9 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const SPEC_PATTERN = /(?:\/\/|#)\s*spec:\s*([\w.\/\-]+)/;
-const SECTION_PATTERN = /(?:\/\/|#)\s*spec-section:\s*([\w.\/\-\s]+)/;
+const SPEC_PATTERN = /^\s*(?:\/\/|#)\s*spec:\s*([\w.\/\-]+)\s*$/;
+const SECTION_PATTERN = /^\s*(?:\/\/|#)\s*spec-section:\s*([\w.\/\-\s]+)\s*$/;
+const FENCE_PATTERN = /^\s*```/;
 const BINARY_EXTENSIONS = new Set([
   ".png", ".jpg", ".jpeg", ".gif", ".ico", ".pdf",
   ".zip", ".tar", ".gz", ".bin", ".exe",
@@ -60,9 +61,17 @@ async function scan(rootDir: string): Promise<ScanResult> {
     }
 
     const lines = content.split("\n");
+    const isMarkdown = file.endsWith(".md");
+    let inCodeFence = false;
     let currentSpec: string | null = null;
 
     for (const line of lines) {
+      if (isMarkdown && FENCE_PATTERN.test(line)) {
+        inCodeFence = !inCodeFence;
+        continue;
+      }
+      if (inCodeFence) continue;
+
       const specMatch = line.match(SPEC_PATTERN);
       if (specMatch) {
         const specPath = specMatch[1].trim();
