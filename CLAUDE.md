@@ -64,19 +64,9 @@ Practice areas span these types. For example, "living specifications" has:
 
 ## Write Boundaries
 
-You may write to:
-- `docs/**` - Conceptual reference and models
-- `policies/**` - Principles and rules
-- `playbooks/**` - Procedural guides
-- `notes/**` - Explorations and brainstorming
-- `specs/**` - Specifications for tooling (dogfooding)
-- `src/**` - Tool implementations
-- `tests/**` - Tool tests
+Consult [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes` for the authoritative allow/deny list.
 
-Never write to:
-- `secrets/**`
-- `credentials/**`
-- `.graft/**` - managed by graft tooling
+In brief: you may write to knowledge content (`docs/`, `policies/`, `playbooks/`, `notes/`) and tooling (`specs/`, `src/`, `tests/`). Never write to managed directories (`.graft/`) or sensitive paths (`secrets/`, `credentials/`).
 
 ## Provenance Requirements
 

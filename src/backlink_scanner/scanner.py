@@ -1,4 +1,5 @@
 # spec: specs/backlink-scanner.md
+# spec-section: Behavior/Scanning for backlinks
 
 """Core scanning logic for finding spec backlink annotations in source files."""
 
@@ -8,6 +9,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 SPEC_PATTERN = re.compile(r"^\s*(?://|#)\s*spec:\s*([\w./\-]+)\s*$")
+SPEC_SECTION_PATTERN = re.compile(r"^\s*(?://|#)\s*spec-section:\s*(.+?)\s*$")
 FENCE_PATTERN = re.compile(r"^\s*```")
 
 BINARY_EXTENSIONS = frozenset(
@@ -38,12 +40,28 @@ SKIP_DIRS = frozenset({".git", ".graft", ".venv", "node_modules", "__pycache__"}
 
 
 @dataclass
+class SpecEntry:
+    """A spec with its implementors and section references."""
+
+    implementors: list[str] = field(default_factory=list)
+    sections: dict[str, list[str]] = field(default_factory=dict)
+
+
+@dataclass
 class ScanResult:
     """Result of scanning a directory for backlink annotations."""
 
-    specs: dict[str, list[str]] = field(default_factory=dict)
+    specs: dict[str, SpecEntry] = field(default_factory=dict)
     dangling: list[str] = field(default_factory=list)
     orphans: list[str] = field(default_factory=list)
+
+
+@dataclass
+class _FileAnnotations:
+    """Annotations found in a single file."""
+
+    spec_paths: list[str] = field(default_factory=list)
+    sections: dict[str, list[str]] = field(default_factory=dict)
 
 
 def _is_binary(path: str) -> bool:
@@ -63,20 +81,21 @@ def _get_files(root: Path) -> list[str]:
     return files
 
 
-def _scan_file(root: Path, file: str) -> list[str]:
-    """Extract spec paths referenced by annotations in a file."""
+def _scan_file(root: Path, file: str) -> _FileAnnotations:
+    """Extract spec paths and section references from annotations in a file."""
     if _is_binary(file):
-        return []
+        return _FileAnnotations()
 
     full_path = root / file
     try:
         content = full_path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
-        return []
+        return _FileAnnotations()
 
     is_markdown = file.endswith(".md")
     in_code_fence = False
-    spec_paths: list[str] = []
+    annotations = _FileAnnotations()
+    current_spec: str | None = None
 
     for line in content.splitlines():
         if is_markdown and FENCE_PATTERN.match(line):
@@ -85,11 +104,21 @@ def _scan_file(root: Path, file: str) -> list[str]:
         if in_code_fence:
             continue
 
-        match = SPEC_PATTERN.match(line)
-        if match:
-            spec_paths.append(match.group(1))
+        spec_match = SPEC_PATTERN.match(line)
+        if spec_match:
+            spec_path = spec_match.group(1)
+            annotations.spec_paths.append(spec_path)
+            current_spec = spec_path
+            continue
 
-    return spec_paths
+        section_match = SPEC_SECTION_PATTERN.match(line)
+        if section_match and current_spec is not None:
+            section_name = section_match.group(1)
+            if current_spec not in annotations.sections:
+                annotations.sections[current_spec] = []
+            annotations.sections[current_spec].append(section_name)
+
+    return annotations
 
 
 def scan(root_dir: str) -> ScanResult:
@@ -106,24 +135,41 @@ def scan(root_dir: str) -> ScanResult:
     """
     root = Path(root_dir).resolve()
     files = _get_files(root)
-    spec_refs: dict[str, set[str]] = {}
+    spec_implementors: dict[str, set[str]] = {}
+    spec_sections: dict[str, dict[str, set[str]]] = {}
 
     for file in files:
-        for spec_path in _scan_file(root, file):
-            if spec_path not in spec_refs:
-                spec_refs[spec_path] = set()
-            spec_refs[spec_path].add(file)
+        annotations = _scan_file(root, file)
+        for spec_path in annotations.spec_paths:
+            if spec_path not in spec_implementors:
+                spec_implementors[spec_path] = set()
+            spec_implementors[spec_path].add(file)
+
+        for spec_path, section_names in annotations.sections.items():
+            if spec_path not in spec_sections:
+                spec_sections[spec_path] = {}
+            for section_name in section_names:
+                if section_name not in spec_sections[spec_path]:
+                    spec_sections[spec_path][section_name] = set()
+                spec_sections[spec_path][section_name].add(file)
 
     # Find spec files in the specs/ directory
     spec_files = [f for f in files if f.startswith("specs/") and f.endswith(".md")]
 
     # Identify dangling references (referenced specs that don't exist)
-    dangling = [sp for sp in spec_refs if not (root / sp).exists()]
+    dangling = [sp for sp in spec_implementors if not (root / sp).exists()]
 
     # Identify orphan specs (spec files with no references)
-    orphans = [f for f in spec_files if f not in spec_refs]
+    orphans = [f for f in spec_files if f not in spec_implementors]
 
-    # Build output with sorted implementors
-    specs = {sp: sorted(implementors) for sp, implementors in spec_refs.items()}
+    # Build output with sorted implementors and sections
+    specs: dict[str, SpecEntry] = {}
+    for sp, implementors in spec_implementors.items():
+        sections: dict[str, list[str]] = {}
+        if sp in spec_sections:
+            sections = {
+                name: sorted(files) for name, files in spec_sections[sp].items()
+            }
+        specs[sp] = SpecEntry(implementors=sorted(implementors), sections=sections)
 
     return ScanResult(specs=specs, dangling=dangling, orphans=orphans)

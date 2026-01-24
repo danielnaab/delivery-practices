@@ -18,6 +18,9 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Sessions
 
+### 2026-01-24
+- [Tooling Cleanup](./2026-01-24-tooling-cleanup.md) - Spec-implementation alignment, exit codes, hygiene
+
 ### 2026-01-23
 - [Initialization](./2026-01-23-initialization.md) - KB setup
 - [Living Specifications](./2026-01-23-living-specifications.md) - Exploring specs as living documentation (graduated)
@@ -28,6 +31,7 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 - **Date-prefixed** - YYYY-MM-DD format
 - **Ephemeral** - Archive or extract when complete
 - **Exploratory** - Less rigor than docs/
+- **Graduated notes remain** - Kept as historical reference; they preserve the exploratory context and reasoning that led to stable content
 
 ## Graduation Path
 

@@ -15,7 +15,7 @@ class TestScanningForBacklinks:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["src.py"]
+        assert result.specs["specs/auth.md"].implementors == ["src.py"]
 
     def test_finds_hash_annotations(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -24,7 +24,7 @@ class TestScanningForBacklinks:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["script.py"]
+        assert result.specs["specs/auth.md"].implementors == ["script.py"]
 
     def test_finds_slash_slash_annotations(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -33,7 +33,7 @@ class TestScanningForBacklinks:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["src.ts"]
+        assert result.specs["specs/auth.md"].implementors == ["src.ts"]
 
     def test_records_multiple_implementors(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -43,7 +43,7 @@ class TestScanningForBacklinks:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["a.py", "b.py"]
+        assert result.specs["specs/auth.md"].implementors == ["a.py", "b.py"]
 
     def test_records_multiple_specs_from_one_file(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -53,8 +53,97 @@ class TestScanningForBacklinks:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["src.py"]
-        assert result.specs["specs/rate.md"] == ["src.py"]
+        assert result.specs["specs/auth.md"].implementors == ["src.py"]
+        assert result.specs["specs/rate.md"].implementors == ["src.py"]
+
+
+class TestSpecSections:
+    def test_records_section_with_preceding_spec(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/auth.md").write_text("# Auth")
+        (tmp_path / "src.py").write_text(
+            "# spec: specs/auth.md\n# spec-section: Behavior/Login\ndef login(): pass"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs["specs/auth.md"].sections == {
+            "Behavior/Login": ["src.py"]
+        }
+
+    def test_ignores_section_without_preceding_spec(self, tmp_path: Path) -> None:
+        (tmp_path / "src.py").write_text(
+            "# spec-section: Behavior/Login\ndef login(): pass"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs == {}
+
+    def test_multiple_sections_per_spec_in_one_file(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/auth.md").write_text("# Auth")
+        (tmp_path / "src.py").write_text(
+            "# spec: specs/auth.md\n"
+            "# spec-section: Behavior/Login\n"
+            "# spec-section: Behavior/Logout\n"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs["specs/auth.md"].sections == {
+            "Behavior/Login": ["src.py"],
+            "Behavior/Logout": ["src.py"],
+        }
+
+    def test_sections_from_multiple_files(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/auth.md").write_text("# Auth")
+        (tmp_path / "a.py").write_text(
+            "# spec: specs/auth.md\n# spec-section: Behavior/Login\n"
+        )
+        (tmp_path / "b.py").write_text(
+            "# spec: specs/auth.md\n# spec-section: Behavior/Login\n"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs["specs/auth.md"].sections == {
+            "Behavior/Login": ["a.py", "b.py"]
+        }
+
+    def test_section_applies_to_most_recent_spec(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/auth.md").write_text("# Auth")
+        (tmp_path / "specs/rate.md").write_text("# Rate")
+        (tmp_path / "src.py").write_text(
+            "# spec: specs/auth.md\n"
+            "# spec-section: Behavior/Login\n"
+            "# spec: specs/rate.md\n"
+            "# spec-section: Behavior/Limiting\n"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs["specs/auth.md"].sections == {
+            "Behavior/Login": ["src.py"]
+        }
+        assert result.specs["specs/rate.md"].sections == {
+            "Behavior/Limiting": ["src.py"]
+        }
+
+    def test_slash_slash_section_annotations(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/auth.md").write_text("# Auth")
+        (tmp_path / "src.ts").write_text(
+            "// spec: specs/auth.md\n// spec-section: Behavior/Login\n"
+        )
+
+        result = scan(str(tmp_path))
+
+        assert result.specs["specs/auth.md"].sections == {
+            "Behavior/Login": ["src.ts"]
+        }
 
 
 class TestDanglingReferences:
@@ -143,7 +232,7 @@ class TestEdgeCases:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["example.md"]
+        assert result.specs["specs/auth.md"].implementors == ["example.md"]
 
     def test_ignores_embedded_annotations(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
@@ -163,4 +252,4 @@ class TestEdgeCases:
 
         result = scan(str(tmp_path))
 
-        assert result.specs["specs/auth.md"] == ["a.py", "m.py", "z.py"]
+        assert result.specs["specs/auth.md"].implementors == ["a.py", "m.py", "z.py"]

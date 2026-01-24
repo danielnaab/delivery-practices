@@ -16,7 +16,6 @@ This supports the living specifications practice: references flow upstream (code
 
 - Semantic analysis of whether implementations match spec intent
 - Modifying source files or specs
-- Blocking CI pipelines (output is informational)
 - Watching for file changes (runs on demand)
 
 ## Behavior
@@ -43,15 +42,21 @@ Annotations must be standalone lines (the annotation is the entire line content,
 - When the scanner parses it
 - Then it does not match
 
+### Section annotations
+
 - Given a line `// spec-section: Behavior/Scanning for backlinks`
+- When a `spec:` annotation has previously appeared in the same file
+- Then it records the section reference against the most recent `spec:` path
+
+- Given a `spec-section:` annotation with no preceding `spec:` in the same file
 - When the scanner parses it
-- Then it records the section reference alongside the spec reference
+- Then it is ignored
 
 ### Output structure
 
 - Given completed scanning
 - When results are reported
-- Then output is a JSON object mapping spec paths to arrays of implementor file paths
+- Then output is a JSON object with `specs`, `dangling`, and `orphans` keys
 
 Example output:
 ```json
@@ -59,13 +64,24 @@ Example output:
   "specs": {
     "specs/backlink-scanner.md": {
       "implementors": [
-        "src/backlink-scanner.ts",
-        "tests/backlink-scanner.test.ts"
-      ]
+        "src/backlink_scanner/scanner.py",
+        "tests/test_scanner.py"
+      ],
+      "sections": {
+        "Behavior/Scanning for backlinks": ["src/backlink_scanner/scanner.py"]
+      }
     }
-  }
+  },
+  "dangling": [],
+  "orphans": []
 }
 ```
+
+### Exit codes
+
+- **Exit 0**: no dangling references AND no orphan specs
+- **Exit 1**: dangling references OR orphan specs found
+- **`--report-only` flag**: always exit 0 (for informational use without failing)
 
 ### Dangling references
 
@@ -89,10 +105,10 @@ Example output:
 
 ## Constraints
 
-- Runs in Node.js (TypeScript)
-- No external dependencies beyond Node standard library
+- Runs in Python (no runtime dependencies beyond standard library)
 - Completes in under 1 second for repositories up to 10,000 files
-- Exit code 0 on success regardless of findings (dangling/orphans are informational)
+- Exit code 0 when clean; exit code 1 when dangling refs or orphans found
+- `--report-only` flag overrides to always exit 0
 
 ## Open Questions
 
@@ -103,7 +119,7 @@ Example output:
 
 - 2026-01-24: Use JSON output for machine readability. Human-readable summaries can be built on top.
 - 2026-01-24: No external dependencies. Keeps the tool simple and the repo self-contained.
-- 2026-01-24: Informational only (exit 0). Blocking behavior belongs in CI configuration, not the tool.
+- 2026-01-24: Fail by default on dangling references or orphan specs. These are broken links and dead weight respectively; failing early catches both. `--report-only` restores informational mode.
 
 ## Sources
 
