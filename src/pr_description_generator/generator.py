@@ -7,7 +7,9 @@ from pathlib import Path
 
 import yaml
 
-from pr_description_generator.models import BehaviorMapEntry, Format, PRInput
+from pr_description_generator.adapters.plain import PlainLinkAdapter
+from pr_description_generator.models import BehaviorMapEntry, Format, GitHubInput, PRInput
+from pr_description_generator.protocols import LinkAdapter
 
 
 class ValidationError(Exception):
@@ -49,6 +51,25 @@ def parse_input(yaml_path: str) -> PRInput:
         valid = ", ".join(f.value for f in Format)
         raise ValidationError(f"Unknown format '{format_str}', valid formats: {valid}") from None
 
+    # Parse optional GitHub configuration
+    github_input = None
+    github_data = data.get("github")
+    if github_data:
+        if not isinstance(github_data, dict):
+            raise ValidationError("github must be a mapping")
+        missing = []
+        for field in ("owner", "repo", "branch"):
+            if not github_data.get(field):
+                missing.append(field)
+        if missing:
+            raise ValidationError(f"github missing required fields: {', '.join(missing)}")
+        github_input = GitHubInput(
+            owner=github_data["owner"],
+            repo=github_data["repo"],
+            branch=github_data["branch"],
+            pr_number=github_data.get("pr_number"),
+        )
+
     return PRInput(
         format=fmt,
         summary=data.get("summary", ""),
@@ -61,6 +82,7 @@ def parse_input(yaml_path: str) -> PRInput:
         decisions=data.get("decisions", []) or [],
         behavior_map_source=data.get("behavior_map_source", ""),
         root_dir=data.get("root_dir", "."),
+        github=github_input,
     )
 
 
@@ -101,48 +123,32 @@ def validate_for_format(pr_input: PRInput) -> list[str]:
     return errors
 
 
-def check_file_exists(path: str, root_dir: str) -> bool:
-    """Check if a file exists at root_dir/path.
-
-    Args:
-        path: Relative path to the file.
-        root_dir: Root directory to check from.
-
-    Returns:
-        True if file exists, False otherwise.
-    """
-    full_path = Path(root_dir) / path
-    return full_path.exists()
-
-
-def format_link(path: str, root_dir: str) -> str:
+def format_link(path: str, adapter: LinkAdapter) -> str:
     """Format a file path as a markdown link or "See in PR" reference.
 
     Args:
         path: Relative path to the file.
-        root_dir: Root directory to check file existence.
+        adapter: Link adapter for platform-specific formatting.
 
     Returns:
         Formatted link string.
     """
     filename = Path(path).name
-    if check_file_exists(path, root_dir):
-        return f"[{filename}]({path})"
-    else:
-        return f"See `{path}` in this PR"
+    exists = adapter.check_file_exists(path)
+    return adapter.format_file_link(path, filename, exists)
 
 
-def format_links(paths: list[str], root_dir: str) -> str:
+def format_links(paths: list[str], adapter: LinkAdapter) -> str:
     """Format multiple file paths as comma-separated links.
 
     Args:
         paths: List of file paths.
-        root_dir: Root directory to check file existence.
+        adapter: Link adapter for platform-specific formatting.
 
     Returns:
         Comma-separated formatted links.
     """
-    formatted = [format_link(p, root_dir) for p in paths]
+    formatted = [format_link(p, adapter) for p in paths]
     return ", ".join(formatted)
 
 
@@ -183,15 +189,19 @@ def load_behavior_map(
     return entries
 
 
-def generate_simple(pr_input: PRInput) -> str:
+def generate_simple(pr_input: PRInput, adapter: LinkAdapter | None = None) -> str:
     """Generate simple format PR description.
 
     Args:
         pr_input: The validated PR input.
+        adapter: Optional link adapter. Defaults to PlainLinkAdapter.
 
     Returns:
         Markdown string.
     """
+    if adapter is None:
+        adapter = PlainLinkAdapter(pr_input.root_dir)
+
     lines = []
 
     # Summary
@@ -200,21 +210,25 @@ def generate_simple(pr_input: PRInput) -> str:
 
     # Spec: ... | Verify: ...
     spec_label = "Spec:" if len(pr_input.specs) == 1 else "Specs:"
-    spec_links = format_links(pr_input.specs, pr_input.root_dir)
+    spec_links = format_links(pr_input.specs, adapter)
     lines.append(f"{spec_label} {spec_links} | Verify: `{pr_input.verify}`")
 
     return "\n".join(lines) + "\n"
 
 
-def generate_medium(pr_input: PRInput) -> str:
+def generate_medium(pr_input: PRInput, adapter: LinkAdapter | None = None) -> str:
     """Generate medium format PR description.
 
     Args:
         pr_input: The validated PR input.
+        adapter: Optional link adapter. Defaults to PlainLinkAdapter.
 
     Returns:
         Markdown string.
     """
+    if adapter is None:
+        adapter = PlainLinkAdapter(pr_input.root_dir)
+
     lines = []
 
     # Summary
@@ -223,9 +237,9 @@ def generate_medium(pr_input: PRInput) -> str:
 
     # Spec: ... | Session: ...
     spec_label = "Spec:" if len(pr_input.specs) == 1 else "Specs:"
-    spec_links = format_links(pr_input.specs, pr_input.root_dir)
+    spec_links = format_links(pr_input.specs, adapter)
     session_label = "Session:" if len(pr_input.sessions) == 1 else "Sessions:"
-    session_links = format_links(pr_input.sessions, pr_input.root_dir)
+    session_links = format_links(pr_input.sessions, adapter)
     lines.append(f"{spec_label} {spec_links} | {session_label} {session_links}")
 
     # Verify
@@ -239,15 +253,19 @@ def generate_medium(pr_input: PRInput) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_large(pr_input: PRInput) -> str:
+def generate_large(pr_input: PRInput, adapter: LinkAdapter | None = None) -> str:
     """Generate large format PR description.
 
     Args:
         pr_input: The validated PR input.
+        adapter: Optional link adapter. Defaults to PlainLinkAdapter.
 
     Returns:
         Markdown string.
     """
+    if adapter is None:
+        adapter = PlainLinkAdapter(pr_input.root_dir)
+
     lines = []
 
     # Summary
@@ -261,9 +279,9 @@ def generate_large(pr_input: PRInput) -> str:
 
     # Specs: ... | Sessions: ...
     spec_label = "Spec:" if len(pr_input.specs) == 1 else "Specs:"
-    spec_links = format_links(pr_input.specs, pr_input.root_dir)
+    spec_links = format_links(pr_input.specs, adapter)
     session_label = "Session:" if len(pr_input.sessions) == 1 else "Sessions:"
-    session_links = format_links(pr_input.sessions, pr_input.root_dir)
+    session_links = format_links(pr_input.sessions, adapter)
     lines.append(f"{spec_label} {spec_links} | {session_label} {session_links}")
 
     # Verify
@@ -276,16 +294,16 @@ def generate_large(pr_input: PRInput) -> str:
 
     # Behavior map (optional)
     if pr_input.behavior_map_source:
-        entries = load_behavior_map(
-            pr_input.behavior_map_source, pr_input.root_dir, pr_input.specs
-        )
+        entries = load_behavior_map(pr_input.behavior_map_source, pr_input.root_dir, pr_input.specs)
         if entries:
             lines.append("")
-            lines.append("<details><summary>Behavior map (which spec sections → which code)</summary>")
+            lines.append(
+                "<details><summary>Behavior map (which spec sections → which code)</summary>"
+            )
             lines.append("")
             for entry in entries:
-                files_str = ", ".join(entry.files)
-                lines.append(f"§{entry.section} → {files_str}")
+                file_links = format_links(entry.files, adapter)
+                lines.append(f"§{entry.section} → {file_links}")
             lines.append("")
             lines.append("</details>")
 
@@ -302,15 +320,17 @@ def generate_large(pr_input: PRInput) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_non_spec(pr_input: PRInput) -> str:
+def generate_non_spec(pr_input: PRInput, adapter: LinkAdapter | None = None) -> str:
     """Generate non-spec format PR description.
 
     Args:
         pr_input: The validated PR input.
+        adapter: Optional link adapter. Defaults to PlainLinkAdapter.
 
     Returns:
         Markdown string.
     """
+    # Non-spec format doesn't use file links, but accept adapter for consistency
     lines = []
 
     # Summary
@@ -327,11 +347,12 @@ def generate_non_spec(pr_input: PRInput) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate(pr_input: PRInput) -> str:
+def generate(pr_input: PRInput, adapter: LinkAdapter | None = None) -> str:
     """Generate PR description for the specified format.
 
     Args:
         pr_input: The validated PR input.
+        adapter: Optional link adapter. Defaults to PlainLinkAdapter.
 
     Returns:
         Markdown string.
@@ -342,4 +363,4 @@ def generate(pr_input: PRInput) -> str:
         Format.LARGE: generate_large,
         Format.NON_SPEC: generate_non_spec,
     }
-    return generators[pr_input.format](pr_input)
+    return generators[pr_input.format](pr_input, adapter)

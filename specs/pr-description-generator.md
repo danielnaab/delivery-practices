@@ -52,16 +52,23 @@ decisions:
 behavior_map_source: .backlink-output.json
 
 root_dir: "."
+
+# Optional GitHub configuration for rich links
+github:
+  owner: anthropic
+  repo: delivery-practices
+  branch: main
+  pr_number: 42  # optional
 ```
 
 ### Format requirements
 
 | Format   | Required fields                                         | Optional fields                           |
 |----------|--------------------------------------------------------|-------------------------------------------|
-| simple   | summary, verify, specs (1+)                            | root_dir                                  |
-| medium   | summary, verify, specs (1+), sessions (1+), changes, focus | root_dir                             |
-| large    | summary, verify, specs (1+), sessions (1+), changes, focus | breaking, decisions, behavior_map_source, root_dir |
-| non-spec | summary, verify, focus                                 | root_dir                                  |
+| simple   | summary, verify, specs (1+)                            | root_dir, github                          |
+| medium   | summary, verify, specs (1+), sessions (1+), changes, focus | root_dir, github                     |
+| large    | summary, verify, specs (1+), sessions (1+), changes, focus | breaking, decisions, behavior_map_source, root_dir, github |
+| non-spec | summary, verify, focus                                 | root_dir, github                          |
 
 ### Validation
 
@@ -75,6 +82,18 @@ Then the generator exits with code 2 and an error message to stderr
 Given an input YAML file
 When the format field is missing or invalid
 Then the generator exits with code 2 and an error message to stderr
+```
+
+```gherkin
+Given an input YAML file with a github field
+When github is present but missing owner, repo, or branch
+Then the generator exits with code 2 and an error message listing missing fields
+```
+
+```gherkin
+Given an input YAML file with a github field
+When github.pr_number is not provided
+Then the generator proceeds normally (pr_number is optional)
 ```
 
 ### Link formatting
@@ -105,6 +124,44 @@ Given multiple spec or session files
 When formatting the output
 Then use plural label: Specs: or Sessions: (comma-separated)
 ```
+
+### Link adapters
+
+The generator supports pluggable link adapters for platform-specific URL formatting. This enables rich links when generating PR descriptions for specific platforms.
+
+```gherkin
+Given no link adapter is specified
+When generating output
+Then use PlainLinkAdapter with relative markdown links
+```
+
+```gherkin
+Given a GitHubLinkAdapter with owner, repo, and branch
+  And a file exists in the repository
+When formatting a file link
+Then generate a GitHub blob URL: https://github.com/owner/repo/blob/branch/path
+```
+
+```gherkin
+Given a GitHubLinkAdapter with pr_number configured
+  And a file does not exist (new in this PR)
+When formatting a file link
+Then generate a PR diff URL with SHA256 anchor: https://github.com/owner/repo/pull/N/files#diff-<hash>
+```
+
+```gherkin
+Given a GitHubLinkAdapter without pr_number configured
+  And a file does not exist
+When formatting a file link
+Then fall back to: See `path` in this PR
+```
+
+The LinkAdapter protocol defines the interface:
+- `format_file_link(path, display_name, exists)` — format link to a file
+- `format_diff_anchor(path)` — format URL anchor for PR diff view
+- `format_pr_files_url()` — format URL to PR files changed view
+- `supports_pr_links()` — check if PR-specific links are available
+- `check_file_exists(path)` — check if file exists in repository
 
 ### Output: simple format
 
@@ -234,6 +291,8 @@ None currently.
 - PyYAML dependency: proper parsing warranted for nested input structure
 - v1 behavior maps use `§Section → file.py` format without restatements — simpler to implement and read
 - behavior_map_source accepts backlink scanner JSON directly, filtered to input specs — no transformation step needed
+- Protocol-based link adapters: enables platform-specific URL generation (GitHub blob links, PR diff anchors) while maintaining testability via fakes
+- GitHubLinkAdapter uses SHA256 hash of file path for diff anchors: matches GitHub's own anchor format
 
 ## Sources
 

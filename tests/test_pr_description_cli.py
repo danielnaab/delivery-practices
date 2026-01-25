@@ -245,3 +245,92 @@ root_dir: "{tmp_path}"
         proc = _run_generator(str(yaml_file))
 
         assert "See `specs/new-spec.md` in this PR" in proc.stdout
+
+
+class TestGitHubLinkFormatting:
+    def test_github_blob_links_for_existing_files(self, tmp_path: Path) -> None:
+        (tmp_path / "specs").mkdir()
+        (tmp_path / "specs/test.md").write_text("# Test")
+
+        yaml_content = f"""\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+root_dir: "{tmp_path}"
+github:
+  owner: anthropic
+  repo: delivery-practices
+  branch: main
+"""
+        yaml_file = tmp_path / "input.yaml"
+        yaml_file.write_text(yaml_content)
+
+        proc = _run_generator(str(yaml_file))
+
+        assert proc.returncode == 0
+        assert (
+            "https://github.com/anthropic/delivery-practices/blob/main/specs/test.md" in proc.stdout
+        )
+
+    def test_github_pr_diff_links_for_new_files(self, tmp_path: Path) -> None:
+        yaml_content = f"""\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/new-spec.md
+root_dir: "{tmp_path}"
+github:
+  owner: anthropic
+  repo: delivery-practices
+  branch: feature
+  pr_number: 42
+"""
+        yaml_file = tmp_path / "input.yaml"
+        yaml_file.write_text(yaml_content)
+
+        proc = _run_generator(str(yaml_file))
+
+        assert proc.returncode == 0
+        assert "https://github.com/anthropic/delivery-practices/pull/42/files#diff-" in proc.stdout
+
+    def test_github_without_pr_number_falls_back(self, tmp_path: Path) -> None:
+        yaml_content = f"""\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/new-spec.md
+root_dir: "{tmp_path}"
+github:
+  owner: anthropic
+  repo: repo
+  branch: main
+"""
+        yaml_file = tmp_path / "input.yaml"
+        yaml_file.write_text(yaml_content)
+
+        proc = _run_generator(str(yaml_file))
+
+        assert proc.returncode == 0
+        assert "See `specs/new-spec.md` in this PR" in proc.stdout
+
+    def test_github_missing_required_fields(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+github:
+  owner: anthropic
+"""
+        yaml_file = tmp_path / "input.yaml"
+        yaml_file.write_text(yaml_content)
+
+        proc = _run_generator(str(yaml_file))
+
+        assert proc.returncode == 2
+        assert "github missing required fields" in proc.stderr

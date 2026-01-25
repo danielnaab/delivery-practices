@@ -16,6 +16,19 @@ class Format(Enum):
 
 
 @dataclass
+class GitHubInput:
+    """GitHub configuration from YAML input.
+
+    Used to configure GitHubLinkAdapter for rich link generation.
+    """
+
+    owner: str
+    repo: str
+    branch: str
+    pr_number: int | None = None
+
+
+@dataclass
 class PRInput:
     """Parsed PR description input from YAML."""
 
@@ -30,6 +43,7 @@ class PRInput:
     decisions: list[str] = field(default_factory=list)
     behavior_map_source: str = ""
     root_dir: str = "."
+    github: GitHubInput | None = None
 
 
 @dataclass
