@@ -1,5 +1,6 @@
 ---
-status: draft
+status: working
+last-verified: 2026-01-25
 owners: [daniel]
 ---
 
@@ -152,10 +153,10 @@ Verify: `[verify]`
 
 - Given a `behavior_map_source` path pointing to a backlink scanner JSON file
 - When the file exists and contains spec section data
-- Then extract section-to-file mappings
+- Then extract section-to-file mappings only for specs listed in the input `specs` field
 
 - Given section data like `{"specs": {"specs/foo.md": {"sections": {"Behavior/Login": ["src/auth.py"]}}}}`
-- When generating the behavior map
+- When `specs/foo.md` is in the input specs list
 - Then output: `§Behavior/Login → src/auth.py`
 
 - Given multiple files implementing a section
@@ -165,6 +166,10 @@ Verify: `[verify]`
 - Given the behavior_map_source file does not exist
 - When generating large format
 - Then omit the behavior map section entirely (no error)
+
+- Given specs in the backlink JSON that are not in the input specs list
+- When generating the behavior map
+- Then those specs' sections are excluded from the output
 
 ### Exit codes
 

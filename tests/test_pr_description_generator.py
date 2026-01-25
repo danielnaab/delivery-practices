@@ -62,6 +62,18 @@ verify: "test"
         with pytest.raises(ValidationError, match="Unknown format 'unknown'"):
             parse_input(str(tmp_path / "input.yaml"))
 
+    def test_raises_on_yaml_not_a_mapping(self, tmp_path: Path) -> None:
+        (tmp_path / "input.yaml").write_text("just a string")
+
+        with pytest.raises(ValidationError, match="YAML must be a mapping"):
+            parse_input(str(tmp_path / "input.yaml"))
+
+    def test_raises_on_yaml_list(self, tmp_path: Path) -> None:
+        (tmp_path / "input.yaml").write_text("- item1\n- item2")
+
+        with pytest.raises(ValidationError, match="YAML must be a mapping"):
+            parse_input(str(tmp_path / "input.yaml"))
+
     def test_parses_all_optional_fields(self, tmp_path: Path) -> None:
         yaml_content = """\
 format: large
@@ -289,6 +301,37 @@ class TestLoadBehaviorMap:
         assert len(result) == 2
         sections = {e.section for e in result}
         assert sections == {"Section/A", "Section/B"}
+
+    def test_filters_to_specified_specs(self, tmp_path: Path) -> None:
+        data = {
+            "specs": {
+                "specs/a.md": {"sections": {"Section/A": ["src/a.py"]}},
+                "specs/b.md": {"sections": {"Section/B": ["src/b.py"]}},
+                "specs/c.md": {"sections": {"Section/C": ["src/c.py"]}},
+            }
+        }
+        (tmp_path / ".backlink.json").write_text(json.dumps(data))
+
+        result = load_behavior_map(
+            ".backlink.json", str(tmp_path), filter_specs=["specs/a.md", "specs/c.md"]
+        )
+
+        assert len(result) == 2
+        sections = {e.section for e in result}
+        assert sections == {"Section/A", "Section/C"}
+
+    def test_filter_specs_none_returns_all(self, tmp_path: Path) -> None:
+        data = {
+            "specs": {
+                "specs/a.md": {"sections": {"Section/A": ["src/a.py"]}},
+                "specs/b.md": {"sections": {"Section/B": ["src/b.py"]}},
+            }
+        }
+        (tmp_path / ".backlink.json").write_text(json.dumps(data))
+
+        result = load_behavior_map(".backlink.json", str(tmp_path), filter_specs=None)
+
+        assert len(result) == 2
 
 
 class TestGenerateSimple:

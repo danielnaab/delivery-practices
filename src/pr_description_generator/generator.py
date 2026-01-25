@@ -132,26 +132,29 @@ def format_link(path: str, root_dir: str) -> str:
         return f"See `{path}` in this PR"
 
 
-def format_links(paths: list[str], root_dir: str) -> tuple[str, str]:
-    """Format multiple file paths with appropriate singular/plural label.
+def format_links(paths: list[str], root_dir: str) -> str:
+    """Format multiple file paths as comma-separated links.
 
     Args:
         paths: List of file paths.
         root_dir: Root directory to check file existence.
 
     Returns:
-        Tuple of (label, formatted_links) where label is singular or plural.
+        Comma-separated formatted links.
     """
     formatted = [format_link(p, root_dir) for p in paths]
     return ", ".join(formatted)
 
 
-def load_behavior_map(source_path: str, root_dir: str) -> list[BehaviorMapEntry]:
+def load_behavior_map(
+    source_path: str, root_dir: str, filter_specs: list[str] | None = None
+) -> list[BehaviorMapEntry]:
     """Load behavior map from backlink scanner JSON output.
 
     Args:
         source_path: Path to the backlink scanner JSON file.
         root_dir: Root directory for resolving paths.
+        filter_specs: If provided, only include sections from these spec paths.
 
     Returns:
         List of BehaviorMapEntry objects, empty if file doesn't exist.
@@ -168,7 +171,10 @@ def load_behavior_map(source_path: str, root_dir: str) -> list[BehaviorMapEntry]
 
     entries = []
     specs = data.get("specs", {})
-    for _spec_path, spec_data in specs.items():
+    for spec_path, spec_data in specs.items():
+        # Filter to only the specs in this PR if filter_specs provided
+        if filter_specs is not None and spec_path not in filter_specs:
+            continue
         sections = spec_data.get("sections", {})
         for section_name, files in sections.items():
             if files:
@@ -270,7 +276,9 @@ def generate_large(pr_input: PRInput) -> str:
 
     # Behavior map (optional)
     if pr_input.behavior_map_source:
-        entries = load_behavior_map(pr_input.behavior_map_source, pr_input.root_dir)
+        entries = load_behavior_map(
+            pr_input.behavior_map_source, pr_input.root_dir, pr_input.specs
+        )
         if entries:
             lines.append("")
             lines.append("<details><summary>Behavior map (which spec sections → which code)</summary>")

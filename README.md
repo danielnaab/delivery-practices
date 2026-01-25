@@ -39,24 +39,26 @@ Personal exploration of delivery practices for:
 
 ## Tooling
 
-Three structural integrity tools, all spec-first with no runtime dependencies:
+Spec-first tools for structural integrity and workflow support:
 
 | Tool | Spec | Purpose |
 |------|------|---------|
 | `backlink-scanner` | [spec](specs/backlink-scanner.md) | Spec-to-implementation traceability via `# spec:` annotations |
 | `kb-linter` | [spec](specs/kb-linter.md) | Validates frontmatter status and provenance against `knowledge-base.yaml` |
 | `link-validator` | [spec](specs/link-validator.md) | Detects broken internal markdown links |
+| `pr-description` | [spec](specs/pr-description-generator.md) | Generates markdown PR descriptions from YAML input |
 
 ```bash
 uv run backlink-scanner        # Traceability check (exit 1 on issues)
 uv run kb-linter               # Content rule enforcement
-uv run link-validator           # Broken link detection
-uv run pytest                  # Run tests (101 tests)
+uv run link-validator          # Broken link detection
+uv run pr-description input.yaml  # Generate PR description
+uv run pytest                  # Run tests (152 tests)
 uv run ruff check .            # Lint
 uv run ruff format --check .   # Format check
 ```
 
-All tools support `--report-only` for informational output (always exit 0).
+Validator tools support `--report-only` for informational output (always exit 0).
 
 ## Knowledge Base System
 
