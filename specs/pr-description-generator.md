@@ -23,9 +23,11 @@ This supports the spec-driven workflow: session notes and structured input becom
 
 ### Input format
 
-- Given a YAML file path as input
-- When the generator runs
-- Then it reads and parses the YAML content
+```gherkin
+Given a YAML file path as input
+When the generator runs
+Then it reads and parses the YAML content
+```
 
 Required fields vary by format. See Format Requirements below.
 
@@ -63,31 +65,46 @@ root_dir: "."
 
 ### Validation
 
-- Given an input YAML file
-- When a required field for the specified format is missing
-- Then the generator exits with code 2 and an error message to stderr
+```gherkin
+Given an input YAML file
+When a required field for the specified format is missing
+Then the generator exits with code 2 and an error message to stderr
+```
 
-- Given an input YAML file
-- When the format field is missing or invalid
-- Then the generator exits with code 2 and an error message to stderr
+```gherkin
+Given an input YAML file
+When the format field is missing or invalid
+Then the generator exits with code 2 and an error message to stderr
+```
 
 ### Link formatting
 
-- Given a file path in specs or sessions
-- When root_dir is specified and the file exists at `{root_dir}/{path}`
-- Then format as markdown link: `[filename](path)`
+```gherkin
+Given a file path in specs or sessions
+  And root_dir is specified
+  And the file exists at {root_dir}/{path}
+When formatting the output
+Then format as markdown link: [filename](path)
+```
 
-- Given a file path in specs or sessions
-- When the file does not exist at `{root_dir}/{path}`
-- Then format as: `See \`path\` in this PR`
+```gherkin
+Given a file path in specs or sessions
+  And the file does not exist at {root_dir}/{path}
+When formatting the output
+Then format as: See `path` in this PR
+```
 
-- Given a single spec or session file
-- When formatting the output
-- Then use singular label: `Spec:` or `Session:`
+```gherkin
+Given a single spec or session file
+When formatting the output
+Then use singular label: Spec: or Session:
+```
 
-- Given multiple spec or session files
-- When formatting the output
-- Then use plural label: `Specs:` or `Sessions:` (comma-separated)
+```gherkin
+Given multiple spec or session files
+When formatting the output
+Then use plural label: Specs: or Sessions: (comma-separated)
+```
 
 ### Output: simple format
 
@@ -151,25 +168,37 @@ Verify: `[verify]`
 
 ### Behavior map generation
 
-- Given a `behavior_map_source` path pointing to a backlink scanner JSON file
-- When the file exists and contains spec section data
-- Then extract section-to-file mappings only for specs listed in the input `specs` field
+```gherkin
+Given a behavior_map_source path pointing to a backlink scanner JSON file
+  And the file exists and contains spec section data
+When generating the behavior map
+Then extract section-to-file mappings only for specs listed in the input specs field
+```
 
-- Given section data like `{"specs": {"specs/foo.md": {"sections": {"Behavior/Login": ["src/auth.py"]}}}}`
-- When `specs/foo.md` is in the input specs list
-- Then output: `§Behavior/Login → src/auth.py`
+```gherkin
+Given section data like {"specs": {"specs/foo.md": {"sections": {"Behavior/Login": ["src/auth.py"]}}}}
+  And specs/foo.md is in the input specs list
+When generating the behavior map
+Then output: §Behavior/Login → src/auth.py
+```
 
-- Given multiple files implementing a section
-- When generating the behavior map
-- Then output: `§Behavior/Login → src/auth.py, src/login.py`
+```gherkin
+Given multiple files implementing a section
+When generating the behavior map
+Then output: §Behavior/Login → src/auth.py, src/login.py
+```
 
-- Given the behavior_map_source file does not exist
-- When generating large format
-- Then omit the behavior map section entirely (no error)
+```gherkin
+Given the behavior_map_source file does not exist
+When generating large format
+Then omit the behavior map section entirely (no error)
+```
 
-- Given specs in the backlink JSON that are not in the input specs list
-- When generating the behavior map
-- Then those specs' sections are excluded from the output
+```gherkin
+Given specs in the backlink JSON that are not in the input specs list
+When generating the behavior map
+Then those specs' sections are excluded from the output
+```
 
 ### Exit codes
 
