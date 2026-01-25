@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- specs/pr-description-generator.md + src/pr_description_generator/ — generates markdown PR descriptions from structured YAML input
 - specs/tool-cli.md — behavioral spec for the shared CLI runner module
 - playbooks/iterative-critique.md — build-critique-fix loop (graduated from AI-workflow note)
 - playbooks/session-logging.md — session context preservation (graduated from AI-workflow note)
