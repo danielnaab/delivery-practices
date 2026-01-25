@@ -24,42 +24,58 @@ This gives [Principle #2](../policies/living-specifications.md) ("source-of-trut
 
 ### Configuration
 
-- Given a `knowledge-base.yaml` file in the root directory
-- When the linter starts
-- Then it reads `rules.lifecycle.statuses` for valid status values
-- And it reads `sources.canonical` paths for provenance-required directories
+```gherkin
+Given a knowledge-base.yaml file in the root directory
+When the linter starts
+Then it reads rules.lifecycle.statuses for valid status values
+  And it reads sources.canonical paths for provenance-required directories
+```
 
 ### Frontmatter validation
 
-- Given a markdown file in a content directory (docs/, policies/, playbooks/)
-- When the file has no YAML frontmatter
-- Then it reports a "missing frontmatter" violation
+```gherkin
+Given a markdown file in a content directory (docs/, policies/, playbooks/)
+When the file has no YAML frontmatter
+Then it reports a "missing frontmatter" violation
+```
 
-- Given a markdown file with frontmatter
-- When the frontmatter has no `status` field
-- Then it reports a "missing status" violation
+```gherkin
+Given a markdown file with frontmatter
+When the frontmatter has no status field
+Then it reports a "missing status" violation
+```
 
-- Given a frontmatter `status` field
-- When the value is not in `rules.lifecycle.statuses`
-- Then it reports an "invalid status" violation with the invalid value and allowed values
+```gherkin
+Given a frontmatter status field
+When the value is not in rules.lifecycle.statuses
+Then it reports an "invalid status" violation with the invalid value and allowed values
+```
 
-- Given a frontmatter with a valid `status` field
-- When the status value is in the allowed set
-- Then no violation is reported for that file's frontmatter
+```gherkin
+Given a frontmatter with a valid status field
+When the status value is in the allowed set
+Then no violation is reported for that file's frontmatter
+```
 
 ### Provenance validation
 
-- Given a file in a path matching `sources.canonical` entries (docs/**, policies/**)
-- When the file does not contain a `## Sources` heading
-- Then it reports a "missing provenance" violation
+```gherkin
+Given a file in a path matching sources.canonical entries (docs/**, policies/**)
+When the file does not contain a ## Sources heading
+Then it reports a "missing provenance" violation
+```
 
-- Given a file in a canonical path with a `## Sources` heading
-- When the section exists (regardless of content)
-- Then no provenance violation is reported
+```gherkin
+Given a file in a canonical path with a ## Sources heading
+When the section exists (regardless of content)
+Then no provenance violation is reported
+```
 
-- Given a file in a non-canonical path (playbooks/, notes/)
-- When the file lacks a Sources section
-- Then no provenance violation is reported (provenance is optional for these paths)
+```gherkin
+Given a file in a non-canonical path (playbooks/, notes/)
+When the file lacks a Sources section
+Then no provenance violation is reported (provenance is optional for these paths)
+```
 
 ### Scanned paths
 
@@ -72,9 +88,11 @@ This gives [Principle #2](../policies/living-specifications.md) ("source-of-trut
 
 ### Output structure
 
-- Given completed linting
-- When results are reported
-- Then output is a JSON object with a flat `violations` array and a `summary` object
+```gherkin
+Given completed linting
+When results are reported
+Then output is a JSON object with a flat violations array and a summary object
+```
 
 Example output:
 ```json

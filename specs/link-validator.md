@@ -24,36 +24,53 @@ This complements the [backlink scanner](backlink-scanner.md) (code→spec tracea
 
 ### Link extraction
 
-- Given a markdown file
-- When the validator scans it
-- Then it extracts all `[text](target)` links where target is a relative path
-- And it skips links inside fenced code blocks (``` ... ```) and inline code spans (`` ` ... ` ``)
-- And it skips external links (starting with `http://`, `https://`, or `mailto:`)
+```gherkin
+Given a markdown file
+When the validator scans it
+Then it extracts all [text](target) links where target is a relative path
+  And it skips links inside fenced code blocks and inline code spans
+  And it skips external links (starting with http://, https://, or mailto:)
+```
 
 ### Path resolution
 
-- Given a link `[text](../docs/format.md)` in file `playbooks/writing-specs.md`
-- When the validator resolves the path
-- Then it resolves relative to the linking file's directory: `docs/format.md`
+```gherkin
+Given a link [text](../docs/format.md) in file playbooks/writing-specs.md
+When the validator resolves the path
+Then it resolves relative to the linking file's directory: docs/format.md
+```
 
-- Given a link `[text](format.md)` in file `docs/README.md`
-- When the validator resolves the path
-- Then it resolves to `docs/format.md`
+```gherkin
+Given a link [text](format.md) in file docs/README.md
+When the validator resolves the path
+Then it resolves to docs/format.md
+```
 
-- Given a link with a fragment `[text](../policies/living-specifications.md#principle-2)`
-- When the validator resolves the path
-- Then it strips the fragment and checks only the file path: `policies/living-specifications.md`
+```gherkin
+Given a link with a fragment [text](../policies/living-specifications.md#principle-2)
+When the validator resolves the path
+Then it strips the fragment and checks only the file path: policies/living-specifications.md
+```
 
 ### Validation
 
-- Given a resolved path pointing to an existing file
-- Then no violation is reported
+```gherkin
+Given a resolved path pointing to an existing file
+When validation completes
+Then no violation is reported
+```
 
-- Given a resolved path pointing to an existing directory (e.g., `../docs/`)
-- Then no violation is reported
+```gherkin
+Given a resolved path pointing to an existing directory (e.g., ../docs/)
+When validation completes
+Then no violation is reported
+```
 
-- Given a resolved path pointing to a file that does not exist
-- Then it reports a "broken-link" violation with the source file, link target, and resolved path
+```gherkin
+Given a resolved path pointing to a file that does not exist
+When validation completes
+Then it reports a "broken-link" violation with the source file, link target, and resolved path
+```
 
 ### Scanned paths
 
@@ -64,9 +81,11 @@ This complements the [backlink scanner](backlink-scanner.md) (code→spec tracea
 
 ### Output structure
 
-- Given completed validation
-- When results are reported
-- Then output is a JSON object with a flat `violations` array and a `summary` object
+```gherkin
+Given completed validation
+When results are reported
+Then output is a JSON object with a flat violations array and a summary object
+```
 
 Example output:
 ```json

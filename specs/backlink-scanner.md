@@ -22,41 +22,56 @@ This supports the living specifications practice: references flow upstream (code
 
 ### Scanning for backlinks
 
-- Given a directory path
-- When the scanner runs
-- Then it finds all files containing backlink annotations matching `// spec:` or `# spec:` followed by a path
+```gherkin
+Given a directory path
+When the scanner runs
+Then it finds all files containing backlink annotations matching // spec: or # spec: followed by a path
+```
 
 ### Annotation format
 
 Annotations must be standalone lines (the annotation is the entire line content, ignoring leading/trailing whitespace).
 
-- Given a line `// spec: specs/backlink-scanner.md`
-- When the scanner parses it
-- Then it records that file as an implementor of `specs/backlink-scanner.md`
+```gherkin
+Given a line // spec: specs/backlink-scanner.md
+When the scanner parses it
+Then it records that file as an implementor of specs/backlink-scanner.md
+```
 
-- Given a line `# spec: specs/backlink-scanner.md`
-- When the scanner parses it
-- Then it records that file as an implementor of `specs/backlink-scanner.md`
+```gherkin
+Given a line # spec: specs/backlink-scanner.md
+When the scanner parses it
+Then it records that file as an implementor of specs/backlink-scanner.md
+```
 
-- Given a line containing an annotation embedded in other content (e.g. inside a string literal)
-- When the scanner parses it
-- Then it does not match
+```gherkin
+Given a line containing an annotation embedded in other content (e.g. inside a string literal)
+When the scanner parses it
+Then it does not match
+```
 
 ### Section annotations
 
-- Given a line `// spec-section: Behavior/Scanning for backlinks`
-- When a `spec:` annotation has previously appeared in the same file
-- Then it records the section reference against the most recent `spec:` path
+```gherkin
+Given a line // spec-section: Behavior/Scanning for backlinks
+  And a spec: annotation has previously appeared in the same file
+When the scanner parses it
+Then it records the section reference against the most recent spec: path
+```
 
-- Given a `spec-section:` annotation with no preceding `spec:` in the same file
-- When the scanner parses it
-- Then it is ignored
+```gherkin
+Given a spec-section: annotation with no preceding spec: in the same file
+When the scanner parses it
+Then it is ignored
+```
 
 ### Output structure
 
-- Given completed scanning
-- When results are reported
-- Then output is a JSON object with `specs`, `dangling`, and `orphans` keys
+```gherkin
+Given completed scanning
+When results are reported
+Then output is a JSON object with specs, dangling, and orphans keys
+```
 
 Example output:
 ```json
@@ -85,15 +100,19 @@ Example output:
 
 ### Dangling references
 
-- Given a backlink annotation referencing `specs/nonexistent.md`
-- When the referenced spec file does not exist
-- Then the scanner includes it in a `dangling` array in the output
+```gherkin
+Given a backlink annotation referencing specs/nonexistent.md
+When the referenced spec file does not exist
+Then the scanner includes it in a dangling array in the output
+```
 
 ### Orphan specs
 
-- Given spec files exist in the specs directory
-- When no source files reference a given spec
-- Then the scanner includes that spec path in an `orphans` array in the output
+```gherkin
+Given spec files exist in the specs directory
+When no source files reference a given spec
+Then the scanner includes that spec path in an orphans array in the output
+```
 
 ### Edge cases
 
