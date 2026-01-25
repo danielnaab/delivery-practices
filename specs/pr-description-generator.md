@@ -225,7 +225,7 @@ There is no exit code 1 — this is a generator, not a validator. Either it prod
 
 ## Open Questions
 
-- [ ] Should `behavior_map_source` accept backlink scanner output directly or a transformed subset?
+None currently.
 
 ## Decisions
 
@@ -233,6 +233,7 @@ There is no exit code 1 — this is a generator, not a validator. Either it prod
 - YAML input file: complex input structure is unwieldy as CLI flags; YAML is AI-generatable
 - PyYAML dependency: proper parsing warranted for nested input structure
 - v1 behavior maps use `§Section → file.py` format without restatements — simpler to implement and read
+- behavior_map_source accepts backlink scanner JSON directly, filtered to input specs — no transformation step needed
 
 ## Sources
 

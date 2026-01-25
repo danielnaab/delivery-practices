@@ -12,9 +12,14 @@
 - Principle #16 "Dogfood the practices" in policies/living-specifications.md
 - notes/2026-01-24-ai-assisted-workflow.md — exploration of AI-assisted development patterns
 
+### Changed
+- All specs now use gherkin code blocks for Given/When/Then scenarios (better visual separation, GitHub syntax highlighting)
+
 ### Fixed
+- pr-description generator: format_links return type annotation (was tuple, actually str)
+- pr-description generator: behavior map now filters to only specs listed in input (was showing all specs from backlink JSON)
 - playbooks/writing-specs.md: fixed stale status vocabulary (proposed→draft, implemented→working/stable)
-- README.md: updated with all tools and current commands
+- README.md: updated with all tools and current commands (156 tests)
 - CHANGELOG.md: completed v0.2.0 entries (CI, tool_cli, playbook validation)
 - pyproject.toml: added --cov=tool_cli to pytest coverage config
 - CI: pinned uv version to >=0.5
