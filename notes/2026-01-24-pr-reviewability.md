@@ -20,7 +20,7 @@ The structure is already there. We need to surface it for reviewers.
 
 ## Conceptual Foundation
 
-The [progressive disclosure](../docs/comprehension.md) principle applies directly to PR review. A reviewer needs different depths at different moments:
+The [progressive disclosure](../docs/living-specifications/comprehension.md) principle applies directly to PR review. A reviewer needs different depths at different moments:
 
 - **Triage**: "Is this relevant to me?" → the title and summary
 - **Scoping**: "How big is this?" → the changes line
@@ -437,16 +437,16 @@ Success criteria:
 
 ## Connections to Existing Practices
 
-- [Comprehension](../docs/comprehension.md) — progressive disclosure principle (#1) directly applies
-- [Relationships](../docs/relationships.md) — three-layer model explains why behavior maps work
-- [Reviewing against specs](../playbooks/reviewing-against-specs.md) — the spec-first review flow
-- [Session logging](../playbooks/session-logging.md) — session notes as PR source material
-- [Verification](../docs/verification.md) — backlinks enable computed behavior maps
-- [Principles](../policies/living-specifications.md) — #6 (AI-compatible = human-compatible), #13 (references flow upstream, views computed)
+- [Comprehension](../docs/living-specifications/comprehension.md) — progressive disclosure principle (#1) directly applies
+- [Relationships](../docs/living-specifications/relationships.md) — three-layer model explains why behavior maps work
+- [Reviewing against specs](../docs/living-specifications/guides/reviewing-against-specs.md) — the spec-first review flow
+- [Session logging](../docs/workflow/guides/session-logging.md) — session notes as PR source material
+- [Verification](../docs/living-specifications/verification.md) — backlinks enable computed behavior maps
+- [Principles](../docs/living-specifications/principles.md) — #6 (AI-compatible = human-compatible), #13 (references flow upstream, views computed)
 
 ## Sources
 
 - Direct observation: Creating PR descriptions for delivery-practices v0.2.0 changes
-- [Comprehension UX principles](../docs/comprehension.md) — progressive disclosure, computed views
+- [Comprehension UX principles](../docs/living-specifications/comprehension.md) — progressive disclosure, computed views
 - Personal experience: Large PR review in professional teams (Flexion)
 - Observation: AI-generated changesets are coherent but large; review UX matters more at scale

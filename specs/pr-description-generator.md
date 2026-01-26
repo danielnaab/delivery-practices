@@ -8,7 +8,7 @@ owners: [daniel]
 
 ## Intent
 
-Generate PR descriptions from structured YAML input, following the formats defined in [playbooks/pr-descriptions.md](../playbooks/pr-descriptions.md). Unlike validator tools (which output JSON with pass/fail semantics), this is a generator that outputs markdown text.
+Generate PR descriptions from structured YAML input, following the formats defined in [pr-descriptions.md](../docs/workflow/guides/pr-descriptions.md). Unlike validator tools (which output JSON with pass/fail semantics), this is a generator that outputs markdown text.
 
 This supports the spec-driven workflow: session notes and structured input become formatted PR descriptions with consistent structure.
 
@@ -296,5 +296,5 @@ None currently.
 
 ## Sources
 
-- [PR Descriptions Playbook](../playbooks/pr-descriptions.md) — format definitions and examples
+- [PR Descriptions Playbook](../docs/workflow/guides/pr-descriptions.md) — format definitions and examples
 - [Backlink Scanner](backlink-scanner.md) — behavior_map_source JSON format

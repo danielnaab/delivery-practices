@@ -2,55 +2,38 @@
 status: working
 ---
 
-# Living Specifications
+# Delivery Practices Documentation
 
-Reference material for the living specifications practice — concepts, templates, and relationship models for teams adopting spec-driven development.
+Practice areas for fast and safe software delivery, with particular focus on AI-assisted development.
 
-> **This directory vs. `specs/`**: The `docs/` directory describes *how to practice* living specifications (for downstream projects). The [`specs/`](../specs/) directory contains *actual behavioral specifications* for this repository's tooling — contracts that code in `src/` implements.
+## Practice Areas
 
-## What This Is
+### [Living Specifications](living-specifications/)
 
-Living specifications are the source of truth for system behavior. They describe what a system does and why, sitting between intent and implementation.
+Spec-driven development using living specifications as the source of truth for system behavior. Includes format, verification approaches, and guides for writing and reviewing against specs.
 
-```
-SPEC (readable, durable, collaborative)
-  ↓ maps to
-TESTS (executable, durable, CI-enforced)
-  ↓ verified by
-CODE (implementation, durable, reviewed)
-```
+### [Workflow](workflow/)
 
-## Reference
+Development workflow practices: iterative critique loops, session context preservation, and PR authoring for spec-driven changes.
 
-- [Format](format.md) — the specification template
-- [Relationships](relationships.md) — how specs relate to tests, acceptance criteria, and code
-- [Verification](verification.md) — drift detection approaches
-- [Comprehension](comprehension.md) — making the system legible to all collaborators
+## Cross-Cutting
 
-## Rules
+### [Decisions](decisions/)
 
-- [Principles](../policies/living-specifications.md) — rules governing specification practices
+Architectural Decision Records (ADRs) that apply across practice areas.
 
-## How-To
+## Tooling
 
-- [Writing specs](../playbooks/writing-specs.md) — how to write or update a specification
-- [Ensemble with specs](../playbooks/ensemble-with-specs.md) — using specs in mob programming
-- [Reviewing against specs](../playbooks/reviewing-against-specs.md) — reviewing PRs with specs as source of truth
-- [Iterative critique](../playbooks/iterative-critique.md) — build-critique-fix loops for quality
-- [Session logging](../playbooks/session-logging.md) — preserving context across work sessions
+This repository also contains tools that support these practices:
 
-## Patterns Borrowed
+| Tool | Purpose |
+|------|---------|
+| [backlink-scanner](../specs/backlink-scanner.md) | Spec-to-implementation traceability |
+| [kb-linter](../specs/kb-linter.md) | Content linter enforcing knowledge-base rules |
+| [link-validator](../specs/link-validator.md) | Broken internal link detection |
+| [pr-description](../specs/pr-description-generator.md) | PR description generator from YAML input |
 
-| Pattern | What We Took | What We Left |
-|---------|-------------|--------------|
-| ADRs | Context → Decision → Consequences; status lifecycle | Immutability (specs evolve) |
-| RFCs | Propose → discuss → decide; Alternatives Considered | Heavyweight process |
-| BDD/Gherkin | Given/When/Then as thinking structure | Step definitions; Cucumber |
-| Google Design Docs | Non-goals; living document expectation | Google Docs (not version-controlled) |
-| Executable Specs | Structured-enough-to-check assertions | Framework lock-in |
-| Living Documentation | Specs for what code can't express; computed views | Assumption code is always readable |
-
-Guiding principle: steal structures, not tooling.
+See [`specs/`](../specs/) for behavioral specifications and [`src/`](../src/) for implementations.
 
 ## Status Semantics
 
@@ -65,8 +48,5 @@ All content carries a lifecycle status in frontmatter:
 
 ## Sources
 
-- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md)
-- ADR pattern: Michael Nygard, "Documenting Architecture Decisions" (2011)
-- BDD: Dan North, "Introducing BDD" (2006)
-- Living Documentation: Cyrille Martraire (2019)
-- C4 Model: Simon Brown
+- Practice exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md)
+- Workflow patterns: [notes/2026-01-24-ai-assisted-workflow.md](../notes/2026-01-24-ai-assisted-workflow.md)

@@ -3,11 +3,11 @@ status: working
 last-validated: 2026-01-24
 ---
 
-# Playbook: Reviewing PRs Against Specifications
+# Reviewing PRs Against Specifications
 
 How to review a pull request when specifications are the source of truth.
 
-> **Context**: This playbook applies to project repositories using the [living specifications](../docs/) practice. Example paths like `docs/specs/` refer to conventions in project repos.
+> **Context**: This playbook applies to project repositories using the [living specifications](../) practice. Example paths like `docs/specs/` refer to conventions in project repos.
 
 ## Before Reviewing
 
@@ -88,10 +88,10 @@ def login(credentials):
 ## Related
 
 - [Writing specs](writing-specs.md) — the author's perspective (includes Step 9: verify against spec)
-- [Verification](../docs/verification.md) — automated drift detection
-- [Artifact relationships](../docs/relationships.md) — the three-layer model
+- [Verification](../verification.md) — automated drift detection
+- [Artifact relationships](../relationships.md) — the three-layer model
 
 ## Sources
 
-- Field-tested: Used to review [link-validator](../specs/link-validator.md) implementation against spec (2026-01-24)
+- Field-tested: Used to review [link-validator](../../../specs/link-validator.md) implementation against spec (2026-01-24)
 - [Writing specs playbook](writing-specs.md) — complementary author-side verification (Step 9)

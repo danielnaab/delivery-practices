@@ -93,5 +93,5 @@ This allows tickets to reference specific increments: "Implement behaviors marke
 
 ## Related
 
-- [Principles](../policies/living-specifications.md)
-- [Writing specs playbook](../playbooks/writing-specs.md)
+- [Principles](principles.md)
+- [Writing specs playbook](guides/writing-specs.md)

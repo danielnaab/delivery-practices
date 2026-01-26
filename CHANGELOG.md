@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Changed
+- Reorganized docs/ into practice areas: living-specifications/ and workflow/
+- Merged policies/ and playbooks/ into practice area subdirectories (principles.md, guides/)
+- Updated knowledge-base.yaml to reflect simplified structure (docs/ and notes/ only)
+- Updated specs with new example paths in gherkin scenarios
+- Removed "Playbook:" prefix from all guide titles (now using simpler titles consistent with guides/ directory name)
+- Promoted pr-descriptions.md from draft to working status
+- Removed duplicated Status Semantics section from living-specifications/README.md (defined in parent docs/README.md)
+
 ### Added
 - specs/pr-description-generator.md + src/pr_description_generator/ — generates markdown PR descriptions from structured YAML input
 - pr-description: LinkAdapter protocol + PlainLinkAdapter + GitHubLinkAdapter for platform-specific link formatting
@@ -12,6 +21,7 @@
 - playbooks/session-logging.md — session context preservation (graduated from AI-workflow note)
 - playbooks/pr-descriptions.md — PR description format for spec-driven changes (graduated from PR reviewability exploration)
 - notes/2026-01-24-pr-reviewability.md — PR reviewability exploration (progressive disclosure for review)
+- notes/2026-01-26-repository-restructure.md — topic-first reorganization session
 - Principle #16 "Dogfood the practices" in policies/living-specifications.md
 - notes/2026-01-24-ai-assisted-workflow.md — exploration of AI-assisted development patterns
 

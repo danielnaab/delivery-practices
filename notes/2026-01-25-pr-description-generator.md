@@ -8,7 +8,7 @@ Date: 2026-01-25
 
 ## Context
 
-Implemented the PR description generator tool based on a detailed plan. The tool generates markdown PR descriptions from structured YAML input, following the formats defined in `playbooks/pr-descriptions.md`. Unlike the validator tools (which output JSON with pass/fail), this is a generator that outputs markdown text.
+Implemented the PR description generator tool based on a detailed plan. The tool generates markdown PR descriptions from structured YAML input, following the formats defined in `docs/workflow/guides/pr-descriptions.md`. Unlike the validator tools (which output JSON with pass/fail), this is a generator that outputs markdown text.
 
 ## Activities
 

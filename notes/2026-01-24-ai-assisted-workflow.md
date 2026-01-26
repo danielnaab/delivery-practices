@@ -87,8 +87,8 @@ Friction during use became improvement signals: missing steps got added, unclear
 
 ## Graduation Status
 
-- **Build-Critique-Fix Loop** → Graduated to [playbooks/iterative-critique.md](../playbooks/iterative-critique.md)
-- **Session logging** → Graduated to [playbooks/session-logging.md](../playbooks/session-logging.md)
+- **Build-Critique-Fix Loop** → Graduated to [iterative-critique.md](../docs/workflow/guides/iterative-critique.md)
+- **Session logging** → Graduated to [session-logging.md](../docs/workflow/guides/session-logging.md)
 - **Speed demands guardrails** → Already covered by Principles #2 and #16
 - **Spec-First AI Implementation** → Partially covered by writing-specs playbook; remaining patterns still exploratory
 
@@ -96,4 +96,4 @@ Friction during use became improvement signals: missing steps got added, unclear
 
 - Direct observation: Building delivery-practices tooling (2026-01-23 to 2026-01-24)
 - Personal experience: Multiple AI-assisted development sessions (2025-2026)
-- Related: [policies/living-specifications.md](../policies/living-specifications.md) principles 2, 6, 16
+- Related: [principles.md](../docs/living-specifications/principles.md) principles 2, 6, 16

@@ -55,10 +55,10 @@ Given/When/Then is valuable as a **thinking structure** in plain markdown. But t
 
 - [Specification format](format.md) — the template with behavior sections
 - [Verification](verification.md) — how drift between layers is detected
-- [Principles](../policies/living-specifications.md) — #7 (separate what/why/how), #9 (tests complement specs)
+- [Principles](principles.md) — #7 (separate what/why/how), #9 (tests complement specs)
 
 ## Sources
 
-- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md) — relationship model synthesis
+- Exploration: [notes/2026-01-23-living-specifications.md](../../notes/2026-01-23-living-specifications.md) — relationship model synthesis
 - Dan North, "Introducing BDD" (2006) — Given/When/Then as thinking structure
 - Personal experience: Backlink-based traceability in knowledge bases

@@ -16,16 +16,12 @@ imports:
 
 paths:
   docs: docs
-  policies: policies
-  playbooks: playbooks
   notes: notes
 
 sources:
   canonical:
     - path: docs/**
-      note: "Conceptual reference is canonical"
-    - path: policies/**
-      note: "Policies are normative"
+      note: "Practice documentation is canonical"
 
 rules:
   lifecycle:
@@ -33,5 +29,5 @@ rules:
   provenance:
     requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
   writes:
-    allow: ["docs/**", "policies/**", "playbooks/**", "notes/**", "specs/**", "src/**", "tests/**"]
+    allow: ["docs/**", "notes/**", "specs/**", "src/**", "tests/**"]
     deny: ["secrets/**", "credentials/**", ".graft/**"]
