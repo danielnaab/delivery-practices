@@ -1,0 +1,32 @@
+# Practice Lab Meeting Record
+# Copy this template and rename to YYYY-MM-DD.yaml
+#
+# See playbook: playbooks/practice-lab.md
+
+date: YYYY-MM-DD
+attendees: []
+
+# What did we notice this week?
+observations:
+  - description: ""
+    context: ""  # optional: project/task where this occurred
+
+# Themes emerging across observations
+patterns:
+  - ""
+
+# What are we intentionally trying this week?
+experiment:
+  what: ""
+  who: []
+
+# What did we capture in the KB?
+captured:
+  - type: ""  # note | playbook | doc
+    path: ""
+    summary: ""
+
+# Check-in from last week's experiment
+previous_experiment:
+  tried: true  # or false
+  outcome: ""

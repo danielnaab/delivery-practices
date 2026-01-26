@@ -12,12 +12,16 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 - [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI (partially graduated to [iterative-critique](../playbooks/iterative-critique.md) and [session-logging](../playbooks/session-logging.md))
 - [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels (partially graduated to [pr-descriptions](../playbooks/pr-descriptions.md))
+- [Practice Lab](./2026-01-25-team-practices-meeting.md) — Team practice improvement meeting format (partially graduated to [practice-lab](../playbooks/practice-lab.md))
 
 ## Graduated
 
 - [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/](../docs/), [policies/](../policies/living-specifications.md), [playbooks/](../playbooks/)
 
 ## Sessions
+
+### 2026-01-25
+- [Practice Lab](./2026-01-25-team-practices-meeting.md) - Team practice improvement exploration
 
 ### 2026-01-24
 - [PR Reviewability](./2026-01-24-pr-reviewability.md) - Progressive disclosure for spec-driven PRs

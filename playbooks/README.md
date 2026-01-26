@@ -16,5 +16,6 @@ These documents answer: **"How do I do X?"**
 - [PR Descriptions](pr-descriptions.md) — Writing PR descriptions for spec-driven changes
 - [Iterative Critique](iterative-critique.md) — Build-critique-fix loops for quality
 - [Session Logging](session-logging.md) — Capturing work session context
+- [Practice Lab](practice-lab.md) — Running team practice improvement meetings
 
 > **Note**: These playbooks describe practices for project repositories that adopt the [living specifications](../docs/) approach.
