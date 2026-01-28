@@ -10,6 +10,8 @@
 - Removed "Playbook:" prefix from all guide titles (now using simpler titles consistent with guides/ directory name)
 - Promoted pr-descriptions.md from draft to working status
 - Removed duplicated Status Semantics section from living-specifications/README.md (defined in parent docs/README.md)
+- Updated guide context headers from "This playbook" to "This guide" (writing-specs, reviewing-against-specs, iterative-critique)
+- Updated format.md and writing-specs.md examples to use gherkin code blocks (consistent with actual spec format)
 
 ### Added
 - specs/pr-description-generator.md + src/pr_description_generator/ — generates markdown PR descriptions from structured YAML input

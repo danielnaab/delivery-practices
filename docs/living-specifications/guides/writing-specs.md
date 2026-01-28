@@ -7,7 +7,7 @@ last-validated: 2026-01-24
 
 How to write a new specification or update an existing one.
 
-> **Context**: This playbook is for use in project repositories that adopt the [living specifications](../) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
+> **Context**: This guide is for use in project repositories that adopt the [living specifications](../) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
 
 ## When to Write a Spec
 
@@ -60,21 +60,24 @@ Explicitly state what's out of scope. This prevents scope creep and clarifies bo
 
 ### 4. Specify Behavior
 
-Use Given/When/Then structure for each scenario:
+Use Given/When/Then structure for each scenario, wrapped in gherkin code blocks:
 
 ```markdown
 ### Login
-- Given valid credentials
-- When the user submits the login form
-- Then they receive a session token and are redirected to dashboard
-```
 
-Add edge cases separately:
-```markdown
+\`\`\`gherkin
+Given valid credentials
+When the user submits the login form
+Then they receive a session token and are redirected to dashboard
+\`\`\`
+
 ### Edge Cases
+
 - Empty email: returns 400 with "email required" message
 - Expired account: returns 403 with reactivation link
 ```
+
+Gherkin code blocks provide better visual separation and GitHub syntax highlighting. Edge cases can remain as bullet points when they're simple one-liners.
 
 ### 5. Add Constraints
 

@@ -30,11 +30,15 @@ What is explicitly out of scope?
 What does the system do?
 
 ### [Scenario Name]
-- Given [precondition]
-- When [action]
-- Then [expected outcome]
+
+\`\`\`gherkin
+Given [precondition]
+When [action]
+Then [expected outcome]
+\`\`\`
 
 ### Edge Cases
+
 - [Case]: [Expected behavior]
 
 ## Constraints
@@ -84,9 +88,26 @@ Behavior statements can indicate which increment introduced them:
 
 ```markdown
 ## Behavior
-- Given valid credentials, user receives a session token [v0.1]
-- Given expired password, user is prompted to reset [v0.2]
-- Rate limit: 5 failed attempts per 10 minutes [v0.3]
+
+### Authentication [v0.1]
+
+\`\`\`gherkin
+Given valid credentials
+When user submits login
+Then user receives a session token
+\`\`\`
+
+### Password Reset [v0.2]
+
+\`\`\`gherkin
+Given expired password
+When user attempts login
+Then user is prompted to reset
+\`\`\`
+
+### Rate Limiting [v0.3]
+
+- 5 failed attempts per 10 minutes triggers lockout
 ```
 
 This allows tickets to reference specific increments: "Implement behaviors marked `[v0.2]`."

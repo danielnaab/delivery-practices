@@ -7,7 +7,7 @@ last-validated: 2026-01-24
 
 How to develop features using structured critique loops to catch drift, gaps, and inconsistencies.
 
-> **Context**: This playbook works with any development workflow but is especially effective with AI-assisted development, where the speed of implementation makes systematic review essential.
+> **Context**: This guide works with any development workflow but is especially effective with AI-assisted development, where the speed of implementation makes systematic review essential.
 
 ## When to Use
 
