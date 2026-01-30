@@ -8,7 +8,7 @@ Date: 2026-01-25
 
 ## Context
 
-Implemented the PR description generator tool based on a detailed plan. The tool generates markdown PR descriptions from structured YAML input, following the formats defined in `playbooks/pr-descriptions.md`. Unlike the validator tools (which output JSON with pass/fail), this is a generator that outputs markdown text.
+Implemented the PR description generator tool based on a detailed plan. The tool generates markdown PR descriptions from structured YAML input, following the formats defined in `docs/workflow/guides/pr-descriptions.md`. Unlike the validator tools (which output JSON with pass/fail), this is a generator that outputs markdown text.
 
 ## Activities
 
@@ -83,3 +83,62 @@ Reviewed all work and identified remaining items:
 3. **Formatting details matter for specs** — The Given/When/Then rendering issue wasn't visible until someone read the rendered output. Gherkin blocks solve this elegantly.
 
 4. **Generator tools need different patterns** — The tool_cli module assumes JSON output and pass/fail exit codes. Generators that output other formats (markdown) need standalone CLIs.
+
+### Link Adapter Enhancement
+
+User tested the generator on a separate project and identified that plain relative links don't work well in PR descriptions — GitHub needs absolute URLs for navigability.
+
+#### Critique Findings
+
+1. **CLI doesn't support GitHub adapter** — GitHubLinkAdapter existed but was unusable from CLI
+2. **Dead code** — `check_file_exists()` function orphaned after adapter refactor
+3. **No YAML input for GitHub config** — Users couldn't configure adapter from input file
+4. **Behavior map files not linked** — Files displayed as plain text, not clickable
+
+#### Implementation
+
+Following patterns from `.graft/python-starter`:
+- **Protocol-based DI**: `LinkAdapter` protocol in `protocols.py`
+- **Fakes over mocks**: `FakeLinkAdapter` in `tests/fakes/` for testing
+- **Frozen dataclass**: `GitHubConfig` as immutable context object
+
+New adapter hierarchy:
+- `PlainLinkAdapter` — relative markdown links (default, backward compatible)
+- `GitHubLinkAdapter` — GitHub blob URLs + PR diff anchors
+
+Added YAML configuration:
+```yaml
+github:
+  owner: anthropic
+  repo: delivery-practices
+  branch: main
+  pr_number: 42  # optional
+```
+
+GitHub adapter generates:
+- Blob URLs for existing files: `https://github.com/owner/repo/blob/branch/path`
+- PR diff anchors for new files: `#diff-<sha256(path)>`
+
+#### Changes Made
+
+| File | Change |
+|------|--------|
+| `protocols.py` | New — `LinkAdapter` protocol |
+| `adapters/plain.py` | New — `PlainLinkAdapter` |
+| `adapters/github.py` | New — `GitHubLinkAdapter` + `GitHubConfig` |
+| `models.py` | Added `GitHubInput`, `github` field to `PRInput` |
+| `generator.py` | Removed dead code, behavior map uses adapter |
+| `__main__.py` | Added `create_adapter()`, uses config |
+| `tests/fakes/` | New — `FakeLinkAdapter` |
+
+## Updated Metrics
+
+- **Tests**: 193 total (37 new for adapters)
+- **Coverage**: 90% overall, 100% on generator and adapters
+- **Tools**: 4 (backlink-scanner, kb-linter, link-validator, pr-description)
+
+## Additional Observations
+
+5. **Critique cycles continue to find real issues** — Second critique found 4 issues including dead code and unusable feature (GitHub adapter with no CLI support).
+
+6. **Protocol-based DI enables clean testing** — FakeLinkAdapter with call tracking makes tests explicit about adapter interactions without mocking.

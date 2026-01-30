@@ -40,14 +40,19 @@ Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-w
 
 ## Content Organization
 
-**Knowledge content** (organized by type):
+**Practice documentation** (organized by topic):
 
-| Directory | Type | Purpose |
-|-----------|------|---------|
-| `docs/` | Declarative | Concepts, models, reference ("understand this") |
-| `policies/` | Normative | Principles, rules, constraints ("follow this") |
-| `playbooks/` | Procedural | Step-by-step guides ("do this") |
-| `notes/` | Ephemeral | Explorations, working notes ("thinking about this") |
+| Directory | Practice Area |
+|-----------|---------------|
+| [`docs/living-specifications/`](docs/living-specifications/) | Spec-driven development |
+| [`docs/workflow/`](docs/workflow/) | Development workflow practices |
+| [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
+| `notes/` | Explorations, working notes ("thinking about this") |
+
+Each practice area contains:
+- Reference docs (concepts, models)
+- Principles (rules, constraints)
+- Guides (how-to procedures)
 
 **Tooling** (dogfooding the practices):
 
@@ -57,18 +62,13 @@ Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-w
 | `src/` | Python implementations of those specs |
 | `tests/` | Pytest test suite verifying spec compliance |
 
-**Key distinction**: `docs/` describes *how to practice* living specifications (for downstream projects). `specs/` contains *behavioral contracts* for this repo's tooling — what the code in `src/` must do.
-
-Practice areas span knowledge types. For example, "living specifications" has:
-- [`docs/`](docs/) — conceptual reference (format, relationships, verification, comprehension)
-- [`policies/living-specifications.md`](policies/living-specifications.md) — principles
-- [`playbooks/writing-specs.md`](playbooks/writing-specs.md) — how-to guides
+**Key distinction**: `docs/` describes *how to practice* delivery practices (for downstream projects). `specs/` contains *behavioral contracts* for this repo's tooling — what the code in `src/` must do.
 
 ## Write Boundaries
 
 Consult [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes` for the authoritative allow/deny list.
 
-In brief: you may write to knowledge content (`docs/`, `policies/`, `playbooks/`, `notes/`) and tooling (`specs/`, `src/`, `tests/`). Never write to managed directories (`.graft/`) or sensitive paths (`secrets/`, `credentials/`).
+In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to managed directories (`.graft/`) or sensitive paths (`secrets/`, `credentials/`).
 
 ## Provenance Requirements
 
@@ -88,9 +88,9 @@ Format:
 ## Quick Reference
 
 When updating this KB:
-- **New practice discovered?** Add to appropriate docs/ area + cite sources
-- **New rule/principle?** Add to policies/
-- **New how-to guide?** Add to playbooks/
+- **New practice discovered?** Add to appropriate practice area in docs/ + cite sources
+- **New principle?** Add to the practice area's principles file
+- **New how-to guide?** Add to the practice area's guides/ directory
 - **Exploring an idea?** Create note in notes/ with date prefix (YYYY-MM-DD)
 - **Making significant choice?** Add decision record in docs/decisions/
 - **Practice stabilizes?** Graduate from notes/ to docs/
@@ -98,16 +98,18 @@ When updating this KB:
 
 ## Current State
 
-- **Living specifications** practice area established ([docs/](docs/), [policies/](policies/), [playbooks/](playbooks/))
-- **[Backlink scanner](specs/backlink-scanner.md)** tool in [src/](src/) with spec in [specs/](specs/) (dogfooding)
-- Structure follows meta-kb knowledge-type conventions
-- Ready to capture additional practice areas from active work
+Practice areas established:
+- **[Living specifications](docs/living-specifications/)** — spec-driven development
+- **[Workflow](docs/workflow/)** — development workflow practices (iterative critique, session logging, PR descriptions)
+
+Tooling (dogfooding):
+- **[Backlink scanner](specs/backlink-scanner.md)**, **[kb-linter](specs/kb-linter.md)**, **[link-validator](specs/link-validator.md)**, **[pr-description](specs/pr-description-generator.md)** — tools in [src/](src/) with specs in [specs/](specs/)
 
 Focus on:
 1. Real practices from actual experience (not theory)
 2. Clear provenance and context for all recommendations
 3. Practical applicability to AI-assisted development
-4. Correct knowledge type placement (declarative vs. normative vs. procedural)
+4. Place content in the appropriate practice area
 
 ---
 
@@ -115,4 +117,4 @@ Focus on:
 - Keep changes minimal and focused
 - Ground all practice recommendations in sources
 - Evolve based on evidence, not speculation
-- Place content in the right knowledge-type directory
+- Place content in the appropriate practice area under docs/

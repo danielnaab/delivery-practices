@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
+from pr_description_generator.adapters.plain import PlainLinkAdapter
 from pr_description_generator.generator import (
     ValidationError,
-    check_file_exists,
     format_link,
     generate,
     generate_large,
@@ -139,6 +139,91 @@ decisions:
         assert result.sessions == []
         assert result.decisions == []
 
+    def test_parses_github_config(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+github:
+  owner: anthropic
+  repo: delivery-practices
+  branch: main
+  pr_number: 42
+"""
+        (tmp_path / "input.yaml").write_text(yaml_content)
+
+        result = parse_input(str(tmp_path / "input.yaml"))
+
+        assert result.github is not None
+        assert result.github.owner == "anthropic"
+        assert result.github.repo == "delivery-practices"
+        assert result.github.branch == "main"
+        assert result.github.pr_number == 42
+
+    def test_github_pr_number_optional(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+github:
+  owner: owner
+  repo: repo
+  branch: feature
+"""
+        (tmp_path / "input.yaml").write_text(yaml_content)
+
+        result = parse_input(str(tmp_path / "input.yaml"))
+
+        assert result.github is not None
+        assert result.github.pr_number is None
+
+    def test_github_none_when_not_provided(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+"""
+        (tmp_path / "input.yaml").write_text(yaml_content)
+
+        result = parse_input(str(tmp_path / "input.yaml"))
+
+        assert result.github is None
+
+    def test_raises_on_github_missing_required_fields(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+github:
+  owner: anthropic
+"""
+        (tmp_path / "input.yaml").write_text(yaml_content)
+
+        with pytest.raises(ValidationError, match="github missing required fields"):
+            parse_input(str(tmp_path / "input.yaml"))
+
+    def test_raises_on_github_not_a_mapping(self, tmp_path: Path) -> None:
+        yaml_content = """\
+format: simple
+summary: Test
+verify: "test"
+specs:
+  - specs/test.md
+github: "not a mapping"
+"""
+        (tmp_path / "input.yaml").write_text(yaml_content)
+
+        with pytest.raises(ValidationError, match="github must be a mapping"):
+            parse_input(str(tmp_path / "input.yaml"))
+
 
 class TestValidateForFormat:
     def test_simple_requires_summary_verify_specs(self) -> None:
@@ -209,9 +294,7 @@ class TestValidateForFormat:
         assert "Missing required field: focus" in errors
 
     def test_non_spec_does_not_require_specs(self) -> None:
-        pr_input = PRInput(
-            format=Format.NON_SPEC, summary="Summary", verify="test", focus="Focus"
-        )
+        pr_input = PRInput(format=Format.NON_SPEC, summary="Summary", verify="test", focus="Focus")
 
         errors = validate_for_format(pr_input)
 
@@ -222,25 +305,18 @@ class TestFormatLink:
     def test_existing_file_becomes_link(self, tmp_path: Path) -> None:
         (tmp_path / "specs").mkdir()
         (tmp_path / "specs/test.md").write_text("# Test")
+        adapter = PlainLinkAdapter(str(tmp_path))
 
-        result = format_link("specs/test.md", str(tmp_path))
+        result = format_link("specs/test.md", adapter)
 
         assert result == "[test.md](specs/test.md)"
 
     def test_new_file_becomes_see_in_pr(self, tmp_path: Path) -> None:
-        result = format_link("specs/new.md", str(tmp_path))
+        adapter = PlainLinkAdapter(str(tmp_path))
+
+        result = format_link("specs/new.md", adapter)
 
         assert result == "See `specs/new.md` in this PR"
-
-
-class TestCheckFileExists:
-    def test_returns_true_for_existing_file(self, tmp_path: Path) -> None:
-        (tmp_path / "file.md").write_text("content")
-
-        assert check_file_exists("file.md", str(tmp_path)) is True
-
-    def test_returns_false_for_missing_file(self, tmp_path: Path) -> None:
-        assert check_file_exists("missing.md", str(tmp_path)) is False
 
 
 class TestLoadBehaviorMap:
@@ -264,9 +340,7 @@ class TestLoadBehaviorMap:
     def test_handles_multiple_files_per_section(self, tmp_path: Path) -> None:
         data = {
             "specs": {
-                "specs/foo.md": {
-                    "sections": {"Behavior/Auth": ["src/auth.py", "src/login.py"]}
-                }
+                "specs/foo.md": {"sections": {"Behavior/Auth": ["src/auth.py", "src/login.py"]}}
             }
         }
         (tmp_path / ".backlink.json").write_text(json.dumps(data))
@@ -440,11 +514,9 @@ class TestGenerateLarge:
         assert "**Breaking**: API v1 removed" in result
 
     def test_includes_behavior_map_when_source_exists(self, tmp_path: Path) -> None:
-        data = {
-            "specs": {
-                "specs/a.md": {"sections": {"Behavior/Auth": ["src/auth.py"]}}
-            }
-        }
+        (tmp_path / "src").mkdir()
+        (tmp_path / "src/auth.py").write_text("# auth")
+        data = {"specs": {"specs/a.md": {"sections": {"Behavior/Auth": ["src/auth.py"]}}}}
         (tmp_path / ".backlink.json").write_text(json.dumps(data))
 
         pr_input = PRInput(
@@ -462,7 +534,7 @@ class TestGenerateLarge:
         result = generate_large(pr_input)
 
         assert "<details><summary>Behavior map" in result
-        assert "§Behavior/Auth → src/auth.py" in result
+        assert "§Behavior/Auth → [auth.py](src/auth.py)" in result
 
     def test_includes_decisions_when_provided(self, tmp_path: Path) -> None:
         pr_input = PRInput(

@@ -10,18 +10,22 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Active Explorations
 
-- [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI (partially graduated to [iterative-critique](../playbooks/iterative-critique.md) and [session-logging](../playbooks/session-logging.md))
-- [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels (partially graduated to [pr-descriptions](../playbooks/pr-descriptions.md))
-- [Practice Lab](./2026-01-25-team-practices-meeting.md) — Team practice improvement meeting format (partially graduated to [practice-lab](../playbooks/practice-lab.md))
+- [AI-Assisted Development Workflow](./2026-01-24-ai-assisted-workflow.md) — Patterns from building tooling with AI (partially graduated to [iterative-critique](../docs/workflow/guides/iterative-critique.md) and [session-logging](../docs/workflow/guides/session-logging.md))
+- [PR Reviewability](./2026-01-24-pr-reviewability.md) — Making spec-driven changes navigable at multiple abstraction levels (partially graduated to [pr-descriptions](../docs/workflow/guides/pr-descriptions.md))
+- [Practice Lab](./2026-01-25-team-practices-meeting.md) — Team practice improvement meeting format (partially graduated to [practice-lab](../docs/workflow/guides/practice-lab.md))
 
 ## Graduated
 
-- [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/](../docs/), [policies/](../policies/living-specifications.md), [playbooks/](../playbooks/)
+- [Living Specifications](./2026-01-23-living-specifications.md) → Graduated to [docs/living-specifications/](../docs/living-specifications/)
 
 ## Sessions
 
+### 2026-01-26
+- [Repository Restructure](./2026-01-26-repository-restructure.md) - Topic-first organization under docs/
+
 ### 2026-01-25
 - [Practice Lab](./2026-01-25-team-practices-meeting.md) - Team practice improvement exploration
+- [PR Description Generator](./2026-01-25-pr-description-generator.md) - PR description generator implementation and link adapter enhancement
 
 ### 2026-01-24
 - [PR Reviewability](./2026-01-24-pr-reviewability.md) - Progressive disclosure for spec-driven PRs
@@ -47,7 +51,7 @@ Notes can reach these end states:
 
 | State | Meaning | Action |
 |-------|---------|--------|
-| **Graduated** | Insights stabilized into docs/, policies/, or playbooks/ | Mark "Graduated to [location]", keep for reference |
+| **Graduated** | Insights stabilized into docs/ | Mark "Graduated to [location]", keep for reference |
 | **Superseded** | A later note or doc covers the same ground better | Mark "Superseded by [link]" |
 | **Abandoned** | Exploration didn't lead anywhere useful | Remove from Active, optionally delete |
 

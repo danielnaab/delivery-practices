@@ -10,7 +10,7 @@ owners: [daniel]
 
 Enforce the content rules declared in [`knowledge-base.yaml`](../knowledge-base.yaml) — validating that content files have proper frontmatter status fields and provenance (Sources sections) where required.
 
-This gives [Principle #2](../policies/living-specifications.md) ("source-of-truth requires enforcement") its mechanical backing: rules declared in configuration are checked by tooling, not just convention.
+This gives [Principle #2](../docs/living-specifications/principles.md) ("source-of-truth requires enforcement") its mechanical backing: rules declared in configuration are checked by tooling, not just convention.
 
 ## Non-goals
 
@@ -34,7 +34,7 @@ Then it reads rules.lifecycle.statuses for valid status values
 ### Frontmatter validation
 
 ```gherkin
-Given a markdown file in a content directory (docs/, policies/, playbooks/)
+Given a markdown file in a content directory (docs/)
 When the file has no YAML frontmatter
 Then it reports a "missing frontmatter" violation
 ```
@@ -60,7 +60,7 @@ Then no violation is reported for that file's frontmatter
 ### Provenance validation
 
 ```gherkin
-Given a file in a path matching sources.canonical entries (docs/**, policies/**)
+Given a file in a path matching sources.canonical entries (docs/**)
 When the file does not contain a ## Sources heading
 Then it reports a "missing provenance" violation
 ```
@@ -72,14 +72,14 @@ Then no provenance violation is reported
 ```
 
 ```gherkin
-Given a file in a non-canonical path (playbooks/, notes/)
+Given a file in a non-canonical path (notes/)
 When the file lacks a Sources section
 Then no provenance violation is reported (provenance is optional for these paths)
 ```
 
 ### Scanned paths
 
-- Content directories: docs/, policies/, playbooks/
+- Content directories: docs/
 - Only `.md` files are checked
 - README.md files are included (they carry status and may need provenance)
 - Files in subdirectories are included recursively
@@ -104,7 +104,7 @@ Example output:
       "message": "No status field in frontmatter"
     },
     {
-      "file": "policies/example.md",
+      "file": "docs/living-specifications/example.md",
       "rule": "missing-provenance",
       "message": "No Sources section found (required for canonical content)"
     }
@@ -145,12 +145,12 @@ Example output:
 ## Decisions
 
 - 2026-01-24: Read rules from knowledge-base.yaml rather than hardcoding. Keeps the tool adaptable to different KBs and avoids drift between declared rules and enforcement.
-- 2026-01-24: Provenance checking uses `sources.canonical` paths to determine which files need Sources sections. This is more precise than checking all files (notes are ephemeral, playbooks link to sources in docs/).
+- 2026-01-24: Provenance checking uses `sources.canonical` paths to determine which files need Sources sections. This is more precise than checking all files (notes are ephemeral).
 - 2026-01-24: Notes excluded from linting. They're ephemeral explorations — enforcing structure on them contradicts their purpose.
 
 ## Sources
 
 - [`knowledge-base.yaml`](../knowledge-base.yaml) — the rules being enforced
-- [Living Specifications Principles](../policies/living-specifications.md) — #2 (enforcement), #14 (fight tribal knowledge)
-- [Specification Format](../docs/format.md) — "Status is non-negotiable"
+- [Living Specifications Principles](../docs/living-specifications/principles.md) — #2 (enforcement), #14 (fight tribal knowledge)
+- [Specification Format](../docs/living-specifications/format.md) — "Status is non-negotiable"
 - [Backlink Scanner](backlink-scanner.md) — sibling tool, structural patterns to follow

@@ -3,7 +3,7 @@ status: working
 last-validated: 2026-01-24
 ---
 
-# Playbook: Session Logging
+# Session Logging
 
 How to capture work session context so it persists across sessions and is useful to teammates and future AI assistants.
 
@@ -62,7 +62,7 @@ What this session sets up for future work.
 
 - Blow-by-blow command history (that's what git log is for)
 - Routine operations ("ran the linter, it passed")
-- Content that belongs in docs/policies/playbooks (graduate it instead)
+- Content that belongs in docs/ (graduate it instead)
 
 ## Updating the Index
 
@@ -76,7 +76,7 @@ After creating a session note, update `notes/index.md`:
 
 When patterns from session notes stabilize:
 
-1. Extract the stable content to the appropriate directory (docs/, policies/, playbooks/)
+1. Extract the stable content to the appropriate practice area in docs/
 2. Add provenance in the target: `Sources: [note link]`
 3. Move from Active Explorations to **Graduated** in the index
 4. Keep the note as historical reference (preserves exploratory context)
@@ -91,11 +91,11 @@ Session notes support PR authoring:
 ## Related
 
 - [Iterative critique](iterative-critique.md) — critique loops feed session notes
-- [Notes index](../notes/index.md) — where sessions are tracked
-- [Notes lifecycle](../notes/index.md#note-lifecycle) — graduation paths
+- [Notes index](../../../notes/index.md) — where sessions are tracked
+- [Notes lifecycle](../../../notes/index.md#note-lifecycle) — graduation paths
 
 ## Sources
 
 - Direct observation: 4 session notes produced during delivery-practices development (2026-01-23 to 2026-01-24)
-- [AI-assisted workflow exploration](../notes/2026-01-24-ai-assisted-workflow.md)
+- [AI-assisted workflow exploration](../../../notes/2026-01-24-ai-assisted-workflow.md)
 - Pattern: context evaporation between AI sessions is a real problem; explicit notes solve it

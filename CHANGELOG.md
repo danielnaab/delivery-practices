@@ -2,22 +2,39 @@
 
 ## [Unreleased]
 
+### Changed
+- Reorganized docs/ into practice areas: living-specifications/ and workflow/
+- Merged policies/ and playbooks/ into practice area subdirectories (principles.md, guides/)
+- Updated knowledge-base.yaml to reflect simplified structure (docs/ and notes/ only)
+- Updated specs with new example paths in gherkin scenarios
+- Removed "Playbook:" prefix from all guide titles (now using simpler titles consistent with guides/ directory name)
+- Promoted pr-descriptions.md from draft to working status
+- Removed duplicated Status Semantics section from living-specifications/README.md (defined in parent docs/README.md)
+- Updated guide context headers from "This playbook" to "This guide" (writing-specs, reviewing-against-specs, iterative-critique)
+- Updated format.md and writing-specs.md examples to use gherkin code blocks (consistent with actual spec format)
+
 ### Added
 - specs/pr-description-generator.md + src/pr_description_generator/ — generates markdown PR descriptions from structured YAML input
+- pr-description: LinkAdapter protocol + PlainLinkAdapter + GitHubLinkAdapter for platform-specific link formatting
+- pr-description: `github` YAML config field for GitHub blob URLs and PR diff anchors
+- pr-description: FakeLinkAdapter in tests/fakes/ for protocol-based testing
 - specs/tool-cli.md — behavioral spec for the shared CLI runner module
 - playbooks/iterative-critique.md — build-critique-fix loop (graduated from AI-workflow note)
 - playbooks/session-logging.md — session context preservation (graduated from AI-workflow note)
 - playbooks/pr-descriptions.md — PR description format for spec-driven changes (graduated from PR reviewability exploration)
 - notes/2026-01-24-pr-reviewability.md — PR reviewability exploration (progressive disclosure for review)
+- notes/2026-01-26-repository-restructure.md — topic-first reorganization session
 - Principle #16 "Dogfood the practices" in policies/living-specifications.md
 - notes/2026-01-24-ai-assisted-workflow.md — exploration of AI-assisted development patterns
 
 ### Changed
 - All specs now use gherkin code blocks for Given/When/Then scenarios (better visual separation, GitHub syntax highlighting)
+- pr-description: behavior map files now rendered as clickable links (was plain text)
 
 ### Fixed
 - pr-description generator: format_links return type annotation (was tuple, actually str)
 - pr-description generator: behavior map now filters to only specs listed in input (was showing all specs from backlink JSON)
+- pr-description generator: removed dead check_file_exists function (replaced by adapter methods)
 - playbooks/writing-specs.md: fixed stale status vocabulary (proposed→draft, implemented→working/stable)
 - README.md: updated with all tools and current commands (156 tests)
 - CHANGELOG.md: completed v0.2.0 entries (CI, tool_cli, playbook validation)

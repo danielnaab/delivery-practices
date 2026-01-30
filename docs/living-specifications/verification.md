@@ -40,14 +40,14 @@ Without backlinks, detection requires guessing which code relates to which spec.
 
 ## Implementation in This Repo
 
-The [backlink scanner](../specs/backlink-scanner.md) implements structural verification for this repository: detecting dangling references and orphan specs via backlink annotations.
+The [backlink scanner](../../specs/backlink-scanner.md) implements structural verification for this repository: detecting dangling references and orphan specs via backlink annotations.
 
 ## Related
 
-- [Principles](../policies/living-specifications.md) — #13 (references flow upstream)
+- [Principles](principles.md) — #13 (references flow upstream)
 - [Artifact relationships](relationships.md) — backlink patterns
 
 ## Sources
 
-- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md) — drift detection themes
+- Exploration: [notes/2026-01-23-living-specifications.md](../../notes/2026-01-23-living-specifications.md) — drift detection themes
 - Personal experience: CI-based linting, spec-code drift in production systems

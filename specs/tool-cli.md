@@ -68,4 +68,4 @@ Three tools share identical CLI behavior: argument parsing, JSON output, exit co
 ## Sources
 
 - Extracted from: identical patterns in three __main__.py files
-- [Principles](../policies/living-specifications.md) — #5 (low ceremony, high signal)
+- [Principles](../docs/living-specifications/principles.md) — #5 (low ceremony, high signal)

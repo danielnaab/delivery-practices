@@ -40,6 +40,6 @@ Normative principles governing how specifications are written, maintained, and u
 
 ## Sources
 
-- Synthesized from exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md)
+- Synthesized from exploration: [notes/2026-01-23-living-specifications.md](../../notes/2026-01-23-living-specifications.md)
 - Personal experience: Flexion delivery practices, agile team collaboration
 - Observation: AI-assisted development workflow patterns (2025-2026)

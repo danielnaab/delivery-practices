@@ -25,13 +25,15 @@ The spec system itself must be legible. Different collaborators need different e
 ```
 README.md                      → "What is this project?"
 ├── CLAUDE.md                  → "What are the rules?" (agents)
-├── docs/                      → "What are the concepts?"
-│   ├── format.md              → "What goes in a spec?"
-│   ├── relationships.md       → "How do artifacts connect?"
-│   ├── verification.md        → "How is drift detected?"
-│   └── comprehension.md       → "How do people navigate?"
-├── policies/                  → "What rules do we follow?"
-├── playbooks/                 → "How do I do X?"
+├── docs/                      → "What are the practices?"
+│   ├── living-specifications/ → "Spec-driven development"
+│   │   ├── format.md          → "What goes in a spec?"
+│   │   ├── relationships.md   → "How do artifacts connect?"
+│   │   ├── principles.md      → "What rules do we follow?"
+│   │   └── guides/            → "How do I do X?"
+│   ├── workflow/              → "Development workflow"
+│   │   └── guides/            → "Iterative critique, session logging"
+│   └── decisions/             → "Architectural decisions"
 ├── specs/                     → "What does the tooling do?"
 ├── src/                       → "Tool implementations"
 └── notes/                     → "What's in progress?"
@@ -45,18 +47,18 @@ README.md                      → "What is this project?"
 | AI agent | CLAUDE.md | Relevant spec |
 | Developer mid-flow | Backlink in code | Spec behavior section |
 | Ensemble participant | Playbook | Spec being implemented |
-| Stakeholder | [Specs index](../specs/) | Status + Open Questions |
+| Stakeholder | [Specs index](../../specs/) | Status + Open Questions |
 | Async reviewer | PR description | Referenced spec |
 
 ## Knowledge Types as Directories
 
-The directory structure signals what kind of knowledge each file contains:
+The directory structure signals what kind of knowledge each file contains. Practice areas under `docs/` combine knowledge types:
 
-| Directory | Knowledge Type | Question it answers |
-|-----------|---------------|-------------------|
-| `docs/` | Declarative | "Understand this" — concepts, models, reference |
-| `policies/` | Normative | "Follow this rule" — constraints, principles |
-| `playbooks/` | Procedural | "Do this" — step-by-step guidance |
+| Location | Knowledge Type | Question it answers |
+|----------|---------------|-------------------|
+| `docs/[area]/` | Declarative | "Understand this" — concepts, models, reference |
+| `docs/[area]/principles.md` | Normative | "Follow this rule" — constraints, principles |
+| `docs/[area]/guides/` | Procedural | "Do this" — step-by-step guidance |
 | `notes/` | Ephemeral | "Thinking about this" — explorations |
 
 ## Key Insight
@@ -65,10 +67,10 @@ The directory structure signals what kind of knowledge each file contains:
 
 ## Related
 
-- [Principles](../policies/living-specifications.md) — #6 (AI-compatible is human-compatible), #14 (fight tribal knowledge)
+- [Principles](principles.md) — #6 (AI-compatible is human-compatible), #14 (fight tribal knowledge)
 
 ## Sources
 
-- [Living Specifications Principles](../policies/living-specifications.md) — #6, #14
-- Exploration: [notes/2026-01-23-living-specifications.md](../notes/2026-01-23-living-specifications.md) — UX/comprehension themes
+- [Living Specifications Principles](principles.md) — #6, #14
+- Exploration: [notes/2026-01-23-living-specifications.md](../../notes/2026-01-23-living-specifications.md) — UX/comprehension themes
 - Personal experience: Developer onboarding patterns, AI agent cold-start behavior

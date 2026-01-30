@@ -3,7 +3,7 @@ status: working
 last-validated: 2026-01-24
 ---
 
-# Playbook: Ensemble Sessions with Specifications
+# Ensemble Sessions with Specifications
 
 How to use specifications effectively in ensemble (mob) programming sessions.
 
@@ -92,8 +92,8 @@ These ceremonies solve async coordination problems. Ensemble doesn't have those 
 
 - [Writing specs](writing-specs.md) — general spec authoring
 - [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective
-- [Specification format](../docs/format.md) — the template
-- [Principles](../policies/living-specifications.md) — #8 (async-first, synchronous-to-resolve)
+- [Specification format](../format.md) — the template
+- [Principles](../principles.md) — #8 (async-first, synchronous-to-resolve)
 
 ## Sources
 

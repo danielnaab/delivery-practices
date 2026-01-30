@@ -1,8 +1,9 @@
 ---
-status: draft
+status: working
+last-validated: 2026-01-26
 ---
 
-# Playbook: Writing PR Descriptions
+# Writing PR Descriptions
 
 How to write PR descriptions that help trusted reviewers navigate spec-driven changes efficiently.
 
@@ -195,7 +196,7 @@ This uses the non-spec format: no spec existed for the refactoring itself. The F
 
 ## Multi-PR Work Streams
 
-For larger efforts spanning multiple PRs, see the [PR Reviewability exploration](../notes/2026-01-24-pr-reviewability.md#multi-pr-work-streams) for work stream index patterns, ordering strategies, and trust gradient guidance. This content hasn't been validated on real work streams yet.
+For larger efforts spanning multiple PRs, see the [PR Reviewability exploration](../../../notes/2026-01-24-pr-reviewability.md#multi-pr-work-streams) for work stream index patterns, ordering strategies, and trust gradient guidance. This content hasn't been validated on real work streams yet.
 
 ## What's NOT in the Description
 
@@ -208,11 +209,11 @@ For larger efforts spanning multiple PRs, see the [PR Reviewability exploration]
 ## Related
 
 - [Session logging](session-logging.md) — session notes as PR source material
-- [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective
+- [Reviewing against specs](../../living-specifications/guides/reviewing-against-specs.md) — the reviewer's perspective
 - [Iterative critique](iterative-critique.md) — build-critique-fix produces session material
 
 ## Sources
 
-- [PR Reviewability exploration](../notes/2026-01-24-pr-reviewability.md) — full design rationale and worked examples
+- [PR Reviewability exploration](../../../notes/2026-01-24-pr-reviewability.md) — full design rationale and worked examples
 - Direct observation: Authoring descriptions for delivery-practices v0.2.0 changes
-- [Comprehension UX principles](../docs/comprehension.md) — progressive disclosure applied to review
+- [Comprehension UX principles](../../living-specifications/comprehension.md) — progressive disclosure applied to review

@@ -3,16 +3,12 @@ title: "Living Specifications as Source of Truth"
 date: 2026-01-23
 status: graduated
 graduated-to:
-  - docs/
-  - policies/living-specifications.md
-  - playbooks/writing-specs.md
-  - playbooks/ensemble-with-specs.md
-  - playbooks/reviewing-against-specs.md
+  - docs/living-specifications/
 ---
 
 # Living Specifications as Source of Truth
 
-> **Graduated**: This exploration has been synthesized into [docs/](../docs/), [policies/](../policies/living-specifications.md), and [playbooks/](../playbooks/). Retained as reasoning trail.
+> **Graduated**: This exploration has been synthesized into [docs/living-specifications/](../docs/living-specifications/). Retained as reasoning trail.
 
 Exploring how to write specifications that serve as living documentation—never stale, collaborative, and integrated with agile delivery and AI-assisted development.
 

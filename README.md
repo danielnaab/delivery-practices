@@ -16,14 +16,14 @@ Personal exploration of delivery practices for:
 
 ## Structure
 
-**Knowledge content** (organized by type):
+**Practice documentation** (organized by topic):
 
-| Directory | Type | Purpose |
-|-----------|------|---------|
-| `docs/` | Declarative | Concepts, models, reference |
-| `policies/` | Normative | Principles, rules, constraints |
-| `playbooks/` | Procedural | Step-by-step guides |
-| `notes/` | Ephemeral | Explorations, working notes |
+| Directory | Practice Area |
+|-----------|---------------|
+| [`docs/living-specifications/`](docs/living-specifications/) | Spec-driven development |
+| [`docs/workflow/`](docs/workflow/) | Development workflow practices |
+| [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
+| `notes/` | Explorations, working notes |
 
 **Tooling** (dogfooding the practices):
 
@@ -33,9 +33,10 @@ Personal exploration of delivery practices for:
 | `src/` | Python implementations |
 | `tests/` | Pytest test suite |
 
-## Current Practice Areas
+## Practice Areas
 
-- **[Living Specifications](docs/)** — Specs as source of truth for system behavior
+- **[Living Specifications](docs/living-specifications/)** — Specs as source of truth for system behavior
+- **[Workflow](docs/workflow/)** — Development workflow practices (iterative critique, session logging, PR descriptions)
 
 ## Tooling
 
@@ -53,7 +54,7 @@ uv run backlink-scanner        # Traceability check (exit 1 on issues)
 uv run kb-linter               # Content rule enforcement
 uv run link-validator          # Broken link detection
 uv run pr-description input.yaml  # Generate PR description
-uv run pytest                  # Run tests (152 tests)
+uv run pytest                  # Run tests (193 tests)
 uv run ruff check .            # Lint
 uv run ruff format --check .   # Format check
 ```

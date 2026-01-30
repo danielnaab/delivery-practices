@@ -3,11 +3,11 @@ status: working
 last-validated: 2026-01-24
 ---
 
-# Playbook: Writing Specifications
+# Writing Specifications
 
 How to write a new specification or update an existing one.
 
-> **Context**: This playbook is for use in project repositories that adopt the [living specifications](../docs/) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
+> **Context**: This guide is for use in project repositories that adopt the [living specifications](../) practice. The paths below (e.g., `docs/specs/`) are conventions for project repos.
 
 ## When to Write a Spec
 
@@ -28,7 +28,7 @@ How to write a new specification or update an existing one.
 ### 0. Orient
 
 Before writing, gather context:
-- Read the [specification format](../docs/format.md) template
+- Read the [specification format](../format.md) template
 - Check for related specs that your new spec might reference or overlap with
 - Identify the sources (requirements, principles, prior decisions) that will inform the design
 
@@ -60,21 +60,24 @@ Explicitly state what's out of scope. This prevents scope creep and clarifies bo
 
 ### 4. Specify Behavior
 
-Use Given/When/Then structure for each scenario:
+Use Given/When/Then structure for each scenario, wrapped in gherkin code blocks:
 
 ```markdown
 ### Login
-- Given valid credentials
-- When the user submits the login form
-- Then they receive a session token and are redirected to dashboard
-```
 
-Add edge cases separately:
-```markdown
+\`\`\`gherkin
+Given valid credentials
+When the user submits the login form
+Then they receive a session token and are redirected to dashboard
+\`\`\`
+
 ### Edge Cases
+
 - Empty email: returns 400 with "email required" message
 - Expired account: returns 403 with reactivation link
 ```
+
+Gherkin code blocks provide better visual separation and GitHub syntax highlighting. Edge cases can remain as bullet points when they're simple one-liners.
 
 ### 5. Add Constraints
 
@@ -117,7 +120,7 @@ Link to related specs, docs, or principles:
 ```markdown
 ## Related
 - [Other Spec](other-spec.md) — shared constraint
-- [Principles](../policies/living-specifications.md) — relevant principle numbers
+- [Principles](../principles.md) — relevant principle numbers
 ```
 
 ### 9. Verify Against Implementation
@@ -151,11 +154,11 @@ This step catches drift introduced during implementation — the most common sou
 
 ## Related
 
-- [Specification format](../docs/format.md) — the template reference
-- [Principles](../policies/living-specifications.md) — normative rules
+- [Specification format](../format.md) — the template reference
+- [Principles](../principles.md) — normative rules
 - [Reviewing against specs](reviewing-against-specs.md) — the reviewer's perspective
 
 ## Sources
 
-- Field-tested: Used to write [specs/kb-linter.md](../specs/kb-linter.md) (2026-01-24)
-- [Specification format](../docs/format.md) — template this playbook walks through
+- Field-tested: Used to write [specs/kb-linter.md](../../../specs/kb-linter.md) (2026-01-24)
+- [Specification format](../format.md) — template this playbook walks through

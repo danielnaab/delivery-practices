@@ -3,11 +3,11 @@ status: working
 last-validated: 2026-01-24
 ---
 
-# Playbook: Iterative Build-Critique-Fix
+# Iterative Build-Critique-Fix
 
 How to develop features using structured critique loops to catch drift, gaps, and inconsistencies.
 
-> **Context**: This playbook works with any development workflow but is especially effective with AI-assisted development, where the speed of implementation makes systematic review essential.
+> **Context**: This guide works with any development workflow but is especially effective with AI-assisted development, where the speed of implementation makes systematic review essential.
 
 ## When to Use
 
@@ -84,19 +84,19 @@ The human provides judgment; the AI provides thoroughness.
 
 ## Integration with Other Playbooks
 
-- **Writing specs** → Build phase uses the [writing-specs playbook](writing-specs.md)
-- **Reviewing against specs** → Critique phase uses the [review checklist](reviewing-against-specs.md)
+- **Writing specs** → Build phase uses the [writing-specs playbook](../../living-specifications/guides/writing-specs.md)
+- **Reviewing against specs** → Critique phase uses the [review checklist](../../living-specifications/guides/reviewing-against-specs.md)
 - **Session logging** → Each loop's findings feed the [session note](session-logging.md)
 
 ## Related
 
-- [Writing specs](writing-specs.md) — spec-first development (Step 9 is a mini-critique)
-- [Reviewing against specs](reviewing-against-specs.md) — structured review checklist
+- [Writing specs](../../living-specifications/guides/writing-specs.md) — spec-first development (Step 9 is a mini-critique)
+- [Reviewing against specs](../../living-specifications/guides/reviewing-against-specs.md) — structured review checklist
 - [Session logging](session-logging.md) — capturing what each loop found
-- [Principles](../policies/living-specifications.md) — #5 (low ceremony), #16 (dogfooding)
+- [Principles](../../living-specifications/principles.md) — #5 (low ceremony), #16 (dogfooding)
 
 ## Sources
 
 - Direct observation: Three critique cycles during delivery-practices v0.2.0 (2026-01-24)
 - Each cycle caught real issues: spec drift (3 items), dead parameters, stale examples, vocabulary clashes
-- [AI-assisted workflow exploration](../notes/2026-01-24-ai-assisted-workflow.md)
+- [AI-assisted workflow exploration](../../../notes/2026-01-24-ai-assisted-workflow.md)
