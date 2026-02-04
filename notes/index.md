@@ -20,6 +20,9 @@ Notes are **ephemeral** - graduate to [docs/](../docs/) when stable.
 
 ## Sessions
 
+### 2026-01-30
+- [USAi Practice Lab Intro](./2026-01-30-usai-practice-lab-intro.md) - Planning for USAi team Practice Lab introduction meeting
+
 ### 2026-01-26
 - [Repository Restructure](./2026-01-26-repository-restructure.md) - Topic-first organization under docs/
 

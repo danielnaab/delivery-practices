@@ -50,3 +50,7 @@ Thumbs.db
 
 # Graft dependencies
 .graft
+
+# Marp generated presentations
+notes/presentations/*.html
+notes/presentations/*.pdf
