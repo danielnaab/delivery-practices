@@ -185,7 +185,7 @@ If the implementation changes after feedback:
 Three tools had identical CLI boilerplate (arg parsing, JSON output, exit codes).
 Extracted to shared tool_cli module. No behavior change — all tools work identically.
 
-Verify: `uv run pytest && uv run backlink-scanner && uv run kb-linter && uv run link-validator`
+Verify: `uv run pytest && PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner . && PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter . && PYTHONPATH=scions/knowledge-base-kit/src python3 -m link_validator .`
 
 **Focus**: Pure refactor — all 101 tests pass unchanged, tool outputs identical. Check that
 run_tool() handles the edge cases each __main__.py previously handled (FileNotFoundError,

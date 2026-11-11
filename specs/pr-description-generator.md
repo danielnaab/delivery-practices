@@ -36,7 +36,7 @@ Example YAML input:
 format: medium
 summary: |
   What was done and why. 2-3 sentences for medium/large.
-verify: "uv run pytest && uv run kb-linter"
+verify: "uv run pytest && PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter ."
 
 specs:
   - specs/kb-linter.md
