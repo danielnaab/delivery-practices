@@ -1,7 +1,7 @@
 # Copier template configuration for python-kit
 # This file defines template variables and generation settings
 
-_min_copier_version: "9.0.0"
+_min_copier_version: "9.3.0"  # migrations in the command/when form
 
 # Answers file configuration
 _answers_file: .copier-answers.yml
@@ -51,6 +51,10 @@ _skip_if_exists:
   - README.md  # Users will customize
   - docs/agents.md  # Project-specific agent entrypoint
   - knowledge-base.yaml  # Project-specific KB config
+  # graft's workflows: generated once, then graft-upgrade alone moves them with graft's pin (their
+  # `# managed by graft` line), so a python-kit update never conflicts with or reverts them.
+  - .forgejo/workflows/graft-check.yaml
+  - .forgejo/workflows/graft-upgrade.yaml
 
 # Template questions (user prompts)
 
@@ -175,10 +179,74 @@ _tasks:
   - command: 'git commit -m "Initial commit from python-kit"'
     when: "{{ _copier_operation == 'copy' }}"
 
-# Migrations for template updates (version-aware)
+# Migrations: what `copier update` runs when it crosses a version (from < version <= to), in the
+# project's directory, after the update (`_stage == "after"`) unless `when` says otherwise. Each
+# release's CHANGELOG "Migration" section says what is left to do by hand. Not a migration: setting
+# `_src_path` (v2.0.0). Copier reads it to fetch the template before any migration runs, and the
+# rendered .copier-answers.yml writes the canonical URL from v2.0.0 on.
 _migrations:
-  - version: v0.2.0
-    before:
-      - echo "Preparing for v0.2.0 migration..."
-    after:
-      - echo "Completed v0.2.0 migration"
+  # v2.0.0 renamed the grafted inputs: scions/python-starter/ is now scions/python-kit/ and
+  # scions/meta-knowledge-base/ is now scions/knowledge-base-kit/ (`nix run .#graft` rebuilds
+  # scions/). The update rewrites the files it manages; this rewrites the paths in the project's own
+  # tracked files, which it skips (README.md, docs/agents.md, ...), leaving scions/ and CHANGELOG.md
+  # alone.
+  - version: v2.0.0
+    command: |
+      "{{ _copier_python }}" - <<'EOF'
+      import pathlib, subprocess
+      renames = [("scions/python-starter/", "scions/python-kit/"),
+                 ("scions/meta-knowledge-base/", "scions/knowledge-base-kit/")]
+      out = subprocess.run(["git", "ls-files", "-z"], capture_output=True, check=True).stdout
+      for name in out.decode().split("\0"):
+          path = pathlib.Path(name)
+          if not name or name.startswith("scions/") or path.name == "CHANGELOG.md" or path.is_symlink() or not path.is_file():
+              continue
+          try:
+              text = path.read_text(encoding="utf-8")
+          except UnicodeDecodeError:
+              continue
+          new = text
+          for old, to in renames:
+              new = new.replace(old, to)
+          if new != text:
+              path.write_text(new, encoding="utf-8")
+              print(f"python-kit v2.0.0 migration: {name}: scions paths renamed")
+      EOF
+
+  # v2.1.0 made the example code `ruff check` clean (B009, UP045, B904, and I001 from `tests` imports,
+  # which ruff's isort now sorts in a block of their own). The update fixes the files it
+  # manages; this makes the same edits in the example files it skips, where they still read as generated.
+  - version: v2.1.0
+    command: |
+      "{{ _copier_python }}" - <<'EOF'
+      import pathlib
+      exit_ = "\n        raise typer.Exit(code=1)\n"
+      fixes = {
+          "src/{{ package_name }}/adapters/in_memory_repository.py": [
+              ('entity_id = getattr(entity, "id")', "entity_id = entity.id"),
+              ("def get(self, entity_id: str) -> Optional[T]:", "def get(self, entity_id: str) -> T | None:"),
+          ],
+          "tests/unit/test_example_service.py": [
+              ("ServiceContext\nfrom tests.fakes.fake_repository", "ServiceContext\n\nfrom tests.fakes.fake_repository"),
+          ],
+          "src/{{ package_name }}/cli/commands/example.py": [
+              ('typer.echo(f"Validation error: {e}", err=True)' + exit_,
+               'typer.echo(f"Validation error: {e}", err=True)' + exit_.replace("1)", "1) from e")),
+              ('typer.echo(f"Error: {e}", err=True)' + exit_,
+               'typer.echo(f"Error: {e}", err=True)' + exit_.replace("1)", "1) from e")),
+          ],
+      }
+      for name, pairs in fixes.items():
+          path = pathlib.Path(name)
+          if path.is_symlink() or not path.is_file():
+              continue
+          text = path.read_text(encoding="utf-8")
+          new = text
+          for old, to in pairs:
+              new = new.replace(old, to)
+          if "Optional[" not in new:
+              new = new.replace("from typing import Generic, Optional, TypeVar\n", "from typing import Generic, TypeVar\n")
+          if new != text:
+              path.write_text(new, encoding="utf-8")
+              print(f"python-kit v2.1.0 migration: {name}: ruff fixes applied")
+      EOF

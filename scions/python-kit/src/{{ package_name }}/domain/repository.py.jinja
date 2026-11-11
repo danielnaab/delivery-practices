@@ -5,7 +5,7 @@ Defines interface for entity storage using typing.Protocol for structural typing
 Ports belong to the domain: the domain defines what it needs from the outside world.
 """
 
-from typing import Generic, Optional, Protocol, TypeVar
+from typing import Generic, Protocol, TypeVar
 
 T = TypeVar("T")
 
@@ -35,7 +35,7 @@ class Repository(Protocol, Generic[T]):
         """
         ...
 
-    def get(self, entity_id: str) -> Optional[T]:
+    def get(self, entity_id: str) -> T | None:
         """Retrieve entity by ID.
 
         Args:
@@ -71,12 +71,12 @@ Define your repository protocols here using typing.Protocol for structural typin
 Ports belong to the domain: the domain defines what it needs from the outside world.
 
 Example:
-    from typing import Protocol, Generic, TypeVar, Optional
+    from typing import Generic, Protocol, TypeVar
 
     T = TypeVar("T")
 
     class Repository(Protocol, Generic[T]):
         def save(self, entity: T) -> None: ...
-        def get(self, entity_id: str) -> Optional[T]: ...
+        def get(self, entity_id: str) -> T | None: ...
 """
 {% endif -%}

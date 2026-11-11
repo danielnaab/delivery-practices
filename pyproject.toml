@@ -56,6 +56,7 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["backlink_scanner", "kb_linter", "link_validator", "tool_cli", "pr_description_generator"]
+known-local-folder = ["tests"]  # its own block, so the order holds whatever the package is called
 
 [tool.ruff.format]
 quote-style = "double"

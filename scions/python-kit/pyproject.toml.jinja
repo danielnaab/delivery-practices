@@ -47,6 +47,9 @@ dev-dependencies = [
 [tool.ruff]
 line-length = 100
 target-version = "py{{ python_version.replace('.', '') }}"
+{%- if graft_docs %}
+extend-exclude = ["scions"]  # graft output: other projects' code, never edited here
+{%- endif %}
 
 [tool.ruff.lint]
 select = [
@@ -66,6 +69,7 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["{{ package_name }}"]
+known-local-folder = ["tests"]  # its own block, so the order holds whatever the package is called
 
 [tool.ruff.format]
 quote-style = "double"

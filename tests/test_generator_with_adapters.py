@@ -5,6 +5,7 @@
 from pr_description_generator.adapters.github import GitHubConfig, GitHubLinkAdapter
 from pr_description_generator.generator import generate, generate_simple
 from pr_description_generator.models import Format, PRInput
+
 from tests.fakes.fake_link_adapter import FakeLinkAdapter
 
 

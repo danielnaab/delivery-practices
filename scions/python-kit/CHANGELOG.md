@@ -10,6 +10,50 @@ python-kit (formerly python-starter) is two things, and each entry says which on
 Generated projects with `graft_docs` pin python-kit to the commit they came from, so
 `copier update`, not graft's weekly PR, moves them between these versions.
 
+## v2.1.0 - 2026-11-11
+
+### Template
+
+- With `graft_docs`: a `.forgejo/workflows/python-kit-upgrade.yaml` workflow, modeled on graft-upgrade. Weekly
+  (Mondays 06:41 UTC) it runs `copier update` to python-kit's newest tag in the project's major, then
+  `nix run .#graft`, `nix flake check` and the tests, pushes the result to `python-kit/upgrade` and opens a PR
+  quoting this CHANGELOG. Conflicts and failing checks are pushed and named in the PR's title; a new major is
+  not taken (the run warns). The update runs in a job with only the job token; the PR job, with the
+  `GRAFT_PR_TOKEN` secret, runs none of the branch's code, and leaves a branch that changes `.forgejo/` or
+  `.github/` workflows for you to open. copier, uv and Python come from nixpkgs `nixos-26.05`.
+- `copier.yml` `_migrations` are real: the v2.0.0 migration renames `scions/python-starter/` to
+  `scions/python-kit/` and `scions/meta-knowledge-base/` to `scions/knowledge-base-kit/` in the project's own
+  tracked files (not `scions/` or CHANGELOG.md), the step v2.0.0's Migration left by hand; the v2.1.0
+  migration makes this release's ruff fixes in the example files the update skips, where they still read as
+  generated. The placeholder v0.2.0 migration is gone. `_min_copier_version` is 9.3.0, for the
+  `command`/`when` form.
+- `TEMPLATE_STATUS.md`: after `copier update`, `nix run .#graft`; and what the weekly update PR does.
+  `docs/copier/template-design.md` (the template's own docs): `graft_docs`' files, migrations, the workflow.
+- graft's workflows (`.forgejo/workflows/graft-check.yaml`, `graft-upgrade.yaml`) are in `_skip_if_exists`:
+  a new project still gets them, and from then on graft-upgrade alone moves them with graft's pin, so a
+  python-kit update neither conflicts with nor reverts them (and its PR is refused only when
+  `python-kit-upgrade.yaml` itself changes).
+- The generated code is `ruff check` clean: `entity.id` for `getattr(entity, "id")` (B009), `T | None` for
+  `Optional[T]` (UP045), and `raise typer.Exit(code=1) from e` in the example CLI commands (B904). `tests`
+  imports are an isort block of their own (`known-local-folder`): a package named after "tests"
+  alphabetically got I001. With `graft_docs`, ruff skips `scions/` (graft output; it reported
+  knowledge-base-kit's import order).
+
+### Exported docs
+
+- `docs/architecture/architecture.md` and `docs/decisions/003-protocol-di.md`: the `Repository` protocol
+  examples use `T | None`.
+
+### Migration
+
+In a generated project: `copier update --trust --vcs-ref v2.1.0` (from v1.x, first set `_src_path` as in
+v2.0.0's Migration). With `graft_docs`: `nix run .#graft`, `nix flake check`, and commit `flake.nix`,
+`flake.lock`, `scions/` and `.forgejo/workflows/python-kit-upgrade.yaml`. From then on the weekly PR does
+this; on a private Forgejo repo it needs the `GRAFT_PR_TOKEN` secret, as graft-upgrade does.
+
+The update and its v2.1.0 migration make the ruff fixes; in example code you have changed, `ruff check`
+shows what is left (`--fix` takes B009 and UP045; B904 needs `from e` by hand).
+
 ## v2.0.1 - 2026-11-11
 
 ### Template
