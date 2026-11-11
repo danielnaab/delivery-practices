@@ -52,4 +52,4 @@ Reassess this decision when any of these occur:
 ## Sources
 
 - `scions/python-kit/` (python-starter then) — template providing the architecture patterns
-- Backlink scanner spec: [`specs/backlink-scanner.md`](../../specs/backlink-scanner.md)
+- Backlink scanner spec: [`specs/backlink-scanner.md`](https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0/specs/backlink-scanner.md)

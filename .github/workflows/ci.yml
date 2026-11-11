@@ -33,10 +33,10 @@ jobs:
         run: uv run pytest --tb=short
 
       - name: Backlink scanner
-        run: uv run backlink-scanner
+        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner .
 
       - name: KB linter
-        run: uv run kb-linter
+        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter .
 
       - name: Link validator
-        run: uv run link-validator
+        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m link_validator .

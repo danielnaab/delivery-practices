@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### Changed (2026-11-11: python-kit v2.1.0; the checker comes from knowledge-base-kit)
+- Removed this repository's copy of the checker (`src/{backlink_scanner,kb_linter,link_validator,tool_cli}`, their
+  tests and `specs/{backlink-scanner,kb-linter,link-validator,tool-cli}.md`). It now lives in
+  [knowledge-base-kit](https://github.com/danielnaab/knowledge-base-kit) and runs from the grafted copy:
+  `PYTHONPATH=scions/knowledge-base-kit/src python3 -m {backlink_scanner,kb_linter,link_validator} .` (CI does the
+  same). Links to the removed specs point at knowledge-base-kit v2.0.0's. `pyproject.toml` drops the three scripts.
+- python-kit updated to v2.1.0 (template stubs not taken), and the copier answer `package_name` is now
+  `pr_description_generator`, this repository's real package, so future updates target it.
+
 ### Changed (2026-11-11: graft v2; living-specifications is a dependency, not a copy)
 - Removed `docs/living-specifications/`, the pre-extraction copy of what is now the
   [living-specifications](https://github.com/danielnaab/living-specifications) repository. It is grafted at v1.0.2 into

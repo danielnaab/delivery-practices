@@ -8,10 +8,11 @@ Living specifications for this repository's tooling. Each spec is a behavioral c
 
 | Spec | Status | Purpose |
 |------|--------|---------|
-| [backlink-scanner.md](backlink-scanner.md) | working | Scan for `spec:` annotations, report traceability |
-| [kb-linter.md](kb-linter.md) | working | Validate content files against knowledge-base.yaml rules |
-| [link-validator.md](link-validator.md) | working | Detect broken internal markdown links |
-| [tool-cli.md](tool-cli.md) | working | Shared CLI runner conventions (args, JSON output, exit codes) |
+| [pr-description-generator.md](pr-description-generator.md) | working | Generate markdown PR descriptions from YAML input |
+
+The structural checkers (backlink scanner, KB linter, link validator) and their specs moved to
+[knowledge-base-kit](https://github.com/danielnaab/knowledge-base-kit/tree/v2.0.0/specs); this repository runs the
+grafted copy (see [its tools guide](../scions/knowledge-base-kit/docs/tools.md)).
 
 ## Lifecycle
 
@@ -27,6 +28,6 @@ Specs use the same status vocabulary as all KB content (see [`docs/README.md`](.
 Run the scanner to check spec-implementation traceability:
 
 ```bash
-uv run backlink-scanner        # Exit 1 if dangling refs or orphan specs
-uv run backlink-scanner --report-only  # Always exit 0 (informational)
+PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner .                # Exit 1 if dangling refs or orphan specs
+PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner . --report-only  # Always exit 0 (informational)
 ```

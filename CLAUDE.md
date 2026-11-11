@@ -103,7 +103,8 @@ Practice areas established:
 - **[Workflow](docs/workflow/)** — development workflow practices (iterative critique, session logging, PR descriptions)
 
 Tooling (dogfooding):
-- **[Backlink scanner](specs/backlink-scanner.md)**, **[kb-linter](specs/kb-linter.md)**, **[link-validator](specs/link-validator.md)**, **[pr-description](specs/pr-description-generator.md)** — tools in [src/](src/) with specs in [specs/](specs/)
+- **[pr-description](specs/pr-description-generator.md)** — tool in [src/](src/) with its spec in [specs/](specs/)
+- Backlink scanner, kb-linter, link-validator — knowledge-base-kit's checker, run from [scions/knowledge-base-kit/](scions/knowledge-base-kit/docs/tools.md) (`PYTHONPATH=scions/knowledge-base-kit/src python3 -m <tool> .`)
 
 Focus on:
 1. Real practices from actual experience (not theory)

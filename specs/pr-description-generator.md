@@ -297,4 +297,4 @@ None currently.
 ## Sources
 
 - [PR Descriptions Playbook](../docs/workflow/guides/pr-descriptions.md) — format definitions and examples
-- [Backlink Scanner](backlink-scanner.md) — behavior_map_source JSON format
+- [Backlink Scanner](https://github.com/danielnaab/knowledge-base-kit/blob/v2.0.0/specs/backlink-scanner.md) — behavior_map_source JSON format

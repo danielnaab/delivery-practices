@@ -28,12 +28,11 @@ This repository also contains tools that support these practices:
 
 | Tool | Purpose |
 |------|---------|
-| [backlink-scanner](../specs/backlink-scanner.md) | Spec-to-implementation traceability |
-| [kb-linter](../specs/kb-linter.md) | Content linter enforcing knowledge-base rules |
-| [link-validator](../specs/link-validator.md) | Broken internal link detection |
 | [pr-description](../specs/pr-description-generator.md) | PR description generator from YAML input |
 
-See [`specs/`](../specs/) for behavioral specifications and [`src/`](../src/) for implementations.
+See [`specs/`](../specs/) for behavioral specifications and [`src/`](../src/) for implementations. The structural
+checkers (backlink scanner, KB linter, link validator) come from knowledge-base-kit; see
+[its tools guide](../scions/knowledge-base-kit/docs/tools.md).
 
 ## Status Semantics
 

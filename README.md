@@ -40,21 +40,20 @@ Personal exploration of delivery practices for:
 
 ## Tooling
 
-Spec-first tools for structural integrity and workflow support:
+Spec-first tools for structural integrity and workflow support. The structural checkers (backlink scanner, KB
+linter, link validator) are [knowledge-base-kit](https://github.com/danielnaab/knowledge-base-kit)'s, run from the
+grafted copy; see [its tools guide](scions/knowledge-base-kit/docs/tools.md).
 
 | Tool | Spec | Purpose |
 |------|------|---------|
-| `backlink-scanner` | [spec](specs/backlink-scanner.md) | Spec-to-implementation traceability via `# spec:` annotations |
-| `kb-linter` | [spec](specs/kb-linter.md) | Validates frontmatter status and provenance against `knowledge-base.yaml` |
-| `link-validator` | [spec](specs/link-validator.md) | Detects broken internal markdown links |
 | `pr-description` | [spec](specs/pr-description-generator.md) | Generates markdown PR descriptions from YAML input |
 
 ```bash
-uv run backlink-scanner        # Traceability check (exit 1 on issues)
-uv run kb-linter               # Content rule enforcement
-uv run link-validator          # Broken link detection
+PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner .  # Traceability check (exit 1 on issues)
+PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter .         # Content rule enforcement
+PYTHONPATH=scions/knowledge-base-kit/src python3 -m link_validator .    # Broken link detection
 uv run pr-description input.yaml  # Generate PR description
-uv run pytest                  # Run tests (193 tests)
+uv run pytest                  # Run tests (92 tests)
 uv run ruff check .            # Lint
 uv run ruff format --check .   # Format check
 ```
