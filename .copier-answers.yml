@@ -1,8 +1,9 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: 3eac821
+_commit: v2.1.0
 _src_path: https://github.com/danielnaab/python-kit
 author_email: daniel@example.com
 author_name: Daniel
+graft_docs: true
 include_dev_scripts: true
 include_example_code: false
 include_github_actions: false

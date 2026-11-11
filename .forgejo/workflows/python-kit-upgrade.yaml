@@ -1,0 +1,221 @@
+# python-kit's upgrade bot, from python-kit's template (https://github.com/danielnaab/python-kit), modeled on
+# graft-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, re-graft
+# scions/, run the checks, and propose the result as a PR from the branch python-kit/upgrade. Nothing is pushed
+# to the default branch: review and merge are yours. A new major is not taken; the run warns instead (read its
+# CHANGELOG's Migration section, then `copier update --trust --vcs-ref vN.0.0` by hand).
+# `copier update` manages this file like the rest of the template; delete it to stop the bot.
+name: python-kit-upgrade
+on:
+  schedule:
+    - cron: "41 6 * * 1"   # Mondays 06:41 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: python-kit-upgrade
+  cancel-in-progress: false
+
+env:
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes
+    sandbox = false
+  BRANCH: python-kit/upgrade
+  # copier, uv, Python and the shell tools come from this nixpkgs release (the runner image has bash, git
+  # and nix only).
+  NIXPKGS: github:NixOS/nixpkgs/nixos-26.05
+
+jobs:
+  # Update, check and push. The update runs the new python-kit version's code (its copier migrations), and
+  # the checks run the merged project (graft's check, the tests), all before review, so this job is given
+  # no secret: only the job token. If there are conflicts or a check fails, the branch is still pushed (its
+  # commit message says what) and this job fails.
+  upgrade:
+    runs-on: nixos-latest
+    timeout-minutes: 60
+    outputs:
+      changed: ${{ steps.upgrade.outputs.changed }}
+    steps:
+      - name: Checkout the default branch
+        env:
+          SERVER: ${{ github.server_url }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+          TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init -q .
+          git remote add origin "$REPO_URL.git"
+          # The token is for this server only (scoped), never for python-kit's upstream.
+          git config "http.$SERVER/.extraheader" "Authorization: Basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)"
+          git fetch -q --no-tags origin "$REF"
+          git checkout -q --force -B "$BRANCH" FETCH_HEAD
+
+      - name: copier update to the newest python-kit tag, check, push to python-kit/upgrade
+        id: upgrade
+        env:
+          SCRIPT: |
+            answers=.copier-answers.yml
+            field() { { grep -m1 "^$1:" "$answers" || true; } | sed -E "s/^$1: *//; s/^['\"]//; s/['\"]$//"; }
+            src=$(field _src_path) cur=$(field _commit)
+            [ -n "$src" ] && [ -n "$cur" ] || { echo "::error::$answers has no _src_path or _commit"; exit 1; }
+            major=$(sed -nE 's/^v([0-9]+)\..*/\1/p' <<<"$cur")
+            [ -n "$major" ] || { echo "::error::_commit $cur is not a python-kit version; run copier update by hand"; exit 1; }
+            tags=$(git ls-remote --tags --refs "$src" 'v*' | sed 's|.*refs/tags/||' | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V)
+            newest=$(tail -n1 <<<"$tags") target=$(grep -E "^v$major\." <<<"$tags" | tail -n1 || true)
+            newest_major=${newest#v} newest_major=${newest_major%%.*}
+            if [ -n "$newest" ] && [ "$newest_major" -gt "$major" ]; then
+              echo "::warning::python-kit $newest is a new major version, not taken: read its CHANGELOG's Migration section, then copier update --trust --vcs-ref $newest"
+            fi
+            base=${cur%%-*}   # a describe like v2.1.0-3-gabc1234 is past v2.1.0
+            if [ -z "$target" ] || [ "$(printf '%s\n%s\n' "$base" "$target" | sort -V | tail -n1)" = "$base" ]; then
+              echo "python-kit: $cur is the newest in v$major"
+              echo changed=false >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git config user.name python-kit-upgrade
+            git config user.email python-kit-upgrade@noreply.invalid
+            copier update --trust --defaults --conflict inline --vcs-ref "$target"
+            git add -A
+            conflicts=""
+            while IFS= read -r -d '' f; do
+              if [ -f "$f" ] && grep -qE '^(<<<<<<<|>>>>>>>)( |$)' "$f"; then conflicts+="$f "; fi
+            done < <(git diff --cached --name-only -z)
+
+            # The checks run over the update, outside the checkout (the logs must not be committed).
+            report=$(mktemp) && log=$(mktemp)
+            check() {
+              local name=$1; shift
+              if ! "$@" > "$log" 2>&1; then
+                printf '\n%s failed:\n\n%s\n' "$name" "$(tail -n 40 "$log")" >> "$report"
+              fi
+            }
+            if [ -f flake.nix ]; then
+              if [[ " $conflicts " == *" flake.nix "* ]]; then
+                printf '\nnix run .#graft: not run (flake.nix has conflicts)\n' >> "$report"
+              else
+                check "nix run .#graft" nix run .#graft
+                check "nix flake check" nix flake check
+              fi
+            fi
+            export UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3
+            check "uv run pytest" uv run pytest
+
+            git add -A
+            message=(-m "python-kit: $cur -> $target")
+            if [ -n "$conflicts" ]; then message+=(-m "conflicts: $conflicts"); fi
+            if [ -s "$report" ]; then message+=(-m "checks failed:$(<"$report")"); fi
+            git commit -q "${message[@]}"
+            git push -q --force origin "HEAD:refs/heads/$BRANCH"
+            echo changed=true >> "$GITHUB_OUTPUT"
+            if [ -n "$conflicts" ]; then echo "::error::conflicts in $conflicts. $BRANCH is pushed, and its PR will say so."; fi
+            if [ -s "$report" ]; then echo "::error::checks failed. $BRANCH is pushed, and its PR will say so."; fi
+            [ -z "$conflicts" ] && [ ! -s "$report" ]
+        run: |
+          nix shell "$NIXPKGS#copier" "$NIXPKGS#uv" "$NIXPKGS#python3" "$NIXPKGS#coreutils" "$NIXPKGS#gnugrep" \
+            "$NIXPKGS#gnused" --command bash -euo pipefail -c "$SCRIPT"
+
+  # Open the PR (or retitle the open one, which the push updated), saying what python-kit changed and whether
+  # the update merged cleanly and passed its checks. A fresh job, checked out at the default branch: it reads
+  # the pushed branch and python-kit's CHANGELOG as data and runs none of their code, so the PR token never
+  # meets code nobody has reviewed yet. It runs when the upgrade job pushed, even if that job failed.
+  pr:
+    needs: upgrade
+    if: ${{ !cancelled() && needs.upgrade.outputs.changed == 'true' }}
+    runs-on: nixos-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout the default branch
+        env:
+          SERVER: ${{ github.server_url }}
+          REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+          REF: ${{ github.event.repository.default_branch }}
+          TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git init -q .
+          git remote add origin "$REPO_URL.git"
+          git config "http.$SERVER/.extraheader" "Authorization: Basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)"
+          git fetch -q --no-tags origin "$REF"
+          git checkout -q --force --detach FETCH_HEAD
+
+      - name: Open (or update) the PR
+        env:
+          WEB: ${{ github.server_url }}/${{ github.repository }}
+          API: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
+          BASE: ${{ github.event.repository.default_branch }}
+          # The job token can push, but Forgejo (through 11 at least) refuses it when opening a PR on a private
+          # repo. A user's token in the Actions secret GRAFT_PR_TOKEN (the one graft-upgrade uses) opens the PR
+          # as that user.
+          PR_TOKEN: ${{ secrets.GRAFT_PR_TOKEN || github.token }}
+          SCRIPT: |
+            git fetch -q --no-tags origin "refs/heads/$BRANCH"
+            head=$(git rev-parse FETCH_HEAD)
+            if git merge-base --is-ancestor "$head" HEAD; then echo "python-kit: $BRANCH is already in $BASE"; exit 0; fi
+            compare="$WEB/compare/$BASE...$BRANCH"
+            # Opening a PR runs the repo's pull_request workflows from the PR's head, with its secrets: a branch
+            # that changes them is left for you to review and open.
+            workflows=$(git diff --no-renames --name-only HEAD..."$head" -- .forgejo .github | tr '\n' ' ')
+            if [ -n "$workflows" ]; then
+              echo "::error::this update changes CI workflows: $workflows. A PR would run them with the repo's secrets before anyone reads them, so none is opened: review the diff at $compare, then open the PR yourself."
+              exit 1
+            fi
+
+            # The commit message the upgrade job wrote. Untrusted text, only ever data.
+            title=$(git log -1 --format=%s "$head")
+            msg=$(git log -1 --format=%b "$head")
+            re='^python-kit: (v[^ ]+) -> (v[0-9]+\.[0-9]+\.[0-9]+)$'
+            [[ $title =~ $re ]] || { echo "::error::$BRANCH's commit isn't an upgrade: $title"; exit 1; }
+            from=${BASH_REMATCH[1]} to=${BASH_REMATCH[2]} from=${from%%-*}
+            conflicts=$(sed -n 's/^conflicts: //p' <<<"$msg")
+            failing=$(sed -n '/^checks failed:/,$p' <<<"$msg")
+
+            # python-kit's CHANGELOG sections from $to down to $from, read from upstream at $to.
+            src=$({ grep -m1 '^_src_path:' .copier-answers.yml || true; } | sed -E "s/^_src_path: *//; s/^['\"]//; s/['\"]$//")
+            notes=$( (unset PR_TOKEN; git fetch -q --depth=1 --no-tags "$src" "refs/tags/$to" && git show FETCH_HEAD:CHANGELOG.md) 2>/dev/null \
+              | awk -v to="## $to" -v from="## $from" '
+                  $0 == from || index($0, from " ") == 1 { exit }
+                  $0 == to || index($0, to " ") == 1 { p = 1 }
+                  p' | head -c 40000 | sed 's/^/> /') || true
+
+            [ -z "$conflicts" ] || title="[conflicts] $title"
+            [ -z "$failing" ] || title="[checks failing] $title"
+            body=$(mktemp) req=$(mktemp)
+            {
+              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/` re-grafted, then `nix flake check` and the tests.\n\n' "$to" "$from" "$to"
+              if [ -n "$conflicts" ]; then
+                printf '> [!WARNING]\n> **Conflicts** (inline markers) in: %s\nResolve them on this branch, or on one of your own made from it: the next run force-pushes `%s`.\n\n' "$conflicts" "$BRANCH"
+              fi
+              if [ -n "$failing" ]; then
+                printf '## Failing checks\n\n%s\n\n' "$(sed 's/^/    /' <<<"$failing")"
+              elif [ -z "$conflicts" ]; then
+                printf 'It merged cleanly, and the checks passed on the result.\n\n'
+              fi
+              printf 'Files the update skips (`_skip_if_exists`: the READMEs, the example code, the tests) keep your edits; python-kit'"'"'s migrations may have changed them (see the diff), and the Migration sections below say what is left to do by hand.\n\n'
+              printf '## What changed in python-kit\n\n'
+              printf "Text below is python-kit's, from its CHANGELOG at %s: read it as theirs.\n\n" "$to"
+              printf '%s\n' "${notes:-"(couldn't read it; see $src)"}"
+            } > "$body"
+            jq -n --arg head "$BRANCH" --arg base "$BASE" --arg title "$title" --rawfile body "$body" \
+              '{head: $head, base: $base, title: $title, body: $body}' > "$req"
+
+            # The token reaches curl as a header file on a pipe, never in a command line.
+            api() { curl -sS -w '\n%{http_code}' -H @<(printf 'Authorization: token %s\n' "$PR_TOKEN") \
+                      -H "Content-Type: application/json" "$@"; }
+            out=$(api "$API/pulls?state=open&limit=50"); code=${out##*$'\n'}; out=${out%$'\n'*}
+            [ "$code" = 200 ] || { echo "::error::listing PRs: HTTP $code"; exit 1; }
+            number=$(jq -r --arg b "$BRANCH" '[.[] | select(.head.ref == $b and .head.repo_id == .base.repo_id)][0].number // empty' <<<"$out")
+            if [ -n "$number" ]; then
+              out=$(jq '{title, body}' "$req" | api -X PATCH -d @- "$API/pulls/$number"); code=${out##*$'\n'}
+              if [ "$code" = 200 ] || [ "$code" = 201 ]; then echo "python-kit: PR #$number updated"
+              else echo "::warning::PR #$number is open and the push updated it, but its description couldn't be updated (HTTP $code)"; fi
+              exit 0
+            fi
+            out=$(api -X POST -d @- "$API/pulls" < "$req"); code=${out##*$'\n'}; out=${out%$'\n'*}
+            if [ "$code" = 201 ]; then jq -r .html_url <<<"$out"; exit 0; fi
+            if [ "$code" = 409 ]; then echo "python-kit: a PR is already open for $BRANCH; the push updated it"; exit 0; fi
+            echo "::error::opening the PR: HTTP $code. $BRANCH is pushed; open it at $compare"
+            [ "$code" != 404 ] || echo "::error::a 404 here is Forgejo refusing the job token: set the GRAFT_PR_TOKEN secret"
+            exit 1
+        run: |
+          nix shell "$NIXPKGS#curl" "$NIXPKGS#jq" "$NIXPKGS#coreutils" "$NIXPKGS#gnugrep" "$NIXPKGS#gnused" \
+            "$NIXPKGS#gawk" --command bash -euo pipefail -c "$SCRIPT"
