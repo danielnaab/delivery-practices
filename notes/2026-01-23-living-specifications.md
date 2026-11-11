@@ -8,7 +8,7 @@ graduated-to:
 
 # Living Specifications as Source of Truth
 
-> **Graduated**: This exploration has been synthesized into [docs/living-specifications/](../docs/living-specifications/). Retained as reasoning trail.
+> **Graduated**: This exploration has been synthesized into [docs/living-specifications/](../scions/living-specifications/docs/). Retained as reasoning trail.
 
 Exploring how to write specifications that serve as living documentation—never stale, collaborative, and integrated with agile delivery and AI-assisted development.
 

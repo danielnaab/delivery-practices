@@ -8,9 +8,9 @@ Practice areas for fast and safe software delivery, with particular focus on AI-
 
 ## Practice Areas
 
-### [Living Specifications](living-specifications/)
+### [Living Specifications](../scions/living-specifications/docs/)
 
-Spec-driven development using living specifications as the source of truth for system behavior. Includes format, verification approaches, and guides for writing and reviewing against specs.
+Spec-driven development using living specifications as the source of truth for system behavior. Includes format, verification approaches, and guides for writing and reviewing against specs. Maintained in the [living-specifications](https://github.com/danielnaab/living-specifications) repository and grafted into `scions/`; edit it there, not here.
 
 ### [Workflow](workflow/)
 

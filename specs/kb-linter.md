@@ -10,7 +10,7 @@ owners: [daniel]
 
 Enforce the content rules declared in [`knowledge-base.yaml`](../knowledge-base.yaml) — validating that content files have proper frontmatter status fields and provenance (Sources sections) where required.
 
-This gives [Principle #2](../docs/living-specifications/principles.md) ("source-of-truth requires enforcement") its mechanical backing: rules declared in configuration are checked by tooling, not just convention.
+This gives [Principle #2](../scions/living-specifications/docs/principles.md) ("source-of-truth requires enforcement") its mechanical backing: rules declared in configuration are checked by tooling, not just convention.
 
 ## Non-goals
 
@@ -83,7 +83,7 @@ Then no provenance violation is reported (provenance is optional for these paths
 - Only `.md` files are checked
 - README.md files are included (they carry status and may need provenance)
 - Files in subdirectories are included recursively
-- Skips: .git/, .graft/, .venv/, node_modules/, __pycache__/
+- Skips: .git/, .graft/, scions/, .venv/, node_modules/, __pycache__/
 - Does not scan: specs/, src/, tests/, notes/ (specs have their own lifecycle; code and tests don't need frontmatter; notes are ephemeral)
 
 ### Output structure
@@ -151,6 +151,6 @@ Example output:
 ## Sources
 
 - [`knowledge-base.yaml`](../knowledge-base.yaml) — the rules being enforced
-- [Living Specifications Principles](../docs/living-specifications/principles.md) — #2 (enforcement), #14 (fight tribal knowledge)
-- [Specification Format](../docs/living-specifications/format.md) — "Status is non-negotiable"
+- [Living Specifications Principles](../scions/living-specifications/docs/principles.md) — #2 (enforcement), #14 (fight tribal knowledge)
+- [Specification Format](../scions/living-specifications/docs/format.md) — "Status is non-negotiable"
 - [Backlink Scanner](backlink-scanner.md) — sibling tool, structural patterns to follow

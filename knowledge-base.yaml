@@ -7,12 +7,15 @@ entrypoints:
   agent: CLAUDE.md
 
 meta:
-  entrypoint: ".graft/meta-knowledge-base/docs/meta.md"
+  entrypoint: "scions/meta-knowledge-base/README.md"
 
 imports:
   - kind: local
-    path: .graft/meta-knowledge-base
-    entrypoint: knowledge-base.yaml
+    path: scions/meta-knowledge-base
+    relationship: foundational
+  - kind: local
+    path: scions/living-specifications
+    relationship: foundational
 
 paths:
   docs: docs
@@ -30,4 +33,4 @@ rules:
     requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
   writes:
     allow: ["docs/**", "notes/**", "specs/**", "src/**", "tests/**"]
-    deny: ["secrets/**", "credentials/**", ".graft/**"]
+    deny: ["secrets/**", "credentials/**", "scions/**"]

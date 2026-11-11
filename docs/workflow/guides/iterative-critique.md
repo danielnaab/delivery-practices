@@ -84,16 +84,16 @@ The human provides judgment; the AI provides thoroughness.
 
 ## Integration with Other Playbooks
 
-- **Writing specs** → Build phase uses the [writing-specs playbook](../../living-specifications/guides/writing-specs.md)
-- **Reviewing against specs** → Critique phase uses the [review checklist](../../living-specifications/guides/reviewing-against-specs.md)
+- **Writing specs** → Build phase uses the [writing-specs playbook](../../../scions/living-specifications/docs/guides/writing-specs.md)
+- **Reviewing against specs** → Critique phase uses the [review checklist](../../../scions/living-specifications/docs/guides/reviewing-against-specs.md)
 - **Session logging** → Each loop's findings feed the [session note](session-logging.md)
 
 ## Related
 
-- [Writing specs](../../living-specifications/guides/writing-specs.md) — spec-first development (Step 9 is a mini-critique)
-- [Reviewing against specs](../../living-specifications/guides/reviewing-against-specs.md) — structured review checklist
+- [Writing specs](../../../scions/living-specifications/docs/guides/writing-specs.md) — spec-first development (Step 9 is a mini-critique)
+- [Reviewing against specs](../../../scions/living-specifications/docs/guides/reviewing-against-specs.md) — structured review checklist
 - [Session logging](session-logging.md) — capturing what each loop found
-- [Principles](../../living-specifications/principles.md) — #5 (low ceremony), #16 (dogfooding)
+- [Principles](../../../scions/living-specifications/docs/principles.md) — #5 (low ceremony), #16 (dogfooding)
 
 ## Sources
 

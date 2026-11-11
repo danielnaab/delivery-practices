@@ -20,7 +20,7 @@ Personal exploration of delivery practices for:
 
 | Directory | Practice Area |
 |-----------|---------------|
-| [`docs/living-specifications/`](docs/living-specifications/) | Spec-driven development |
+| [`scions/living-specifications/`](scions/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
 | [`docs/workflow/`](docs/workflow/) | Development workflow practices |
 | [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
 | `notes/` | Explorations, working notes |
@@ -35,7 +35,7 @@ Personal exploration of delivery practices for:
 
 ## Practice Areas
 
-- **[Living Specifications](docs/living-specifications/)** — Specs as source of truth for system behavior
+- **[Living Specifications](scions/living-specifications/docs/)** — Specs as source of truth for system behavior
 - **[Workflow](docs/workflow/)** — Development workflow practices (iterative critique, session logging, PR descriptions)
 
 ## Tooling
@@ -63,7 +63,7 @@ Validator tools support `--report-only` for informational output (always exit 0)
 
 ## Knowledge Base System
 
-Follows [meta-knowledge-base](.graft/meta-knowledge-base/docs/meta.md) conventions:
+Follows [meta-knowledge-base](scions/meta-knowledge-base/README.md) conventions:
 - Evidence-driven evolution
 - Lifecycle states: draft → working → stable → deprecated
 - Provenance for all practice recommendations

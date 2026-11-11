@@ -36,7 +36,7 @@ BINARY_EXTENSIONS = frozenset(
     }
 )
 
-SKIP_DIRS = frozenset({".git", ".graft", ".venv", "node_modules", "__pycache__"})
+SKIP_DIRS = frozenset({".git", ".graft", "scions", ".venv", "node_modules", "__pycache__"})
 
 
 @dataclass

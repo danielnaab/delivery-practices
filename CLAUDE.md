@@ -5,7 +5,7 @@ You are working in the **delivery-practices knowledge base** - a repository for 
 ## Before Making Changes
 
 1. Read [knowledge-base.yaml](knowledge-base.yaml) for KB configuration
-2. Follow [meta knowledge base conventions](.graft/meta-knowledge-base/docs/meta.md)
+2. Follow [meta knowledge base conventions](scions/meta-knowledge-base/README.md)
 3. Understand key policies:
    - **Authority**: docs/ canonical, notes/ exploratory
    - **Provenance**: Ground practice recommendations in sources
@@ -32,7 +32,7 @@ This KB focuses on **delivery practices for AI-assisted development**:
 
 ## Workflow: Plan → Patch → Verify
 
-Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-workflow.md):
+Follow the [agent workflow pattern](scions/meta-knowledge-base/docs/playbooks/agent-workflow.md):
 
 1. **Plan**: State intent, files to touch, uncertainties
 2. **Patch**: Make minimal changes to achieve goal
@@ -44,7 +44,7 @@ Follow the [agent workflow pattern](.graft/meta-knowledge-base/playbooks/agent-w
 
 | Directory | Practice Area |
 |-----------|---------------|
-| [`docs/living-specifications/`](docs/living-specifications/) | Spec-driven development |
+| [`scions/living-specifications/`](scions/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
 | [`docs/workflow/`](docs/workflow/) | Development workflow practices |
 | [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
 | `notes/` | Explorations, working notes ("thinking about this") |
@@ -68,7 +68,7 @@ Each practice area contains:
 
 Consult [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes` for the authoritative allow/deny list.
 
-In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to managed directories (`.graft/`) or sensitive paths (`secrets/`, `credentials/`).
+In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to managed directories (`scions/`) or sensitive paths (`secrets/`, `credentials/`).
 
 ## Provenance Requirements
 
@@ -99,7 +99,7 @@ When updating this KB:
 ## Current State
 
 Practice areas established:
-- **[Living specifications](docs/living-specifications/)** — spec-driven development
+- **[Living specifications](scions/living-specifications/docs/)** — spec-driven development
 - **[Workflow](docs/workflow/)** — development workflow practices (iterative critique, session logging, PR descriptions)
 
 Tooling (dogfooding):

@@ -209,11 +209,11 @@ For larger efforts spanning multiple PRs, see the [PR Reviewability exploration]
 ## Related
 
 - [Session logging](session-logging.md) — session notes as PR source material
-- [Reviewing against specs](../../living-specifications/guides/reviewing-against-specs.md) — the reviewer's perspective
+- [Reviewing against specs](../../../scions/living-specifications/docs/guides/reviewing-against-specs.md) — the reviewer's perspective
 - [Iterative critique](iterative-critique.md) — build-critique-fix produces session material
 
 ## Sources
 
 - [PR Reviewability exploration](../../../notes/2026-01-24-pr-reviewability.md) — full design rationale and worked examples
 - Direct observation: Authoring descriptions for delivery-practices v0.2.0 changes
-- [Comprehension UX principles](../../living-specifications/comprehension.md) — progressive disclosure applied to review
+- [Comprehension UX principles](../../../scions/living-specifications/docs/comprehension.md) — progressive disclosure applied to review

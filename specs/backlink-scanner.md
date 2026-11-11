@@ -143,6 +143,6 @@ Then the scanner includes that spec path in an orphans array in the output
 
 ## Sources
 
-- [Verification and Drift Detection](../docs/living-specifications/verification.md) - backlink annotation patterns
-- [Artifact Relationships](../docs/living-specifications/relationships.md) - three-layer model, upstream references
+- [Verification and Drift Detection](../scions/living-specifications/docs/verification.md) - backlink annotation patterns
+- [Artifact Relationships](../scions/living-specifications/docs/relationships.md) - three-layer model, upstream references
 - Personal experience: backlink-based navigation in knowledge bases

@@ -1,6 +1,6 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
 _commit: 3eac821
-_src_path: .graft/python-starter
+_src_path: https://github.com/danielnaab/python-starter
 author_email: daniel@example.com
 author_name: Daniel
 include_dev_scripts: true

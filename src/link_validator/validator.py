@@ -17,7 +17,7 @@ FENCE_PATTERN = re.compile(r"^(`{3,}|~{3,})")
 # Matches inline code spans (backtick-wrapped)
 INLINE_CODE_PATTERN = re.compile(r"(`+)(.+?)\1")
 
-SKIP_DIRS = frozenset({".git", ".graft", ".venv", "node_modules", "__pycache__"})
+SKIP_DIRS = frozenset({".git", ".graft", "scions", ".venv", "node_modules", "__pycache__"})
 
 CONTENT_DIRS = ("docs", "policies", "playbooks", "notes", "specs")
 

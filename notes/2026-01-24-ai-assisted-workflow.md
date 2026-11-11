@@ -96,4 +96,4 @@ Friction during use became improvement signals: missing steps got added, unclear
 
 - Direct observation: Building delivery-practices tooling (2026-01-23 to 2026-01-24)
 - Personal experience: Multiple AI-assisted development sessions (2025-2026)
-- Related: [principles.md](../docs/living-specifications/principles.md) principles 2, 6, 16
+- Related: [principles.md](../scions/living-specifications/docs/principles.md) principles 2, 6, 16

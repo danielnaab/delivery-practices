@@ -14,7 +14,7 @@ FRONTMATTER_PATTERN = re.compile(r"^---\s*\n(.*?)^---\s*\n", re.DOTALL | re.MULT
 STATUS_PATTERN = re.compile(r"^status:\s*(.+?)\s*$", re.MULTILINE)
 SOURCES_HEADING_PATTERN = re.compile(r"^## Sources\s*$", re.MULTILINE)
 
-SKIP_DIRS = frozenset({".git", ".graft", ".venv", "node_modules", "__pycache__"})
+SKIP_DIRS = frozenset({".git", ".graft", "scions", ".venv", "node_modules", "__pycache__"})
 
 CONTENT_DIRS = ("docs", "policies", "playbooks")
 

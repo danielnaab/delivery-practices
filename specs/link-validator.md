@@ -47,7 +47,7 @@ Then it resolves to docs/living-specifications/format.md
 ```
 
 ```gherkin
-Given a link with a fragment [text](../docs/living-specifications/principles.md#principle-2)
+Given a link with a fragment [text](../scions/living-specifications/docs/principles.md#principle-2)
 When the validator resolves the path
 Then it strips the fragment and checks only the file path: docs/living-specifications/principles.md
 ```
@@ -77,7 +77,7 @@ Then it reports a "broken-link" violation with the source file, link target, and
 - Content directories: docs/, notes/, specs/
 - Only `.md` files are scanned for links
 - Files in subdirectories are included recursively
-- Skips: .git/, .graft/, .venv/, node_modules/, __pycache__/
+- Skips: .git/, .graft/, scions/, .venv/, node_modules/, __pycache__/
 
 ### Output structure
 
@@ -143,5 +143,5 @@ Example output:
 
 - [KB Linter](kb-linter.md) — sibling tool, structural patterns to follow
 - [Backlink Scanner](backlink-scanner.md) — sibling tool, completes the integrity trio
-- [Verification and Drift Detection](../docs/living-specifications/verification.md) — link validation as detection approach
+- [Verification and Drift Detection](../scions/living-specifications/docs/verification.md) — link validation as detection approach
 - Exploration: link pattern analysis of this repository (2026-01-24)

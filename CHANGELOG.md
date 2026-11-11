@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Changed (2026-11-11: graft v2; living-specifications is a dependency, not a copy)
+- Removed `docs/living-specifications/`, the pre-extraction copy of what is now the
+  [living-specifications](https://github.com/danielnaab/living-specifications) repository. It is grafted at v1.0.2 into
+  `scions/living-specifications/`, and every link now points into that copy. The repository's text was newer in every
+  file that differed, so nothing was lost.
+- Dependencies moved from graft v0 (`graft.yaml`, `graft.lock`, `.graft/` submodules tracking `main`) to graft v2
+  (`flake.nix`, committed `scions/`, pinned tags): meta-knowledge-base v1.1.0, living-specifications v1.0.2,
+  python-starter v1.3.0. graft's check and weekly upgrade workflows are in `.forgejo/workflows/`.
+- `knowledge-base.yaml` imports and write rules point at `scions/`; `.copier-answers.yml` `_src_path` is python-starter's
+  GitHub URL (was `.graft/python-starter`), so `copier update` works from any checkout.
+- The link validator, backlink scanner and KB linter skip `scions/`, as they skip `.graft/`.
+
 ### Changed
 - Reorganized docs/ into practice areas: living-specifications/ and workflow/
 - Merged policies/ and playbooks/ into practice area subdirectories (principles.md, guides/)
