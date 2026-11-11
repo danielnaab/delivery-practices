@@ -7,11 +7,11 @@ entrypoints:
   agent: CLAUDE.md
 
 meta:
-  entrypoint: "scions/meta-knowledge-base/README.md"
+  entrypoint: "scions/knowledge-base-kit/README.md"
 
 imports:
   - kind: local
-    path: scions/meta-knowledge-base
+    path: scions/knowledge-base-kit
     relationship: foundational
   - kind: local
     path: scions/living-specifications

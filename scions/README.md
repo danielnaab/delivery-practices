@@ -8,6 +8,6 @@ them. To upgrade: `nix run .#graft upgrade` (or change the tag in `flake.nix`, t
 
 | Scion | Commit |
 |---|---|
+| [knowledge-base-kit](knowledge-base-kit/) | `f95fa544dbd92d7ebba36ef7d4eb6c8bfb8a28f8` |
 | [living-specifications](living-specifications/) | `3dba1ae2243074bf344cdf5464f7f5f3d311bc63` |
-| [meta-knowledge-base](meta-knowledge-base/) | `8223746e072f3effdc7057e9869e986c02fc55f7` |
-| [python-starter](python-starter/) | `391188f7133a38aeec0cb4daafc603b60a276a79` |
+| [python-kit](python-kit/) | `5f797be15ec9cde7e4d1c9c4050a351230d962b5` |

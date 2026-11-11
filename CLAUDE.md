@@ -5,7 +5,7 @@ You are working in the **delivery-practices knowledge base** - a repository for 
 ## Before Making Changes
 
 1. Read [knowledge-base.yaml](knowledge-base.yaml) for KB configuration
-2. Follow [meta knowledge base conventions](scions/meta-knowledge-base/README.md)
+2. Follow [meta knowledge base conventions](scions/knowledge-base-kit/README.md)
 3. Understand key policies:
    - **Authority**: docs/ canonical, notes/ exploratory
    - **Provenance**: Ground practice recommendations in sources
@@ -32,7 +32,7 @@ This KB focuses on **delivery practices for AI-assisted development**:
 
 ## Workflow: Plan → Patch → Verify
 
-Follow the [agent workflow pattern](scions/meta-knowledge-base/docs/playbooks/agent-workflow.md):
+Follow the [agent workflow pattern](scions/knowledge-base-kit/docs/playbooks/agent-workflow.md):
 
 1. **Plan**: State intent, files to touch, uncertainties
 2. **Patch**: Make minimal changes to achieve goal

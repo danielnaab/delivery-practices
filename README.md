@@ -63,7 +63,7 @@ Validator tools support `--report-only` for informational output (always exit 0)
 
 ## Knowledge Base System
 
-Follows [meta-knowledge-base](scions/meta-knowledge-base/README.md) conventions:
+Follows [knowledge-base-kit](scions/knowledge-base-kit/README.md) conventions:
 - Evidence-driven evolution
 - Lifecycle states: draft → working → stable → deprecated
 - Provenance for all practice recommendations

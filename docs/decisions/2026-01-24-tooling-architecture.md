@@ -8,7 +8,7 @@ status: working
 
 ## Context
 
-We adopted [python-starter](../../scions/python-starter/) for scaffolding: `pyproject.toml`, ruff, pytest, uv. The template also provides architecture layers (domain models, protocols, services, adapters, context objects) designed for larger applications.
+We adopted [python-starter](../../scions/python-kit/) for scaffolding: `pyproject.toml`, ruff, pytest, uv. The template also provides architecture layers (domain models, protocols, services, adapters, context objects) designed for larger applications.
 
 The backlink scanner is a single-purpose CLI tool: walk files, match annotations, report results. Its complexity doesn't warrant protocol hierarchies, adapter layers, or context objects today.
 
@@ -51,5 +51,5 @@ Reassess this decision when any of these occur:
 
 ## Sources
 
-- `scions/python-starter/` — template providing the architecture patterns
+- `scions/python-kit/` (python-starter then) — template providing the architecture patterns
 - Backlink scanner spec: [`specs/backlink-scanner.md`](../../specs/backlink-scanner.md)

@@ -5,9 +5,9 @@
     graft.url = "github:danielnaab/graft/v2.9.0";
 
     # Each `flake = false` input is a scion, grafted into scions/<name>/ (https://github.com/danielnaab/graft).
-    meta-knowledge-base = { url = "github:danielnaab/meta-knowledge-base/v1.1.0"; flake = false; };
+    knowledge-base-kit = { url = "github:danielnaab/knowledge-base-kit/v2.0.0"; flake = false; };
     living-specifications = { url = "github:danielnaab/living-specifications/v1.0.2"; flake = false; };
-    python-starter = { url = "github:danielnaab/python-starter/v1.3.0"; flake = false; };
+    python-kit     = { url = "github:danielnaab/python-kit/v2.0.1"; flake = false; };
   };
 
   outputs = inputs: inputs.graft.lib.mkFlake { inherit inputs; };
