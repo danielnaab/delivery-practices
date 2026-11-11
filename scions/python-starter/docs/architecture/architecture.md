@@ -29,7 +29,6 @@ Services are **pure functions** taking `ServiceContext` as first parameter:
 class ServiceContext:
     repository: Repository[Entity]
 
-
 # services/example_service.py.jinja
 def create_example(ctx: ServiceContext, name: str, value: int) -> Entity:
     entity = Entity(name=EntityName(text=name), value=EntityValue(amount=value))

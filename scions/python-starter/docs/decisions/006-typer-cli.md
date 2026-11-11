@@ -33,10 +33,8 @@ The CLI is a thin adapter over services:
 # cli/main.py.jinja
 app = typer.Typer()
 
-
 def get_context() -> ServiceContext:
     return ServiceContext(repository=InMemoryRepository[Entity]())
-
 
 @app.command()
 def create(name: str, value: int) -> None:

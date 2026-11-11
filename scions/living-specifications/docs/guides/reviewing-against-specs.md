@@ -78,7 +78,8 @@ If the project uses backlink annotations, check:
 ```python
 # spec: docs/specs/auth.md
 # spec-section: Behavior/Login
-def login(credentials): ...
+def login(credentials):
+    ...
 ```
 
 - Is the backlink accurate? (Does this code actually implement that spec section?)
