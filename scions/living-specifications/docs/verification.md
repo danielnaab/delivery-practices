@@ -20,8 +20,7 @@ Implementation annotates which spec it implements:
 ```python
 # spec: docs/specs/auth.md
 # spec-section: Behavior/Login
-def login(credentials):
-    ...
+def login(credentials): ...
 ```
 
 Tools can then:
