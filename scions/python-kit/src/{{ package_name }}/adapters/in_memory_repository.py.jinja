@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """In-memory repository — dict-backed storage for development and testing.
 
 Simple in-memory storage using a dictionary.
@@ -88,27 +87,3 @@ class InMemoryRepository(Generic[T]):
         Useful for testing.
         """
         self._storage.clear()
-{% else -%}
-"""Repository implementations.
-
-Implement your repository adapters here. They should satisfy the Repository
-protocol from the domain layer.
-
-Example:
-    from typing import Generic, TypeVar
-
-    T = TypeVar("T")
-
-    class PostgresRepository(Generic[T]):
-        def __init__(self, connection_string: str):
-            self.connection_string = connection_string
-
-        def save(self, entity: T) -> None:
-            # Implementation using psycopg2 or SQLAlchemy
-            pass
-
-        def get(self, entity_id: str) -> T | None:
-            # Implementation
-            pass
-"""
-{% endif -%}

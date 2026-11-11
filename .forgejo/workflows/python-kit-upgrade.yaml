@@ -75,6 +75,19 @@ jobs:
             git config user.name python-kit-upgrade
             git config user.email python-kit-upgrade@noreply.invalid
             copier update --trust --defaults --conflict inline --vcs-ref "$target"
+
+            # flake.nix is the project's (copier skips it): move its python-kit pin, and only that, to the
+            # commit $target names. graft-upgrade moves graft and the other pins.
+            if [ -f flake.nix ]; then
+              refs=$(git ls-remote "$src" "refs/tags/$target" "refs/tags/$target^{}")
+              sha=$(awk -v t="refs/tags/$target" '$2 == t "^{}" { p = $1 } $2 == t { l = $1 } END { print (p ? p : l) }' <<<"$refs")
+              [[ $sha =~ ^[0-9a-f]{40}$ ]] || { echo "::error::can't resolve python-kit $target to a commit at $src"; exit 1; }
+              pin='^([^#]*(^|[^[:alnum:]_])url[[:space:]]*=[[:space:]]*"github:danielnaab/python-kit/)[^"]*"'
+              n=$(grep -cE "$pin" flake.nix || true)
+              [ "$n" = 1 ] || { echo "::error::flake.nix has $n lines like url = \"github:danielnaab/python-kit/...\", not one: set the python-kit input to $sha by hand"; exit 1; }
+              sed -i -E "s#$pin#\1$sha\"#" flake.nix
+              echo "python-kit: flake.nix pins python-kit $target ($sha)"
+            fi
             git add -A
             conflicts=""
             while IFS= read -r -d '' f; do
@@ -98,7 +111,9 @@ jobs:
               fi
             fi
             export UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3
-            check "uv run pytest" uv run pytest
+            # Exit 5 is "no tests ran": a project without example code may have none yet.
+            pytest_() { local rc=0; uv run pytest "$@" || rc=$?; [ "$rc" = 0 ] || [ "$rc" = 5 ]; }
+            check "uv run pytest" pytest_
 
             git add -A
             message=(-m "python-kit: $cur -> $target")
@@ -112,7 +127,7 @@ jobs:
             [ -z "$conflicts" ] && [ ! -s "$report" ]
         run: |
           nix shell "$NIXPKGS#copier" "$NIXPKGS#uv" "$NIXPKGS#python3" "$NIXPKGS#coreutils" "$NIXPKGS#gnugrep" \
-            "$NIXPKGS#gnused" --command bash -euo pipefail -c "$SCRIPT"
+            "$NIXPKGS#gnused" "$NIXPKGS#gawk" --command bash -euo pipefail -c "$SCRIPT"
 
   # Open the PR (or retitle the open one, which the push updated), saying what python-kit changed and whether
   # the update merged cleanly and passed its checks. A fresh job, checked out at the default branch: it reads
@@ -190,7 +205,7 @@ jobs:
               elif [ -z "$conflicts" ]; then
                 printf 'It merged cleanly, and the checks passed on the result.\n\n'
               fi
-              printf 'Files the update skips (`_skip_if_exists`: the READMEs, the example code, the tests) keep your edits; python-kit'"'"'s migrations may have changed them (see the diff), and the Migration sections below say what is left to do by hand.\n\n'
+              printf 'Files the update skips (`_skip_if_exists`: the READMEs, `flake.nix`, whose python-kit pin alone this run moved, the example code and its tests) keep your edits; python-kit'"'"'s migrations may have changed them (see the diff), and the Migration sections below say what is left to do by hand.\n\n'
               printf '## What changed in python-kit\n\n'
               printf "Text below is python-kit's, from its CHANGELOG at %s: read it as theirs.\n\n" "$to"
               printf '%s\n' "${notes:-"(couldn't read it; see $src)"}"

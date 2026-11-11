@@ -72,17 +72,17 @@
     "python-kit": {
       "flake": false,
       "locked": {
-        "lastModified": 1794427216,
-        "narHash": "sha256-/u8wJ8uAB3s6+b80vDtzt89/bRFBSZF3EfNr08Yjbb8=",
+        "lastModified": 1794437856,
+        "narHash": "sha256-8FUafqrUyU5xLR8ZM+MavzHvwkuS+0jnMSghGjTd+uM=",
         "owner": "danielnaab",
         "repo": "python-kit",
-        "rev": "b42f55f1d61c46d4cae974395c5b077fc0000039",
+        "rev": "934f9c265b50455e3aa76aad9d196d2a9d92ed98",
         "type": "github"
       },
       "original": {
         "owner": "danielnaab",
         "repo": "python-kit",
-        "rev": "b42f55f1d61c46d4cae974395c5b077fc0000039",
+        "rev": "934f9c265b50455e3aa76aad9d196d2a9d92ed98",
         "type": "github"
       }
     },

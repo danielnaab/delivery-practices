@@ -10,4 +10,4 @@ them. To upgrade: `nix run .#graft upgrade` (or change the tag in `flake.nix`, t
 |---|---|
 | [knowledge-base-kit](knowledge-base-kit/) | `f95fa544dbd92d7ebba36ef7d4eb6c8bfb8a28f8` |
 | [living-specifications](living-specifications/) | `3dba1ae2243074bf344cdf5464f7f5f3d311bc63` |
-| [python-kit](python-kit/) | `b42f55f1d61c46d4cae974395c5b077fc0000039` |
+| [python-kit](python-kit/) | `934f9c265b50455e3aa76aad9d196d2a9d92ed98` |

@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Integration tests for InMemoryRepository."""
 
 import pytest
@@ -158,22 +157,3 @@ class TestInMemoryRepository:
         repo.save(entity)
         retrieved = repo.get(entity.id)
         assert retrieved == entity
-{% else -%}
-"""Integration tests for adapters.
-
-Add integration tests using real adapter implementations.
-
-Example:
-    from {{ package_name }}.adapters.in_memory_repository import PostgresRepository
-    from {{ package_name }}.domain.entity import User
-
-    def test_postgres_repository_save_and_get():
-        repo = PostgresRepository(connection_string="postgresql://...")
-        user = User(email="test@example.com", name="Test")
-
-        repo.save(user)
-        retrieved = repo.get(user.id)
-
-        assert retrieved == user
-"""
-{% endif -%}

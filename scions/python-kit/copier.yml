@@ -1,7 +1,8 @@
 # Copier template configuration for python-kit
 # This file defines template variables and generation settings
 
-_min_copier_version: "9.3.0"  # migrations in the command/when form
+_min_copier_version: "9.10.3"  # an update applies the new _exclude to the old render too (9.10.3; before, a file
+# newly excluded, such as docs/agents.md, looked removed and was deleted); `_copier_operation` (9.6.0)
 
 # Answers file configuration
 _answers_file: .copier-answers.yml
@@ -39,22 +40,45 @@ _exclude:
   - knowledge-base.yaml  # Template KB config, not for generated projects
   - "{% if not include_github_actions %}.github{% endif %}"
   - "{% if not include_dev_scripts %}scripts{% endif %}"
+  # Generated once: an update neither changes docs/agents.md nor brings it back once deleted (with
+  # _skip_if_exists alone, it came back on every update). It is in _skip_if_exists too, for recopy,
+  # which runs as a copy.
+  - "{% if _copier_operation == 'update' %}docs/agents.md{% endif %}"
+  # The example code and its tests, only with include_example_code (they once rendered as docstring-only
+  # stubs, which every `copier update` recreated in a project that had deleted them)
+  - "{% if not include_example_code %}src/*/domain/entity.py*{% endif %}"
+  - "{% if not include_example_code %}src/*/domain/errors.py*{% endif %}"
+  - "{% if not include_example_code %}src/*/domain/repository.py*{% endif %}"
+  - "{% if not include_example_code %}src/*/adapters/in_memory_repository.py*{% endif %}"
+  - "{% if not include_example_code %}src/*/cli/commands/example.py*{% endif %}"
+  - "{% if not include_example_code %}src/*/services/example_service.py*{% endif %}"
+  - "{% if not include_example_code %}tests/conftest.py*{% endif %}"
+  - "{% if not include_example_code %}tests/fakes/fake_repository.py*{% endif %}"
+  - "{% if not include_example_code %}tests/unit/test_entity.py*{% endif %}"
+  - "{% if not include_example_code %}tests/unit/test_example_service.py*{% endif %}"
+  - "{% if not include_example_code %}tests/integration/test_in_memory_repository.py*{% endif %}"
 
 # Files users will modify - protect during updates
 _skip_if_exists:
-  - src/{{ package_name }}/domain/entity.py
-  - src/{{ package_name }}/services/example_service.py
-  - src/{{ package_name }}/adapters/in_memory_repository.py
-  - src/{{ package_name }}/cli/commands/example.py
-  - tests/unit/*.py
-  - tests/integration/*.py
+  # The example code, which you rewrite: only with include_example_code. Without it there is no example code,
+  # and a file listed here that a project deleted would come back on every `copier update`.
+  - "{% if include_example_code %}src/{{ package_name }}/domain/entity.py{% endif %}"
+  - "{% if include_example_code %}src/{{ package_name }}/services/example_service.py{% endif %}"
+  - "{% if include_example_code %}src/{{ package_name }}/adapters/in_memory_repository.py{% endif %}"
+  - "{% if include_example_code %}src/{{ package_name }}/cli/commands/example.py{% endif %}"
+  - "{% if include_example_code %}tests/unit/*.py{% endif %}"
+  - "{% if include_example_code %}tests/integration/*.py{% endif %}"
   - README.md  # Users will customize
-  - docs/agents.md  # Project-specific agent entrypoint
+  - docs/agents.md  # Project-specific agent entrypoint (and _exclude on update, above)
   - knowledge-base.yaml  # Project-specific KB config
   # graft's workflows: generated once, then graft-upgrade alone moves them with graft's pin (their
   # `# managed by graft` line), so a python-kit update never conflicts with or reverts them.
   - .forgejo/workflows/graft-check.yaml
   - .forgejo/workflows/graft-upgrade.yaml
+  # flake.nix is the project's: graft-upgrade moves graft and its other pins, and python-kit-upgrade (or the
+  # v2.2.0 migration, or you, after a manual update) moves the python-kit pin alone. A python-kit update that
+  # rewrote it conflicted with every project whose flake.nix had changed.
+  - flake.nix
 
 # Template questions (user prompts)
 
@@ -249,4 +273,26 @@ _migrations:
           if new != text:
               path.write_text(new, encoding="utf-8")
               print(f"python-kit v2.1.0 migration: {name}: ruff fixes applied")
+      EOF
+
+  # v2.2.0 put flake.nix in _skip_if_exists, so from here on the update leaves it alone, and the
+  # python-kit-upgrade workflow moves the python-kit pin. The workflow that runs this update is still
+  # v2.1.0's, which doesn't, so this moves the pin once: to the commit this update takes.
+  - version: v2.2.0
+    when: "{{ _stage == 'after' and graft_docs }}"
+    command: |
+      "{{ _copier_python }}" - <<'EOF'
+      import pathlib, re, sys
+      path = pathlib.Path("flake.nix")
+      if path.is_symlink() or not path.is_file():
+          sys.exit(0)
+      pin = re.compile(r'^([^#\n]*\burl\s*=\s*"github:danielnaab/python-kit/)[^"]*(")', re.M)
+      text = path.read_text(encoding="utf-8")
+      if len(pin.findall(text)) != 1:
+          sys.exit('python-kit v2.2.0 migration: flake.nix has no single url = "github:danielnaab/python-kit/..." '
+                   "line: set the python-kit input to {{ _copier_conf.vcs_ref_hash }} by hand")
+      new = pin.sub(r"\g<1>{{ _copier_conf.vcs_ref_hash }}\g<2>", text)
+      if new != text:
+          path.write_text(new, encoding="utf-8")
+          print("python-kit v2.2.0 migration: flake.nix: python-kit pinned to {{ _copier_conf.vcs_ref_hash }}")
       EOF

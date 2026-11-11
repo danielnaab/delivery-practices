@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Unit tests for Entity, EntityName, and EntityValue."""
 
 import pytest
@@ -174,21 +173,3 @@ class TestEntity:
         assert "test-id" in repr_str
         assert "Test" in repr_str
         assert "100" in repr_str
-{% else -%}
-"""Unit tests for domain entities.
-
-Add tests for your domain entities and value objects.
-
-Example:
-    from {{ package_name }}.domain.entity import User
-    from {{ package_name }}.domain.errors import ValidationError
-
-    def test_create_user():
-        user = User(email="test@example.com", name="Test User")
-        assert user.email == "test@example.com"
-
-    def test_invalid_email_raises_error():
-        with pytest.raises(ValidationError):
-            User(email="invalid", name="Test")
-"""
-{% endif -%}

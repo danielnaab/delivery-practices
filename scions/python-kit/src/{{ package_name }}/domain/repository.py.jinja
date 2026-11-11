@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Repository protocol — generic persistence interface.
 
 Defines interface for entity storage using typing.Protocol for structural typing.
@@ -64,19 +63,3 @@ class Repository(Protocol, Generic[T]):
             True if entity was deleted, False if not found
         """
         ...
-{% else -%}
-"""Repository protocol — generic persistence interface.
-
-Define your repository protocols here using typing.Protocol for structural typing.
-Ports belong to the domain: the domain defines what it needs from the outside world.
-
-Example:
-    from typing import Generic, Protocol, TypeVar
-
-    T = TypeVar("T")
-
-    class Repository(Protocol, Generic[T]):
-        def save(self, entity: T) -> None: ...
-        def get(self, entity_id: str) -> T | None: ...
-"""
-{% endif -%}

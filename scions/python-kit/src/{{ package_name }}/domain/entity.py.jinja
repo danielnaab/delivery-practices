@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Entity — domain object with identity.
 
 Entities are distinguished by their ID rather than attributes.
@@ -184,25 +183,3 @@ class Entity:
             f"Entity(id={self.id!r}, name={self.name.text!r}, "
             f"value={self.value.amount})"
         )
-{% else -%}
-"""Entity — domain object with identity.
-
-Add your domain entities here. Entities have identity (ID) and are distinguished
-by that ID rather than their attributes.
-
-Example:
-    from dataclasses import dataclass, field
-    from uuid import uuid4
-
-    @dataclass
-    class User:
-        email: str
-        name: str
-        id: str = field(default_factory=lambda: str(uuid4()))
-
-        def __eq__(self, other: object) -> bool:
-            if not isinstance(other, User):
-                return NotImplemented
-            return self.id == other.id
-"""
-{% endif -%}

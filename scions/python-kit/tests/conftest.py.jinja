@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Pytest configuration and fixtures.
 
 Shared fixtures available to all tests.
@@ -48,20 +47,3 @@ def test_context(fake_repository: FakeRepository[Entity]) -> ServiceContext:
     return ServiceContext(
         repository=fake_repository,
     )
-{% else -%}
-"""Pytest configuration and fixtures.
-
-Add your test fixtures here.
-
-Example:
-    import pytest
-    from {{ package_name }}.services.context import ServiceContext
-    from tests.fakes.fake_repository import FakeRepository
-
-    @pytest.fixture
-    def test_context() -> ServiceContext:
-        return ServiceContext(
-            user_repository=FakeRepository()
-        )
-"""
-{% endif -%}

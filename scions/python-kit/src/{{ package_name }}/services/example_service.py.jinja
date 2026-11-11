@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Example service functions demonstrating functional service pattern.
 
 Service functions are pure functions taking ServiceContext as first parameter.
@@ -93,27 +92,3 @@ def list_examples(
         5
     """
     return ctx.repository.list_all()
-{% else -%}
-"""Service functions - business logic as pure functions.
-
-Define your service functions here. Each function should:
-1. Take ServiceContext as first parameter
-2. Be a pure function (no hidden state)
-3. Use dependencies from context
-4. Return values or raise exceptions
-
-Example:
-    from {{ package_name }}.services.context import ServiceContext
-    from {{ package_name }}.domain.entity import User
-
-    def create_user(
-        ctx: ServiceContext,
-        email: str,
-        name: str,
-    ) -> User:
-        \"\"\"Create and persist a new user.\"\"\"
-        user = User(email=email, name=name)
-        ctx.user_repository.save(user)
-        return user
-"""
-{% endif -%}

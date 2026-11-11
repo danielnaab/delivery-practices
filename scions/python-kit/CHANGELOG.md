@@ -7,8 +7,69 @@ python-kit (formerly python-starter) is two things, and each entry says which on
   (`.gitattributes`: `docs/architecture`, `docs/decisions`, `docs/guides`, `docs/reference`, the
   `src/` and `tests/` they cite, `copier.yml`, `pyproject.toml.jinja`, and this file).
 
-Generated projects with `graft_docs` pin python-kit to the commit they came from, so
-`copier update`, not graft's weekly PR, moves them between these versions.
+Generated projects with `graft_docs` pin python-kit to the commit they came from, in their `flake.nix`. From
+v2.2.0 the python-kit-upgrade PR moves that pin with each `copier update` (before, the update's merge did);
+graft's weekly PR doesn't.
+
+## v2.2.0 - 2026-11-11
+
+### Template
+
+- `flake.nix` is the project's: it is in `_skip_if_exists`, so `copier update` no longer rewrites it (an update
+  that moved the python-kit pin conflicted in every project whose `flake.nix` had changed, as graft-upgrade
+  changes it). python-kit-upgrade moves the python-kit input, and nothing else in the file, to the commit of
+  the tag it updated to (a `url = "github:danielnaab/python-kit/..."` line, whatever its layout; the run fails
+  if there isn't exactly one), then runs `nix run .#graft` as before. graft-upgrade still moves graft and the
+  other pins. The PR job is unchanged: it runs none of the branch's code.
+- `docs/agents.md` is generated once: `_exclude` lists it during an update (`_copier_operation == 'update'`),
+  so an update neither changes it nor recreates it after you delete it. It stays in `_skip_if_exists` too, so
+  `copier recopy` (which runs as a copy) doesn't overwrite it.
+- `_min_copier_version` is 9.10.3. Older copier doesn't apply the new template's `_exclude` to its render of
+  the old one, so a file this release newly excludes looks removed from the template and the update deletes
+  it: with 9.10.2, a v2.1.0 to v2.2.0 update deletes `docs/agents.md`, `tests/conftest.py` and
+  `tests/fakes/fake_repository.py`.
+- python-kit-upgrade counts pytest's exit 5 ("no tests ran") as passing, so a project without example code
+  and without tests of its own no longer gets every PR titled `[checks failing]`.
+- With `include_example_code: false`, the example code is not generated at all. Before, its files rendered as
+  docstring-only stubs (`domain/entity.py`, `errors.py`, `repository.py`, `adapters/in_memory_repository.py`,
+  `services/example_service.py`, `cli/commands/example.py`, `tests/conftest.py`, `tests/fakes/fake_repository.py`,
+  `tests/unit/test_entity.py`, `test_example_service.py`, `tests/integration/test_in_memory_repository.py`), and
+  being in `_skip_if_exists`, which only protects files that exist, every `copier update` recreated the ones a
+  project had deleted, as did the weekly python-kit-upgrade PR. `copier.yml` `_exclude` now lists them under
+  `{% if not include_example_code %}`, and the example entries of `_skip_if_exists` (including `tests/unit/*.py`
+  and `tests/integration/*.py`) apply only with example code, so without it an update respects deleted files
+  such as `tests/unit/__init__.py`. Nothing imported the stubs: the `__init__.py` exports, `services/context.py`
+  and `cli/main.py` are unchanged and keep their skeleton comments.
+- `TEMPLATE_STATUS.md` lists the example files as protected only with example code, and says what happens
+  without it.
+- The generated `docs/README.md` drops its `**Version**: <commit>` line (`TEMPLATE_STATUS.md` and
+  `.copier-answers.yml` record the version): it changed with every release, so every update conflicted in a
+  project that had rewritten `docs/README.md` (copier 9.10.3 marks the conflict; later copier keeps your file).
+
+### Exported docs
+
+- The example templates in `src/` and `tests/` lose their `{% else %}` stub branches.
+
+### Migration
+
+`copier update --trust --vcs-ref v2.2.0` (copier 9.10.3 or later: an older one deletes `docs/agents.md` and,
+without example code, `tests/conftest.py` and `tests/fakes/fake_repository.py`). The update leaves `flake.nix` alone, and
+its v2.2.0 migration moves the python-kit pin to v2.2.0's commit (the python-kit-upgrade workflow running this
+update is still v2.1.0's, which doesn't); if it finds no single python-kit `url` line it stops and says so,
+and you set the pin by hand. Then `nix run .#graft`, `nix flake check`, and commit `flake.nix`, `flake.lock`,
+`scions/` and `.forgejo/workflows/python-kit-upgrade.yaml`. The weekly PR does this too, except that it
+changes a workflow, so it is pushed for you to open.
+
+By hand: the comment above `flake.nix`'s python-kit input says `copier update` moves it. Now python-kit-upgrade
+(or, this once, the v2.2.0 migration) moves it, and the update never touches `flake.nix` again, so edit that
+comment to say so.
+
+With a copier older than 9.15.1 (seen with 9.10.3), a project that rewrote `docs/README.md` gets one conflict there: v2.1.0's render
+still has the `**Version**` line this release drops. Keep your version. Copier 9.15.1 or later keeps it without a
+conflict. It happens only on this update.
+
+Nothing is deleted: stub example files a project without example code still has stay, and are yours to
+delete; an update won't bring them back, or `docs/agents.md`.
 
 ## v2.1.0 - 2026-11-11
 

@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Unit tests for example service functions."""
 
 import pytest
@@ -155,25 +154,3 @@ class TestListExamples:
 
         assert len(entities) == 5
         assert fake_repository.get_saved_count() == 5
-{% else -%}
-"""Unit tests for service layer.
-
-Add tests for your service functions using fake dependencies.
-
-Example:
-    from {{ package_name }}.services import user_service
-    from {{ package_name }}.services.context import ServiceContext
-
-    def test_create_user(test_context: ServiceContext):
-        user = user_service.create_user(
-            test_context,
-            email="test@example.com",
-            name="Test User"
-        )
-
-        assert user.email == "test@example.com"
-        # Verify it was saved
-        saved = test_context.user_repository.get(user.id)
-        assert saved == user
-"""
-{% endif -%}

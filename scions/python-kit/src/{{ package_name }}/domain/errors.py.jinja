@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Domain errors — business rule violations."""
 
 
@@ -35,9 +34,3 @@ class EntityNotFoundError(DomainError):
         super().__init__(f"{entity_type} not found: {entity_id}")
         self.entity_id = entity_id
         self.entity_type = entity_type
-{% else -%}
-"""Domain errors — business rule violations.
-
-Add your domain-specific exceptions here.
-"""
-{% endif -%}

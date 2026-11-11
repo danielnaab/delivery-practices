@@ -1,4 +1,3 @@
-{% if include_example_code -%}
 """Example CLI commands demonstrating CLI patterns.
 
 Each command wires the service context and calls service functions.
@@ -75,29 +74,3 @@ def list_entities() -> None:
     typer.echo(f"Found {len(entities)} entities:")
     for entity in entities:
         typer.echo(f"  - {entity.id}: {entity.name.text} (value: {entity.value.amount})")
-{% else -%}
-"""CLI commands.
-
-Add your CLI commands here. Each command should:
-1. Get the service context
-2. Call service functions
-3. Handle presentation/output
-
-Example:
-    import typer
-    from {{ package_name }}.cli.main import get_context
-    from {{ package_name }}.services import user_service
-
-    app = typer.Typer()
-
-    @app.command()
-    def create_user(
-        email: str = typer.Argument(...),
-        name: str = typer.Argument(...),
-    ) -> None:
-        \"\"\"Create a new user.\"\"\"
-        ctx = get_context()
-        user = user_service.create_user(ctx, email=email, name=name)
-        typer.echo(f"Created user: {user.id}")
-"""
-{% endif -%}
