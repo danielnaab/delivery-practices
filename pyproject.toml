@@ -33,7 +33,7 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["scions"]  # grafted copies: graft's check fails if they are edited
+extend-exclude = ["scions"]  # grafted repositories (git submodules), linted by their own CI
 
 [tool.ruff.lint]
 select = [
