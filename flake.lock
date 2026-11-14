@@ -6,16 +6,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1794575081,
-        "narHash": "sha256-+4dyG9emMzTTX0cyeOWpIZuKEUj93AsAiEANM6h8l0E=",
+        "lastModified": 1794668029,
+        "narHash": "sha256-AZz92XaRsnhjIxF9wdMRsMFCHAit23Vkweh1/PDMWXY=",
         "owner": "danielnaab",
         "repo": "graft",
-        "rev": "9314f1d79d27eb542d36d0c6b29078e94118d627",
+        "rev": "18252abce4444f8bde0aea4d93af4ef32e5340c7",
         "type": "github"
       },
       "original": {
         "owner": "danielnaab",
-        "ref": "v2.12.0",
+        "ref": "v2.13.1",
         "repo": "graft",
         "type": "github"
       }
@@ -37,40 +37,6 @@
         "type": "github"
       }
     },
-    "knowledge-base-kit_2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1794498455,
-        "narHash": "sha256-qMUlgi+5vWSDQjWacNGS3K2brS1v7LsYzAirJGq/fvA=",
-        "owner": "danielnaab",
-        "repo": "knowledge-base-kit",
-        "rev": "348eff0aa27fd519507ba168d440f2854ee54189",
-        "type": "github"
-      },
-      "original": {
-        "owner": "danielnaab",
-        "ref": "v2.1.0",
-        "repo": "knowledge-base-kit",
-        "type": "github"
-      }
-    },
-    "living-specifications": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1794413295,
-        "narHash": "sha256-Br1jA0NNj1AtFpIBLvLzIwo4O46NddUIDM96SsVK6gk=",
-        "owner": "danielnaab",
-        "repo": "living-specifications",
-        "rev": "3dba1ae2243074bf344cdf5464f7f5f3d311bc63",
-        "type": "github"
-      },
-      "original": {
-        "owner": "danielnaab",
-        "ref": "v1.0.2",
-        "repo": "living-specifications",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1767313136,
@@ -87,29 +53,9 @@
         "type": "github"
       }
     },
-    "python-kit": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1794437856,
-        "narHash": "sha256-8FUafqrUyU5xLR8ZM+MavzHvwkuS+0jnMSghGjTd+uM=",
-        "owner": "danielnaab",
-        "repo": "python-kit",
-        "rev": "934f9c265b50455e3aa76aad9d196d2a9d92ed98",
-        "type": "github"
-      },
-      "original": {
-        "owner": "danielnaab",
-        "repo": "python-kit",
-        "rev": "934f9c265b50455e3aa76aad9d196d2a9d92ed98",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
-        "graft": "graft",
-        "knowledge-base-kit": "knowledge-base-kit_2",
-        "living-specifications": "living-specifications",
-        "python-kit": "python-kit"
+        "graft": "graft"
       }
     }
   },
