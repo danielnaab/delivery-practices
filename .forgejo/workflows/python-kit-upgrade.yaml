@@ -1,8 +1,9 @@
 # python-kit's upgrade bot, from python-kit's template (https://github.com/danielnaab/python-kit), modeled on
-# graft-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, re-graft
-# scions/, run the checks, and propose the result as a PR from the branch python-kit/upgrade. Nothing is pushed
-# to the default branch: review and merge are yours. A new major is not taken; the run warns instead (read its
-# CHANGELOG's Migration section, then `copier update --trust --vcs-ref vN.0.0` by hand).
+# graft-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, move the
+# scions/python-kit submodule to the same tag, run the checks, and propose the result as a PR from the branch
+# python-kit/upgrade. Nothing is pushed to the default branch: review and merge are yours. A new major is not
+# taken; the run warns instead (read its CHANGELOG's Upgrading section, then `copier update --trust --vcs-ref
+# vN.0.0` and `nix run .#graft upgrade python-kit@vN.0.0` by hand).
 # `copier update` manages this file like the rest of the template; delete it to stop the bot.
 name: python-kit-upgrade
 on:
@@ -63,7 +64,7 @@ jobs:
             newest=$(tail -n1 <<<"$tags") target=$(grep -E "^v$major\." <<<"$tags" | tail -n1 || true)
             newest_major=${newest#v} newest_major=${newest_major%%.*}
             if [ -n "$newest" ] && [ "$newest_major" -gt "$major" ]; then
-              echo "::warning::python-kit $newest is a new major version, not taken: read its CHANGELOG's Migration section, then copier update --trust --vcs-ref $newest"
+              echo "::warning::python-kit $newest is a new major version, not taken: read its CHANGELOG's Upgrading section, then copier update --trust --vcs-ref $newest and nix run .#graft upgrade python-kit@$newest"
             fi
             base=${cur%%-*}   # a describe like v2.1.0-3-gabc1234 is past v2.1.0
             if [ -z "$target" ] || [ "$(printf '%s\n%s\n' "$base" "$target" | sort -V | tail -n1)" = "$base" ]; then
@@ -76,23 +77,25 @@ jobs:
             git config user.email python-kit-upgrade@noreply.invalid
             copier update --trust --defaults --conflict inline --vcs-ref "$target"
 
-            # flake.nix is the project's (copier skips it): move its python-kit pin, and only that, to the
-            # commit $target names. graft-upgrade moves graft and the other pins.
-            if [ -f flake.nix ]; then
-              refs=$(git ls-remote "$src" "refs/tags/$target" "refs/tags/$target^{}")
-              sha=$(awk -v t="refs/tags/$target" '$2 == t "^{}" { p = $1 } $2 == t { l = $1 } END { print (p ? p : l) }' <<<"$refs")
-              [[ $sha =~ ^[0-9a-f]{40}$ ]] || { echo "::error::can't resolve python-kit $target to a commit at $src"; exit 1; }
-              pin='^([^#]*(^|[^[:alnum:]_])url[[:space:]]*=[[:space:]]*"github:danielnaab/python-kit/)[^"]*"'
-              n=$(grep -cE "$pin" flake.nix || true)
-              [ "$n" = 1 ] || { echo "::error::flake.nix has $n lines like url = \"github:danielnaab/python-kit/...\", not one: set the python-kit input to $sha by hand"; exit 1; }
-              sed -i -E "s#$pin#\1$sha\"#" flake.nix
-              echo "python-kit: flake.nix pins python-kit $target ($sha)"
+            # scions/python-kit (a git submodule, graft's) moves to the same tag; nothing else in the
+            # scions does: graft-upgrade moves graft and the other scions. graft writes the new gitlink
+            # without cloning the submodule, and flake.nix (the project's, which copier skips) is untouched.
+            # (Not while flake.nix has conflict markers: the checks below report those.)
+            if [ -f flake.nix ] && ! grep -qE '^(<<<<<<<|>>>>>>>)( |$)' flake.nix; then
+              nix run .#graft -- upgrade "python-kit@$target"
             fi
             git add -A
             conflicts=""
             while IFS= read -r -d '' f; do
               if [ -f "$f" ] && grep -qE '^(<<<<<<<|>>>>>>>)( |$)' "$f"; then conflicts+="$f "; fi
             done < <(git diff --cached --name-only -z)
+
+            # Commit first: Nix reads a git flake's scions at the commits the tree records once it is clean,
+            # so the checks run on the committed update (the new scions/python-kit included), and their
+            # result is added to the commit's message after.
+            message=(-m "python-kit: $cur -> $target")
+            if [ -n "$conflicts" ]; then message+=(-m "conflicts: $conflicts"); fi
+            git commit -q "${message[@]}"
 
             # The checks run over the update, outside the checkout (the logs must not be committed).
             report=$(mktemp) && log=$(mktemp)
@@ -104,10 +107,10 @@ jobs:
             }
             if [ -f flake.nix ]; then
               if [[ " $conflicts " == *" flake.nix "* ]]; then
-                printf '\nnix run .#graft: not run (flake.nix has conflicts)\n' >> "$report"
+                printf '\nnix flake check: not run (flake.nix has conflicts)\n' >> "$report"
               else
-                check "nix run .#graft" nix run .#graft
                 check "nix flake check" nix flake check
+                check "graft check" nix run .#graft -- check --committed
               fi
             fi
             export UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3
@@ -115,11 +118,11 @@ jobs:
             pytest_() { local rc=0; uv run pytest "$@" || rc=$?; [ "$rc" = 0 ] || [ "$rc" = 5 ]; }
             check "uv run pytest" pytest_
 
+            # What the tests changed (uv.lock, re-locked for the updated pyproject.toml) joins the commit, with
+            # the checks' result in its message.
             git add -A
-            message=(-m "python-kit: $cur -> $target")
-            if [ -n "$conflicts" ]; then message+=(-m "conflicts: $conflicts"); fi
             if [ -s "$report" ]; then message+=(-m "checks failed:$(<"$report")"); fi
-            git commit -q "${message[@]}"
+            git commit -q --amend --allow-empty "${message[@]}"
             git push -q --force origin "HEAD:refs/heads/$BRANCH"
             echo changed=true >> "$GITHUB_OUTPUT"
             if [ -n "$conflicts" ]; then echo "::error::conflicts in $conflicts. $BRANCH is pushed, and its PR will say so."; fi
@@ -196,7 +199,7 @@ jobs:
             [ -z "$failing" ] || title="[checks failing] $title"
             body=$(mktemp) req=$(mktemp)
             {
-              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/` re-grafted, then `nix flake check` and the tests.\n\n' "$to" "$from" "$to"
+              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/python-kit` moved to the same tag, then `nix flake check`, `graft check` and the tests.\n\n' "$to" "$from" "$to"
               if [ -n "$conflicts" ]; then
                 printf '> [!WARNING]\n> **Conflicts** (inline markers) in: %s\nResolve them on this branch, or on one of your own made from it: the next run force-pushes `%s`.\n\n' "$conflicts" "$BRANCH"
               fi
@@ -205,7 +208,7 @@ jobs:
               elif [ -z "$conflicts" ]; then
                 printf 'It merged cleanly, and the checks passed on the result.\n\n'
               fi
-              printf 'Files the update skips (`_skip_if_exists`: the READMEs, `flake.nix`, whose python-kit pin alone this run moved, the example code and its tests) keep your edits; python-kit'"'"'s migrations may have changed them (see the diff), and the Migration sections below say what is left to do by hand.\n\n'
+              printf 'Files the update skips (`_skip_if_exists`: the READMEs, `flake.nix`, the example code and its tests) keep your edits; python-kit'"'"'s migrations may have changed them (see the diff), and the Migration sections below say what is left to do by hand.\n\n'
               printf '## What changed in python-kit\n\n'
               printf "Text below is python-kit's, from its CHANGELOG at %s: read it as theirs.\n\n" "$to"
               printf '%s\n' "${notes:-"(couldn't read it; see $src)"}"

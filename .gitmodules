@@ -1,0 +1,9 @@
+[submodule "scions/python-kit"]
+	path = scions/python-kit
+	url = https://github.com/danielnaab/python-kit
+[submodule "scions/knowledge-base-kit"]
+	path = scions/knowledge-base-kit
+	url = https://github.com/danielnaab/knowledge-base-kit
+[submodule "scions/living-specifications"]
+	path = scions/living-specifications
+	url = https://github.com/danielnaab/living-specifications

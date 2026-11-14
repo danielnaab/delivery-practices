@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true  # scions/ are git submodules (graft v2.13.0): the checkers below run from one
 
       - name: Install uv
         uses: astral-sh/setup-uv@v4
