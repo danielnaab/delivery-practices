@@ -68,7 +68,7 @@ Each practice area contains:
 
 Consult [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes` for the authoritative allow/deny list.
 
-In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to sensitive paths (`secrets/`, `credentials/`); `scions/` holds other repositories (git submodules): fix one as a change to that repository (see Scions (graft) below).
+In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to sensitive paths (`secrets/`, `credentials/`); `scions/` holds other repositories (git submodules): ask before editing one; a fix belongs in that provider (see Scions (graft) below).
 
 ## Scions (graft)
 `scions/` holds git submodules: other repositories at release tags. Read them; they are the rules and tools

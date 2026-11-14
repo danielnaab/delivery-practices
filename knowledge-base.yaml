@@ -33,4 +33,7 @@ rules:
     requiredFor: ["practice-recommendations", "factual-claims", "operational-guidance"]
   writes:
     allow: ["docs/**", "notes/**", "specs/**", "src/**", "tests/**"]
-    deny: ["secrets/**", "credentials/**", "scions/**"]
+    deny: ["secrets/**", "credentials/**"]
+    # scions/** (git submodules) is left out of deny on purpose: an edit there is a change to that provider,
+    # made on a branch in the scion and upstreamed. Ask first (the agent rules: CLAUDE.md). This kit version's
+    # writes rules have allow/deny only, no ask-first list.
