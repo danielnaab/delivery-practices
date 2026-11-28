@@ -96,7 +96,7 @@ jobs:
           BASE: ${{ github.event.repository.default_branch }}
           # The job token can push, but Forgejo (through 11 at least) refuses it when opening a PR
           # on a private repo. A user's token, in the Actions secret TUTEUR_PR_TOKEN (or graft's GRAFT_PR_TOKEN,
-          # read through 0.1.x; set it once for
+          # read through 0.2.x; set it once for
           # all your repos under Settings > Actions > Secrets), opens the PR as that user.
           PR_TOKEN: ${{ secrets.TUTEUR_PR_TOKEN || secrets.GRAFT_PR_TOKEN || github.token }}
         run: |
