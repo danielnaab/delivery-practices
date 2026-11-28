@@ -1,6 +1,6 @@
 # python-kit's upgrade bot, from python-kit's template (https://github.com/danielnaab/python-kit), modeled on
 # tuteur-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, move the
-# scions/python-kit submodule to the same tag, run the checks, and propose the result as a PR from the branch
+# .patterns/python-kit submodule to the same tag, run the checks, and propose the result as a PR from the branch
 # python-kit/upgrade. Nothing is pushed to the default branch: review and merge are yours. A new major is not
 # taken; the run warns instead (read its CHANGELOG's Upgrading section, then `copier update --trust --vcs-ref
 # vN.0.0` and `nix run .#tuteur upgrade python-kit@vN.0.0` by hand).
@@ -77,7 +77,7 @@ jobs:
             git config user.email python-kit-upgrade@noreply.invalid
             copier update --trust --defaults --conflict inline --vcs-ref "$target"
 
-            # scions/python-kit (a git submodule, a tuteur pattern) moves to the same tag; nothing else in the
+            # .patterns/python-kit (a git submodule, a tuteur pattern) moves to the same tag; nothing else in the
             # patterns does: tuteur-upgrade moves tuteur and the other patterns. tuteur writes the new gitlink
             # without cloning the submodule, and flake.nix (the project's, which copier skips) is untouched.
             # (Not while flake.nix has conflict markers: the checks below report those.)
@@ -91,7 +91,7 @@ jobs:
             done < <(git diff --cached --name-only -z)
 
             # Commit first: Nix reads a git flake's patterns at the commits the tree records once it is clean,
-            # so the checks run on the committed update (the new scions/python-kit included), and their
+            # so the checks run on the committed update (the new .patterns/python-kit included), and their
             # result is added to the commit's message after.
             message=(-m "python-kit: $cur -> $target")
             if [ -n "$conflicts" ]; then message+=(-m "conflicts: $conflicts"); fi
@@ -200,7 +200,7 @@ jobs:
             [ -z "$failing" ] || title="[checks failing] $title"
             body=$(mktemp) req=$(mktemp)
             {
-              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/python-kit` moved to the same tag, then `nix flake check`, `tuteur check` and the tests.\n\n' "$to" "$from" "$to"
+              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `.patterns/python-kit` moved to the same tag, then `nix flake check`, `tuteur check` and the tests.\n\n' "$to" "$from" "$to"
               if [ -n "$conflicts" ]; then
                 printf '> [!WARNING]\n> **Conflicts** (inline markers) in: %s\nResolve them on this branch, or on one of your own made from it: the next run force-pushes `%s`.\n\n' "$conflicts" "$BRANCH"
               fi
