@@ -50,7 +50,7 @@ AI conversations are ephemeral. [Session logging](guides/session-logging.md) cap
 
 ## Integration with Living Specifications
 
-These workflow practices work alongside [living specifications](../../scions/living-specifications/docs/):
+These workflow practices work alongside [living specifications](../../.patterns/living-specifications/docs/):
 
 | Practice | Integration Point |
 |----------|-------------------|

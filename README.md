@@ -20,7 +20,7 @@ Personal exploration of delivery practices for:
 
 | Directory | Practice Area |
 |-----------|---------------|
-| [`scions/living-specifications/`](scions/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
+| [`.patterns/living-specifications/`](.patterns/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
 | [`docs/workflow/`](docs/workflow/) | Development workflow practices |
 | [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
 | `notes/` | Explorations, working notes |
@@ -35,23 +35,23 @@ Personal exploration of delivery practices for:
 
 ## Practice Areas
 
-- **[Living Specifications](scions/living-specifications/docs/)** — Specs as source of truth for system behavior
+- **[Living Specifications](.patterns/living-specifications/docs/)** — Specs as source of truth for system behavior
 - **[Workflow](docs/workflow/)** — Development workflow practices (iterative critique, session logging, PR descriptions)
 
 ## Tooling
 
 Spec-first tools for structural integrity and workflow support. The structural checkers (backlink scanner, KB
 linter, link validator) are [knowledge-base-kit](https://github.com/danielnaab/knowledge-base-kit)'s, run from the
-grafted copy; see [its tools guide](scions/knowledge-base-kit/docs/tools.md).
+grafted copy; see [its tools guide](.patterns/knowledge-base-kit/docs/tools.md).
 
 | Tool | Spec | Purpose |
 |------|------|---------|
 | `pr-description` | [spec](specs/pr-description-generator.md) | Generates markdown PR descriptions from YAML input |
 
 ```bash
-PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner .  # Traceability check (exit 1 on issues)
-PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter .         # Content rule enforcement
-PYTHONPATH=scions/knowledge-base-kit/src python3 -m link_validator .    # Broken link detection
+PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m backlink_scanner .  # Traceability check (exit 1 on issues)
+PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m kb_linter .         # Content rule enforcement
+PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m link_validator .    # Broken link detection
 uv run pr-description input.yaml  # Generate PR description
 uv run pytest                  # Run tests (92 tests)
 uv run ruff check .            # Lint
@@ -62,7 +62,7 @@ Validator tools support `--report-only` for informational output (always exit 0)
 
 ## Knowledge Base System
 
-Follows [knowledge-base-kit](scions/knowledge-base-kit/README.md) conventions:
+Follows [knowledge-base-kit](.patterns/knowledge-base-kit/README.md) conventions:
 - Evidence-driven evolution
 - Lifecycle states: draft → working → stable → deprecated
 - Provenance for all practice recommendations

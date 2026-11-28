@@ -33,7 +33,7 @@ dev = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["scions"]  # grafted repositories (git submodules), linted by their own CI
+extend-exclude = [".patterns"]  # grafted repositories (git submodules), linted by their own CI
 
 [tool.ruff.lint]
 select = [
