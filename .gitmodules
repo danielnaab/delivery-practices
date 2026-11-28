@@ -1,9 +1,9 @@
 [submodule "scions/python-kit"]
-	path = scions/python-kit
+	path = .patterns/python-kit
 	url = https://github.com/danielnaab/python-kit
 [submodule "scions/knowledge-base-kit"]
-	path = scions/knowledge-base-kit
+	path = .patterns/knowledge-base-kit
 	url = https://github.com/danielnaab/knowledge-base-kit
 [submodule "scions/living-specifications"]
-	path = scions/living-specifications
+	path = .patterns/living-specifications
 	url = https://github.com/danielnaab/living-specifications

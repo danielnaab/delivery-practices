@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: true  # scions/ are git submodules (graft v2.13.1): the checkers below run from one
+          submodules: true  # .patterns/ are git submodules (graft v2.13.1): the checkers below run from one
 
       - name: Install uv
         uses: astral-sh/setup-uv@v4
@@ -35,10 +35,10 @@ jobs:
         run: uv run pytest --tb=short
 
       - name: Backlink scanner
-        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m backlink_scanner .
+        run: PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m backlink_scanner .
 
       - name: KB linter
-        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m kb_linter .
+        run: PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m kb_linter .
 
       - name: Link validator
-        run: PYTHONPATH=scions/knowledge-base-kit/src python3 -m link_validator .
+        run: PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m link_validator .

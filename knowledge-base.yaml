@@ -7,14 +7,14 @@ entrypoints:
   agent: CLAUDE.md
 
 meta:
-  entrypoint: "scions/knowledge-base-kit/README.md"
+  entrypoint: ".patterns/knowledge-base-kit/README.md"
 
 imports:
   - kind: local
-    path: scions/knowledge-base-kit
+    path: .patterns/knowledge-base-kit
     relationship: foundational
   - kind: local
-    path: scions/living-specifications
+    path: .patterns/living-specifications
     relationship: foundational
 
 paths:
@@ -34,6 +34,6 @@ rules:
   writes:
     allow: ["docs/**", "notes/**", "specs/**", "src/**", "tests/**"]
     deny: ["secrets/**", "credentials/**"]
-    # scions/** (git submodules) is left out of deny on purpose: an edit there is a change to that provider,
+    # .patterns/** (git submodules) is left out of deny on purpose: an edit there is a change to that provider,
     # made on a branch in the scion and upstreamed. Ask first (the agent rules: CLAUDE.md). This kit version's
     # writes rules have allow/deny only, no ask-first list.

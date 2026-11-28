@@ -8,9 +8,9 @@ Practice areas for fast and safe software delivery, with particular focus on AI-
 
 ## Practice Areas
 
-### [Living Specifications](../scions/living-specifications/docs/)
+### [Living Specifications](../.patterns/living-specifications/docs/)
 
-Spec-driven development using living specifications as the source of truth for system behavior. Includes format, verification approaches, and guides for writing and reviewing against specs. Maintained in the [living-specifications](https://github.com/danielnaab/living-specifications) repository and grafted into `scions/`; edit it there, not here.
+Spec-driven development using living specifications as the source of truth for system behavior. Includes format, verification approaches, and guides for writing and reviewing against specs. Maintained in the [living-specifications](https://github.com/danielnaab/living-specifications) repository and grafted into `.patterns/`; edit it there, not here.
 
 ### [Workflow](workflow/)
 
@@ -32,7 +32,7 @@ This repository also contains tools that support these practices:
 
 See [`specs/`](../specs/) for behavioral specifications and [`src/`](../src/) for implementations. The structural
 checkers (backlink scanner, KB linter, link validator) come from knowledge-base-kit; see
-[its tools guide](../scions/knowledge-base-kit/docs/tools.md).
+[its tools guide](../.patterns/knowledge-base-kit/docs/tools.md).
 
 ## Status Semantics
 

@@ -5,7 +5,7 @@ You are working in the **delivery-practices knowledge base** - a repository for 
 ## Before Making Changes
 
 1. Read [knowledge-base.yaml](knowledge-base.yaml) for KB configuration
-2. Follow [meta knowledge base conventions](scions/knowledge-base-kit/README.md)
+2. Follow [meta knowledge base conventions](.patterns/knowledge-base-kit/README.md)
 3. Understand key policies:
    - **Authority**: docs/ canonical, notes/ exploratory
    - **Provenance**: Ground practice recommendations in sources
@@ -32,7 +32,7 @@ This KB focuses on **delivery practices for AI-assisted development**:
 
 ## Workflow: Plan → Patch → Verify
 
-Follow the [agent workflow pattern](scions/knowledge-base-kit/docs/playbooks/agent-workflow.md):
+Follow the [agent workflow pattern](.patterns/knowledge-base-kit/docs/playbooks/agent-workflow.md):
 
 1. **Plan**: State intent, files to touch, uncertainties
 2. **Patch**: Make minimal changes to achieve goal
@@ -44,7 +44,7 @@ Follow the [agent workflow pattern](scions/knowledge-base-kit/docs/playbooks/age
 
 | Directory | Practice Area |
 |-----------|---------------|
-| [`scions/living-specifications/`](scions/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
+| [`.patterns/living-specifications/`](.patterns/living-specifications/docs/) | Spec-driven development (grafted from [living-specifications](https://github.com/danielnaab/living-specifications)) |
 | [`docs/workflow/`](docs/workflow/) | Development workflow practices |
 | [`docs/decisions/`](docs/decisions/) | Cross-cutting architectural decisions |
 | `notes/` | Explorations, working notes ("thinking about this") |
@@ -68,22 +68,22 @@ Each practice area contains:
 
 Consult [`knowledge-base.yaml`](knowledge-base.yaml) `rules.writes` for the authoritative allow/deny list.
 
-In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to sensitive paths (`secrets/`, `credentials/`); `scions/` holds other repositories (git submodules): ask before editing one; a fix belongs in that provider (see Scions (graft) below).
+In brief: you may write to practice documentation (`docs/`), explorations (`notes/`), and tooling (`specs/`, `src/`, `tests/`). Never write to sensitive paths (`secrets/`, `credentials/`); `.patterns/` holds other repositories (git submodules): ask before editing one; a fix belongs in that provider (see Scions (graft) below).
 
 ## Scions (graft)
-`scions/` holds git submodules: other repositories at release tags. Read them; they are the rules and tools
+`.patterns/` holds git submodules: other repositories at release tags. Read them; they are the rules and tools
 this repository follows. If one is empty, run `git submodule update --init --recursive`.
 - Ask before you edit a scion: an edit there is a change to another repository. Fix it in the provider: in
-  `scions/NAME`, `git switch -c fix-…`, edit, run the provider's own tests there, push the branch to the
-  provider and open its pull request. This repository takes the fix with `nix run .#graft upgrade NAME@TAG`
+  `.patterns/NAME`, `git switch -c fix-…`, edit, run the provider's own tests there, push the branch to the
+  provider and open its pull request. This repository takes the fix with `nix run .#tuteur upgrade NAME@TAG`
   once it is released.
 - Commit or stash in a scion before you switch, pull or check out this repository's branches: a move of the
   scion's gitlink can move the scion under your edits.
 - A Nix build of this repository uses a scion's uncommitted edits only while another tracked file here is
   modified, and sees a new file in a scion only once it is `git add`-ed there. To build with them, run
-  `nix run .#graft -- try NAME` (it prints any `git -C … add` needed), build with the command it prints,
-  then `nix run .#graft -- try --stop`. Run `try --stop` before `git stash` here: stash fails while try is on.
-- `nix run .#graft check` fails while try is on, or while a scion has uncommitted edits, is away from its
+  `nix run .#tuteur -- try NAME` (it prints any `git -C … add` needed), build with the command it prints,
+  then `nix run .#tuteur -- try --stop`. Run `try --stop` before `git stash` here: stash fails while try is on.
+- `nix run .#tuteur check` fails while try is on, or while a scion has uncommitted edits, is away from its
   gitlink, or sits on an unreleased commit. Don't commit a moved scion unless it is at a release tag.
 
 ## Provenance Requirements
@@ -115,12 +115,12 @@ When updating this KB:
 ## Current State
 
 Practice areas established:
-- **[Living specifications](scions/living-specifications/docs/)** — spec-driven development
+- **[Living specifications](.patterns/living-specifications/docs/)** — spec-driven development
 - **[Workflow](docs/workflow/)** — development workflow practices (iterative critique, session logging, PR descriptions)
 
 Tooling (dogfooding):
 - **[pr-description](specs/pr-description-generator.md)** — tool in [src/](src/) with its spec in [specs/](specs/)
-- Backlink scanner, kb-linter, link-validator — knowledge-base-kit's checker, run from [scions/knowledge-base-kit/](scions/knowledge-base-kit/docs/tools.md) (`PYTHONPATH=scions/knowledge-base-kit/src python3 -m <tool> .`)
+- Backlink scanner, kb-linter, link-validator — knowledge-base-kit's checker, run from [.patterns/knowledge-base-kit/](.patterns/knowledge-base-kit/docs/tools.md) (`PYTHONPATH=.patterns/knowledge-base-kit/src python3 -m <tool> .`)
 
 Focus on:
 1. Real practices from actual experience (not theory)
