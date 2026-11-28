@@ -1,9 +1,9 @@
 # python-kit's upgrade bot, from python-kit's template (https://github.com/danielnaab/python-kit), modeled on
-# graft-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, move the
+# tuteur-upgrade: weekly, `copier update` this project to python-kit's newest tag in the major it is on, move the
 # scions/python-kit submodule to the same tag, run the checks, and propose the result as a PR from the branch
 # python-kit/upgrade. Nothing is pushed to the default branch: review and merge are yours. A new major is not
 # taken; the run warns instead (read its CHANGELOG's Upgrading section, then `copier update --trust --vcs-ref
-# vN.0.0` and `nix run .#graft upgrade python-kit@vN.0.0` by hand).
+# vN.0.0` and `nix run .#tuteur upgrade python-kit@vN.0.0` by hand).
 # `copier update` manages this file like the rest of the template; delete it to stop the bot.
 name: python-kit-upgrade
 on:
@@ -26,7 +26,7 @@ env:
 
 jobs:
   # Update, check and push. The update runs the new python-kit version's code (its copier migrations), and
-  # the checks run the merged project (graft's check, the tests), all before review, so this job is given
+  # the checks run the merged project (tuteur's check, the tests), all before review, so this job is given
   # no secret: only the job token. If there are conflicts or a check fails, the branch is still pushed (its
   # commit message says what) and this job fails.
   upgrade:
@@ -64,7 +64,7 @@ jobs:
             newest=$(tail -n1 <<<"$tags") target=$(grep -E "^v$major\." <<<"$tags" | tail -n1 || true)
             newest_major=${newest#v} newest_major=${newest_major%%.*}
             if [ -n "$newest" ] && [ "$newest_major" -gt "$major" ]; then
-              echo "::warning::python-kit $newest is a new major version, not taken: read its CHANGELOG's Upgrading section, then copier update --trust --vcs-ref $newest and nix run .#graft upgrade python-kit@$newest"
+              echo "::warning::python-kit $newest is a new major version, not taken: read its CHANGELOG's Upgrading section, then copier update --trust --vcs-ref $newest and nix run .#tuteur upgrade python-kit@$newest"
             fi
             base=${cur%%-*}   # a describe like v2.1.0-3-gabc1234 is past v2.1.0
             if [ -z "$target" ] || [ "$(printf '%s\n%s\n' "$base" "$target" | sort -V | tail -n1)" = "$base" ]; then
@@ -77,12 +77,12 @@ jobs:
             git config user.email python-kit-upgrade@noreply.invalid
             copier update --trust --defaults --conflict inline --vcs-ref "$target"
 
-            # scions/python-kit (a git submodule, graft's) moves to the same tag; nothing else in the
-            # scions does: graft-upgrade moves graft and the other scions. graft writes the new gitlink
+            # scions/python-kit (a git submodule, a tuteur pattern) moves to the same tag; nothing else in the
+            # patterns does: tuteur-upgrade moves tuteur and the other patterns. tuteur writes the new gitlink
             # without cloning the submodule, and flake.nix (the project's, which copier skips) is untouched.
             # (Not while flake.nix has conflict markers: the checks below report those.)
             if [ -f flake.nix ] && ! grep -qE '^(<<<<<<<|>>>>>>>)( |$)' flake.nix; then
-              nix run .#graft -- upgrade "python-kit@$target"
+              nix run .#tuteur -- upgrade "python-kit@$target"
             fi
             git add -A
             conflicts=""
@@ -90,7 +90,7 @@ jobs:
               if [ -f "$f" ] && grep -qE '^(<<<<<<<|>>>>>>>)( |$)' "$f"; then conflicts+="$f "; fi
             done < <(git diff --cached --name-only -z)
 
-            # Commit first: Nix reads a git flake's scions at the commits the tree records once it is clean,
+            # Commit first: Nix reads a git flake's patterns at the commits the tree records once it is clean,
             # so the checks run on the committed update (the new scions/python-kit included), and their
             # result is added to the commit's message after.
             message=(-m "python-kit: $cur -> $target")
@@ -110,7 +110,7 @@ jobs:
                 printf '\nnix flake check: not run (flake.nix has conflicts)\n' >> "$report"
               else
                 check "nix flake check" nix flake check
-                check "graft check" nix run .#graft -- check --committed
+                check "tuteur check" nix run .#tuteur -- check --committed
               fi
             fi
             export UV_PYTHON_DOWNLOADS=never UV_PYTHON=python3
@@ -162,9 +162,10 @@ jobs:
           API: ${{ github.server_url }}/api/v1/repos/${{ github.repository }}
           BASE: ${{ github.event.repository.default_branch }}
           # The job token can push, but Forgejo (through 11 at least) refuses it when opening a PR on a private
-          # repo. A user's token in the Actions secret GRAFT_PR_TOKEN (the one graft-upgrade uses) opens the PR
-          # as that user.
-          PR_TOKEN: ${{ secrets.GRAFT_PR_TOKEN || github.token }}
+          # repo. A user's token in the Actions secret TUTEUR_PR_TOKEN opens the PR as that user; tuteur-upgrade
+          # reads the same secret, in the same order. GRAFT_PR_TOKEN, the name graft-upgrade read, still works: every
+          # project generated before tuteur has it set, so this bot keeps its token there without a new secret.
+          PR_TOKEN: ${{ secrets.TUTEUR_PR_TOKEN || secrets.GRAFT_PR_TOKEN || github.token }}
           SCRIPT: |
             git fetch -q --no-tags origin "refs/heads/$BRANCH"
             head=$(git rev-parse FETCH_HEAD)
@@ -199,7 +200,7 @@ jobs:
             [ -z "$failing" ] || title="[checks failing] $title"
             body=$(mktemp) req=$(mktemp)
             {
-              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/python-kit` moved to the same tag, then `nix flake check`, `graft check` and the tests.\n\n' "$to" "$from" "$to"
+              printf 'Moved by `copier update --vcs-ref %s` (python-kit-upgrade): this project from python-kit %s to %s, `scions/python-kit` moved to the same tag, then `nix flake check`, `tuteur check` and the tests.\n\n' "$to" "$from" "$to"
               if [ -n "$conflicts" ]; then
                 printf '> [!WARNING]\n> **Conflicts** (inline markers) in: %s\nResolve them on this branch, or on one of your own made from it: the next run force-pushes `%s`.\n\n' "$conflicts" "$BRANCH"
               fi
@@ -232,7 +233,7 @@ jobs:
             if [ "$code" = 201 ]; then jq -r .html_url <<<"$out"; exit 0; fi
             if [ "$code" = 409 ]; then echo "python-kit: a PR is already open for $BRANCH; the push updated it"; exit 0; fi
             echo "::error::opening the PR: HTTP $code. $BRANCH is pushed; open it at $compare"
-            [ "$code" != 404 ] || echo "::error::a 404 here is Forgejo refusing the job token: set the GRAFT_PR_TOKEN secret"
+            [ "$code" != 404 ] || echo "::error::a 404 here is Forgejo refusing the job token: set the TUTEUR_PR_TOKEN secret (GRAFT_PR_TOKEN works too)"
             exit 1
         run: |
           nix shell "$NIXPKGS#curl" "$NIXPKGS#jq" "$NIXPKGS#coreutils" "$NIXPKGS#gnugrep" "$NIXPKGS#gnused" \
